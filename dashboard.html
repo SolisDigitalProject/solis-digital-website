@@ -26,6 +26,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .kpi-val.green{color:var(--green)}.kpi-val.accent{color:var(--accent)}.kpi-val.red{color:var(--red)}.kpi-val.blue{color:var(--blue)}.kpi-val.purple{color:var(--purple)}
 .kpi-sub{font-size:12px;color:var(--text3);margin-top:4px}
 .panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:0 32px 24px}
+.panels-b{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 32px 24px}
+.inquiry-item{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.inquiry-item:last-child{border-bottom:none}
+.inquiry-email{font-size:13px;color:var(--white);font-weight:600}
+.inquiry-msg{font-size:12px;color:var(--text2);margin-top:2px}
+.inquiry-date{font-size:11px;color:var(--text3)}
+@media(max-width:768px){.panels-b{grid-template-columns:1fr}}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .panel-h{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .panel-h h3{font-size:14px;font-weight:700}
@@ -99,6 +106,16 @@ tr:hover td{background:rgba(232,162,58,.02)}
   </div>
 </div>
 
+<div class="panels-b">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Recent Inquiries</h3>
+      <span class="badge" id="inquiryCount">0</span>
+    </div>
+    <div id="inquiries"><div class="loading-s">Loading inquiries...</div></div>
+  </div>
+</div>
+
 <script>
 var SB='https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
 var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
@@ -112,9 +129,10 @@ function loadData(){
   Promise.all([
     q('/leads?select=*&order=lead_score.desc.nullslast'),
     q('/clients?select=*'),
-    q('/outreach?select=*')
+    q('/outreach?select=*'),
+    q('/inquiries?select=*&order=created_at.desc&limit=10')
   ]).then(function(res){
-    var leads=res[0],clients=res[1],outreach=res[2];
+    var leads=res[0],clients=res[1],outreach=res[2],inquiries=res[3]||[];
     allLeads=leads;
 
     // KPIs
@@ -187,6 +205,20 @@ function loadData(){
       fhtml+='</div>';
     });
     document.getElementById('funnel').innerHTML=fhtml;
+
+    // Inquiries
+    document.getElementById('inquiryCount').textContent=inquiries.length;
+    if(inquiries.length){
+      var ihtml='';
+      inquiries.forEach(function(i){
+        ihtml+='<div class="inquiry-item"><div><div class="inquiry-email">'+esc(i.email||'Unknown')+'</div>';
+        if(i.message)ihtml+='<div class="inquiry-msg">'+esc(i.message.substring(0,80))+(i.message.length>80?'...':'')+'</div>';
+        ihtml+='</div><div class="inquiry-date">'+new Date(i.created_at).toLocaleDateString('en-GB')+'</div></div>';
+      });
+      document.getElementById('inquiries').innerHTML=ihtml;
+    } else {
+      document.getElementById('inquiries').innerHTML='<div class="loading-s" style="padding:20px">No inquiries yet.</div>';
+    }
   });
 }
 
