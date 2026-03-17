@@ -7,6 +7,48 @@
 <meta name="description" content="Solis Digital builds high-converting websites, runs profitable campaigns, and automates your marketing — all powered by AI. Based in Leeds, serving the UK.">
 <meta name="keywords" content="AI marketing agency Leeds, web design Leeds, SEO agency Yorkshire, AI website builder, digital marketing UK">
 <link rel="canonical" href="https://solisdigital.co.uk">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Solis Digital — AI-Powered Marketing Agency | Leeds">
+<meta property="og:description" content="High-converting websites, profitable campaigns, and marketing automation — all powered by AI. Results in days, not months.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://solisdigital.co.uk">
+<meta property="og:site_name" content="Solis Digital">
+<meta property="og:locale" content="en_GB">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Solis Digital — AI-Powered Marketing Agency | Leeds">
+<meta name="twitter:description" content="High-converting websites, profitable campaigns, and marketing automation — all powered by AI.">
+
+<!-- Structured Data: LocalBusiness -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Solis Digital",
+  "description": "AI-Powered Marketing Agency building high-converting websites, running profitable campaigns, and automating marketing for UK businesses.",
+  "url": "https://solisdigital.co.uk",
+  "email": "info@solisdigital.co.uk",
+  "areaServed": {
+    "@type": "Country",
+    "name": "United Kingdom"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Leeds",
+    "addressRegion": "West Yorkshire",
+    "addressCountry": "GB"
+  },
+  "priceRange": "££",
+  "serviceType": ["Web Design", "SEO", "Digital Marketing", "AI Automation"],
+  "founder": [
+    {"@type": "Person", "name": "Alex"},
+    {"@type": "Person", "name": "Zain"}
+  ]
+}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -134,12 +176,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;
 .cf{display:flex;gap:10px;max-width:480px;margin:0 auto}
 .ci{flex:1;padding:16px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;font-size:15px;outline:none;transition:border .3s}
 .ci:focus{border-color:var(--accent)}
+.form-msg{font-size:13px;margin-top:10px;text-align:center;display:none}
+.form-msg.success{color:var(--green);display:block}
+.form-msg.error{color:#ef4444;display:block}
+
+/* COOKIE BANNER */
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:center;gap:16px;z-index:10000;font-size:13px;color:var(--text2);flex-wrap:wrap}
+.cookie-banner a{color:var(--accentL);text-decoration:underline}
+.cookie-btn{padding:8px 20px;background:var(--accent);color:#0a0a0a;border:none;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit}
+.cookie-banner.hidden{display:none}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:48px 0}
 .fi{display:flex;justify-content:space-between;align-items:center}
 .fc{font-size:13px;color:var(--text3)}
 .fl{display:flex;gap:28px}.fl a{font-size:13px;color:var(--text3);transition:color .3s}.fl a:hover{color:var(--accentL)}
+
+/* LEGAL PAGES */
+.legal-page{display:none;padding:100px 32px 60px;max-width:800px;margin:0 auto}
+.legal-page.active{display:block}
+.legal-page h2{font-family:var(--font-display);font-size:32px;font-weight:700;margin-bottom:24px;color:var(--white)}
+.legal-page h3{font-size:18px;font-weight:700;color:var(--white);margin:28px 0 12px}
+.legal-page p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:16px}
+.legal-page ul{list-style:disc;padding-left:24px;margin-bottom:16px}
+.legal-page ul li{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:4px}
+.legal-back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:14px;font-weight:600;margin-bottom:24px;cursor:pointer}
+.legal-back:hover{color:var(--accentL)}
 
 /* ANIMATIONS */
 @keyframes fu{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
@@ -162,13 +224,17 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   .cf{flex-direction:column}
   .fi{flex-direction:column;gap:16px;text-align:center}
   .team-g{grid-template-columns:1fr;max-width:320px;margin:0 auto}
+  .cookie-banner{flex-direction:column;text-align:center;padding:20px}
 }
 </style>
 </head>
 <body>
 
+<!-- MAIN SITE CONTENT -->
+<div id="mainContent">
+
 <nav>
-<a href="#" class="logo">
+<a href="#" class="logo" onclick="showMain()">
   <div class="logo-icon"></div>
   Solis <span class="logo-d">Digital</span>
 </a>
@@ -180,7 +246,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <a href="#team" onclick="closeNav()">Team</a>
 </div>
 <div style="display:flex;align-items:center;gap:16px">
-  <a href="#contact" class="nc">Free Audit</a>
+  <a href="#contact" class="nc" onclick="showMain()">Free Audit</a>
   <div class="hamburger" id="hamburger" onclick="toggleNav()">
     <span></span><span></span><span></span>
   </div>
@@ -188,7 +254,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </nav>
 
 <section class="hero">
-<div class="hero-ey">☀ AI-Powered Marketing Agency — Leeds, UK</div>
+<div class="hero-ey">AI-Powered Marketing Agency — Leeds, UK</div>
 <h1>We Build Brands That<br>Shine <em>Online</em></h1>
 <p class="hero-sub">High-converting websites, profitable campaigns, and marketing automation — all powered by AI. Results in days, not months. Based in Leeds, serving the UK.</p>
 <div class="hero-btns">
@@ -321,8 +387,9 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <div class="rv" style="max-width:480px;margin:0 auto">
 <div class="cf">
   <input type="email" class="ci" id="auditEmail" placeholder="Enter your business email" />
-  <button class="bm" onclick="submitAudit()">Get Free Audit →</button>
+  <button class="bm" id="auditBtn" onclick="submitAudit()">Get Free Audit →</button>
 </div>
+<div id="formMsg" class="form-msg"></div>
 <p style="font-size:12px;color:var(--text3);margin-top:12px;text-align:center">No spam. No sales pressure. Just a detailed audit of your online presence.</p>
 </div>
 </div></section>
@@ -330,13 +397,131 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <footer><div class="ctn"><div class="fi">
 <p class="fc">© 2026 Solis Digital. All rights reserved. | info@solisdigital.co.uk</p>
 <div class="fl">
-  <a href="#">Privacy Policy</a>
-  <a href="#">Terms</a>
+  <a href="#" onclick="showPage('privacy');return false">Privacy Policy</a>
+  <a href="#" onclick="showPage('terms');return false">Terms</a>
   <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>
 </div>
 </div></div></footer>
 
+</div><!-- end mainContent -->
+
+<!-- PRIVACY POLICY PAGE -->
+<div id="privacyPage" class="legal-page">
+<nav>
+<a href="#" class="logo" onclick="showMain()">
+  <div class="logo-icon"></div>
+  Solis <span class="logo-d">Digital</span>
+</a>
+<div style="display:flex;align-items:center;gap:16px">
+  <a href="#" class="nc" onclick="showMain()">Back to Site</a>
+</div>
+</nav>
+<div class="legal-back" onclick="showMain()">← Back to homepage</div>
+<h2>Privacy Policy</h2>
+<p><strong>Last updated:</strong> 17 March 2026</p>
+<p>Solis Digital ("we", "our", "us") is committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information in compliance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
+
+<h3>1. Data Controller</h3>
+<p>Solis Digital, based in Leeds, West Yorkshire, UK. Contact: info@solisdigital.co.uk</p>
+
+<h3>2. Information We Collect</h3>
+<ul>
+<li><strong>Contact information:</strong> Email address submitted through our website audit form</li>
+<li><strong>Business information:</strong> Business name, website URL, industry, and location (collected during service delivery)</li>
+<li><strong>Usage data:</strong> Pages visited, time on site, and referral source via Google Analytics (anonymised)</li>
+<li><strong>Cookies:</strong> Essential cookies for site functionality and analytics cookies (with consent)</li>
+</ul>
+
+<h3>3. How We Use Your Data</h3>
+<ul>
+<li>To deliver the free website audit you requested</li>
+<li>To communicate about our services if you have enquired</li>
+<li>To improve our website and services</li>
+<li>To comply with legal obligations</li>
+</ul>
+
+<h3>4. Legal Basis for Processing</h3>
+<ul>
+<li><strong>Consent:</strong> When you submit your email for a free audit</li>
+<li><strong>Legitimate interest:</strong> To improve our services and website experience</li>
+<li><strong>Contract:</strong> To deliver services you have purchased</li>
+</ul>
+
+<h3>5. Data Sharing</h3>
+<p>We do not sell your personal data. We may share data with trusted processors including: Supabase (database hosting, EU region), Vercel (website hosting), Google Analytics (anonymised usage data), and Stripe (payment processing — only if you become a client).</p>
+
+<h3>6. Data Retention</h3>
+<p>We retain your data for as long as necessary to fulfil the purposes outlined above, or as required by law. Audit enquiry data is retained for 12 months. Client data is retained for 6 years after the end of service (for tax and legal compliance).</p>
+
+<h3>7. Your Rights</h3>
+<p>Under UK GDPR, you have the right to: access your data, rectify inaccurate data, request erasure, restrict processing, data portability, and object to processing. To exercise any of these rights, email info@solisdigital.co.uk.</p>
+
+<h3>8. Cookies</h3>
+<p>We use Google Analytics with anonymised IP addresses to understand how visitors use our site. You can opt out by declining cookies when prompted or by adjusting your browser settings.</p>
+
+<h3>9. Changes to This Policy</h3>
+<p>We may update this policy from time to time. Any changes will be posted on this page with an updated date.</p>
+
+<h3>10. Contact</h3>
+<p>For any privacy-related enquiries: info@solisdigital.co.uk</p>
+</div>
+
+<!-- TERMS PAGE -->
+<div id="termsPage" class="legal-page">
+<nav>
+<a href="#" class="logo" onclick="showMain()">
+  <div class="logo-icon"></div>
+  Solis <span class="logo-d">Digital</span>
+</a>
+<div style="display:flex;align-items:center;gap:16px">
+  <a href="#" class="nc" onclick="showMain()">Back to Site</a>
+</div>
+</nav>
+<div class="legal-back" onclick="showMain()">← Back to homepage</div>
+<h2>Terms & Conditions</h2>
+<p><strong>Last updated:</strong> 17 March 2026</p>
+<p>These terms govern your use of the Solis Digital website (solisdigital.co.uk) and any services provided by Solis Digital.</p>
+
+<h3>1. Services</h3>
+<p>Solis Digital provides website design, SEO, digital marketing, AI automation, and related services as described on our website. Specific deliverables, timelines, and pricing are agreed upon in individual client contracts.</p>
+
+<h3>2. Free Website Audit</h3>
+<p>Our free website audit is provided without obligation. By submitting your email, you consent to receiving the audit report and a follow-up communication about our services. You may unsubscribe at any time.</p>
+
+<h3>3. Intellectual Property</h3>
+<p>All website designs, code, and content created by Solis Digital for a client become the client's property upon full payment. Solis Digital retains the right to showcase completed work in our portfolio unless otherwise agreed in writing.</p>
+
+<h3>4. Payment Terms</h3>
+<p>One-off payments are due before project commencement. Monthly retainers are billed on the first of each month. All prices are in GBP and exclusive of VAT (if applicable). Late payments may incur a 2% monthly charge.</p>
+
+<h3>5. Revisions & Delivery</h3>
+<p>All packages include 2 rounds of revisions. Additional revisions are charged at £75/hour. Delivery timelines begin after receipt of all required client materials (content, images, brand assets, and completed intake questionnaire).</p>
+
+<h3>6. Cancellation</h3>
+<p>Monthly retainer services may be cancelled with 30 days' written notice. One-off project payments are non-refundable once work has commenced, except where we fail to deliver the agreed scope.</p>
+
+<h3>7. Limitation of Liability</h3>
+<p>Solis Digital's total liability for any claim arising from our services shall not exceed the total amount paid by the client for the specific service in question. We are not liable for indirect, consequential, or incidental damages.</p>
+
+<h3>8. Governing Law</h3>
+<p>These terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+
+<h3>9. Contact</h3>
+<p>For any questions about these terms: info@solisdigital.co.uk</p>
+</div>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookieBanner" class="cookie-banner hidden">
+  We use cookies to analyse site traffic and improve your experience. <a href="#" onclick="showPage('privacy');return false">Privacy Policy</a>
+  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+  <button class="cookie-btn" style="background:var(--border2);color:var(--text2)" onclick="declineCookies()">Decline</button>
+</div>
+
 <script>
+// Supabase config
+var SUPABASE_URL='https://zqcpktpnfikmshqeqxlg.supabase.co';
+var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+
 // Mobile nav toggle
 function toggleNav(){
   document.getElementById('navLinks').classList.toggle('open');
@@ -345,6 +530,20 @@ function toggleNav(){
 function closeNav(){
   document.getElementById('navLinks').classList.remove('open');
   document.getElementById('hamburger').classList.remove('active');
+}
+
+// Legal pages
+function showPage(page){
+  document.getElementById('mainContent').style.display='none';
+  document.getElementById('privacyPage').classList.remove('active');
+  document.getElementById('termsPage').classList.remove('active');
+  document.getElementById(page+'Page').classList.add('active');
+  window.scrollTo(0,0);
+}
+function showMain(){
+  document.getElementById('mainContent').style.display='block';
+  document.getElementById('privacyPage').classList.remove('active');
+  document.getElementById('termsPage').classList.remove('active');
 }
 
 // Scroll reveal
@@ -368,35 +567,80 @@ function ac(){
 var co=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){ac();co.unobserve(e.target)}})},{threshold:.3});
 var ct=document.querySelector('.ctrs');if(ct)co.observe(ct);
 
-// Audit form — submits to Supabase inquiries table
-var SB_URL='https://zqcpktpnfikmshqeqxlg.supabase.co';
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-
+// Audit form — submits to Supabase
 function submitAudit(){
-  var email=document.getElementById('auditEmail').value;
-  var btn=document.querySelector('.cf .bm');
-  if(!email||!email.includes('@')){alert('Please enter a valid email address.');return}
-  btn.textContent='Sending...';btn.style.pointerEvents='none';
-  fetch(SB_URL+'/rest/v1/inquiries',{
+  var email=document.getElementById('auditEmail').value.trim();
+  var msg=document.getElementById('formMsg');
+  var btn=document.getElementById('auditBtn');
+  if(!email||!email.includes('@')||!email.includes('.')){
+    msg.className='form-msg error';
+    msg.textContent='Please enter a valid email address.';
+    return;
+  }
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  msg.className='form-msg';
+  msg.style.display='none';
+
+  fetch(SUPABASE_URL+'/rest/v1/inquiries',{
     method:'POST',
-    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    headers:{
+      'Content-Type':'application/json',
+      'apikey':SUPABASE_KEY,
+      'Authorization':'Bearer '+SUPABASE_KEY,
+      'Prefer':'return=minimal'
+    },
     body:JSON.stringify({email:email,source:'website_audit_form'})
   }).then(function(r){
-    if(!r.ok) throw new Error('Network error');
-    document.querySelector('.cf').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:24px;margin-bottom:12px">✓</div><p style="color:var(--accentL);font-weight:700;font-size:17px">Audit requested!</p><p style="color:var(--text2);font-size:14px;margin-top:8px">We\'ll email '+email+' within 24 hours with your detailed report.</p></div>';
+    if(r.ok){
+      msg.className='form-msg success';
+      msg.textContent='Thanks! Your free audit is on its way. We\'ll be in touch within 24 hours.';
+      document.getElementById('auditEmail').value='';
+    }else{
+      throw new Error('Request failed');
+    }
   }).catch(function(){
-    btn.textContent='Get Free Audit →';btn.style.pointerEvents='auto';
-    alert('Something went wrong. Please email us at info@solisdigital.co.uk instead.');
+    msg.className='form-msg error';
+    msg.textContent='Something went wrong. Please email us directly at info@solisdigital.co.uk';
+  }).finally(function(){
+    btn.disabled=false;
+    btn.textContent='Get Free Audit →';
   });
 }
-</script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V7ZVJZKH2W"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
+
+// Cookie consent
+function initCookies(){
+  var consent=localStorage.getItem('cookie_consent');
+  if(!consent){
+    document.getElementById('cookieBanner').classList.remove('hidden');
+  }
+}
+function acceptCookies(){
+  localStorage.setItem('cookie_consent','accepted');
+  document.getElementById('cookieBanner').classList.add('hidden');
+  loadAnalytics();
+}
+function declineCookies(){
+  localStorage.setItem('cookie_consent','declined');
+  document.getElementById('cookieBanner').classList.add('hidden');
+}
+function loadAnalytics(){
+  if(document.getElementById('gtag-script'))return;
+  var s=document.createElement('script');
+  s.id='gtag-script';
+  s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-V7ZVJZKH2W';
+  document.head.appendChild(s);
+  window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-V7ZVJZKH2W');
+  window.gtag=gtag;
+  gtag('js',new Date());
+  gtag('config','G-V7ZVJZKH2W',{anonymize_ip:true});
+}
+
+// Init
+initCookies();
+if(localStorage.getItem('cookie_consent')==='accepted'){loadAnalytics();}
 </script>
 </body>
 </html>
