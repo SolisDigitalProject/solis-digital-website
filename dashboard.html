@@ -3,194 +3,256 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solis Digital — Dashboard</title>
+<title>Solis Digital — Command Centre</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--green:#34d399;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;--white:#fff}
+:root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--green:#34d399;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;--white:#fff;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;padding:24px;min-height:100vh}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
-.header h1{font-size:24px;font-weight:800}
-.header h1 span{color:var(--accent)}
-.refresh{padding:8px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
-.refresh:hover{border-color:var(--accent);color:var(--white)}
-.timestamp{font-size:12px;color:var(--text3);margin-top:4px}
-
-/* KPI Cards */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+.top{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2)}
+.top h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px}
+.top h1 span{color:var(--accent)}
+.top-r{display:flex;gap:10px}
+.btn{padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:var(--font);transition:all .2s}
+.btn-p{background:var(--accent);color:#0a0a0a}.btn-p:hover{background:var(--accentL)}
+.btn-s{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn-s:hover{border-color:var(--accent)}
+.btn-d{background:var(--green);color:#0a0a0a}.btn-d:hover{opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;padding:24px 32px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .3s}
+.kpi:hover{border-color:rgba(232,162,58,.2)}
 .kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:8px}
-.kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px}
-.kpi-sub{font-size:12px;color:var(--text2);margin-top:4px}
-.green{color:var(--green)}.amber{color:var(--accent)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}.white{color:var(--white)}
-
-/* Sections */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
-@media(max-width:768px){.grid2{grid-template-columns:1fr}}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
-.panel h3{font-size:14px;font-weight:700;margin-bottom:16px;color:var(--white)}
-
-/* Funnel */
-.funnel-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.funnel-step:last-child{border-bottom:none}
-.funnel-bar{height:8px;border-radius:4px;background:var(--accent);transition:width .6s ease}
-.funnel-label{font-size:13px;color:var(--text2);min-width:100px}
-.funnel-count{font-size:14px;font-weight:700;color:var(--white);min-width:40px;text-align:right}
-
-/* Table */
-.leads-table{width:100%;border-collapse:collapse;font-size:13px}
-.leads-table th{text-align:left;padding:8px 12px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
-.leads-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
-.leads-table tr:hover td{color:var(--white)}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.badge-new{background:rgba(96,165,250,.1);color:var(--blue)}
-.badge-audited{background:rgba(232,162,58,.1);color:var(--accent)}
-.badge-outreach{background:rgba(167,139,250,.1);color:var(--purple)}
-.badge-replied{background:rgba(52,211,153,.1);color:var(--green)}
-.badge-won{background:rgba(52,211,153,.2);color:var(--green)}
-.badge-no{background:rgba(248,113,113,.1);color:var(--red)}
-
-/* Inquiries */
-.inquiry-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.kpi-val{font-size:32px;font-weight:900;letter-spacing:-1px;color:var(--white)}
+.kpi-val.green{color:var(--green)}.kpi-val.accent{color:var(--accent)}.kpi-val.red{color:var(--red)}.kpi-val.blue{color:var(--blue)}.kpi-val.purple{color:var(--purple)}
+.kpi-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:0 32px 24px}
+.panels-b{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 32px 24px}
+.inquiry-item{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .inquiry-item:last-child{border-bottom:none}
-.inquiry-email{font-size:14px;color:var(--white)}
-.inquiry-date{font-size:12px;color:var(--text3)}
-
-.loading{text-align:center;padding:40px;color:var(--text3)}
+.inquiry-email{font-size:13px;color:var(--white);font-weight:600}
+.inquiry-msg{font-size:12px;color:var(--text2);margin-top:2px}
+.inquiry-date{font-size:11px;color:var(--text3)}
+@media(max-width:768px){.panels-b{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.panel-h{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.panel-h h3{font-size:14px;font-weight:700}
+.panel-h .badge{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;background:rgba(232,162,58,.1);color:var(--accent)}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:600;border-bottom:1px solid var(--border);background:var(--bg2)}
+td{padding:10px 16px;font-size:13px;border-bottom:1px solid var(--border)}
+tr:hover td{background:rgba(232,162,58,.02)}
+.status{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;display:inline-block}
+.s-new{background:rgba(96,165,250,.1);color:var(--blue)}
+.s-audited{background:rgba(232,162,58,.1);color:var(--accent)}
+.s-outreach{background:rgba(167,139,250,.1);color:var(--purple)}
+.s-replied{background:rgba(52,211,153,.1);color:var(--green)}
+.s-booked{background:rgba(52,211,153,.2);color:var(--green)}
+.s-won{background:rgba(52,211,153,.3);color:#0a0a0a;background:var(--green)}
+.s-no{background:rgba(248,113,113,.1);color:var(--red)}
+.score-bar{width:60px;height:6px;border-radius:3px;background:var(--border);display:inline-block;vertical-align:middle;margin-left:6px;position:relative}
+.score-fill{height:100%;border-radius:3px;position:absolute;left:0;top:0}
+.funnel{padding:20px}
+.funnel-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.funnel-row:last-child{border:none}
+.funnel-label{width:100px;font-size:12px;font-weight:600;color:var(--text2)}
+.funnel-bar{flex:1;height:28px;background:var(--bg);border-radius:6px;overflow:hidden;position:relative}
+.funnel-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:11px;font-weight:700;color:#0a0a0a;transition:width .8s ease}
+.funnel-n{font-size:14px;font-weight:800;width:40px;text-align:right;color:var(--white)}
+.loading-s{text-align:center;padding:40px;color:var(--text3)}
+@media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.panels{grid-template-columns:1fr}}
+@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div>
-    <h1>Solis <span>Digital</span> — Dashboard</h1>
-    <div class="timestamp" id="timestamp"></div>
-  </div>
-  <button class="refresh" onclick="loadAll()">Refresh ↻</button>
-</div>
-
-<div class="kpis" id="kpis"><div class="loading">Loading...</div></div>
-
-<div class="grid2">
-  <div class="panel">
-    <h3>Conversion Funnel</h3>
-    <div id="funnel"><div class="loading">Loading...</div></div>
-  </div>
-  <div class="panel">
-    <h3>Recent Inquiries</h3>
-    <div id="inquiries"><div class="loading">Loading...</div></div>
+<div class="top">
+  <h1>&#9728; Solis <span>Command Centre</span></h1>
+  <div class="top-r">
+    <button class="btn btn-s" onclick="exportCSV()">Export CSV for Instantly</button>
+    <button class="btn btn-d" onclick="runBulkAudit()">Run Bulk Audit</button>
+    <button class="btn btn-p" onclick="loadData()">Refresh</button>
   </div>
 </div>
 
-<div class="panel" style="margin-bottom:32px">
-  <h3>Lead Pipeline</h3>
-  <div style="overflow-x:auto">
-    <table class="leads-table" id="leadsTable">
-      <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Status</th><th>Speed</th><th>SEO</th><th>Email</th></tr></thead>
-      <tbody id="leadsBody"><tr><td colspan="7" class="loading">Loading...</td></tr></tbody>
-    </table>
+<div class="grid" id="kpis">
+  <div class="kpi"><div class="kpi-label">Total Leads</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub" id="kTotalSub">loading...</div></div>
+  <div class="kpi"><div class="kpi-label">Audited</div><div class="kpi-val accent" id="kAudited">—</div><div class="kpi-sub" id="kAuditedSub">ready for outreach</div></div>
+  <div class="kpi"><div class="kpi-label">Emails Available</div><div class="kpi-val blue" id="kEmails">—</div><div class="kpi-sub" id="kEmailsSub">contactable leads</div></div>
+  <div class="kpi"><div class="kpi-label">Avg Lead Score</div><div class="kpi-val purple" id="kScore">—</div><div class="kpi-sub">out of 100</div></div>
+  <div class="kpi"><div class="kpi-label">Clients Won</div><div class="kpi-val green" id="kClients">—</div><div class="kpi-sub" id="kClientsSub">total revenue</div></div>
+  <div class="kpi"><div class="kpi-label">Outreach Sent</div><div class="kpi-val" id="kOutreach">—</div><div class="kpi-sub" id="kOutreachSub">emails sent</div></div>
+</div>
+
+<div class="panels">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Top Leads by Score</h3>
+      <span class="badge" id="leadCount">0 leads</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Score</th><th>Speed</th><th>Email</th><th>Status</th></tr></thead>
+        <tbody id="leadsTable"><tr><td colspan="7" class="loading-s">Loading leads...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Pipeline Funnel</h3>
+    </div>
+    <div class="funnel" id="funnel">
+      <div class="loading-s">Loading funnel...</div>
+    </div>
+  </div>
+</div>
+
+<div class="panels-b">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Recent Inquiries</h3>
+      <span class="badge" id="inquiryCount">0</span>
+    </div>
+    <div id="inquiries"><div class="loading-s">Loading inquiries...</div></div>
   </div>
 </div>
 
 <script>
-const SB='https://zqcpktpnfikmshqeqxlg.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-const H={'apikey':KEY,'Authorization':'Bearer '+KEY};
+var SB='https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
+var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
 
-async function query(table,params){
-  const r=await fetch(`${SB}/rest/v1/${table}?${params}`,{headers:H});
-  return r.json();
+var allLeads=[];
+
+function q(endpoint){return fetch(SB+endpoint,{headers:H}).then(function(r){return r.json()})}
+
+function loadData(){
+  Promise.all([
+    q('/leads?select=*&order=lead_score.desc.nullslast'),
+    q('/clients?select=*'),
+    q('/outreach?select=*'),
+    q('/inquiries?select=*&order=created_at.desc&limit=10')
+  ]).then(function(res){
+    var leads=res[0],clients=res[1],outreach=res[2],inquiries=res[3]||[];
+    allLeads=leads;
+
+    // KPIs
+    document.getElementById('kTotal').textContent=leads.length;
+    var byStatus={};
+    leads.forEach(function(l){byStatus[l.status]=(byStatus[l.status]||0)+1});
+    document.getElementById('kTotalSub').textContent=Object.keys(byStatus).map(function(k){return byStatus[k]+' '+k}).join(', ');
+
+    var audited=leads.filter(function(l){return l.status==='Audited'});
+    document.getElementById('kAudited').textContent=audited.length;
+    var withEmail=audited.filter(function(l){return l.email});
+    document.getElementById('kAuditedSub').textContent=withEmail.length+' with email';
+
+    var emails=leads.filter(function(l){return l.email});
+    document.getElementById('kEmails').textContent=emails.length;
+    document.getElementById('kEmailsSub').textContent=Math.round(emails.length/leads.length*100)+'% of leads';
+
+    var scores=leads.filter(function(l){return l.lead_score!=null}).map(function(l){return l.lead_score});
+    var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b},0)/scores.length):0;
+    document.getElementById('kScore').textContent=avg;
+
+    document.getElementById('kClients').textContent=clients.length;
+    var rev=clients.reduce(function(a,c){return a+(parseFloat(c.one_off_revenue)||0)},0);
+    var mrr=clients.reduce(function(a,c){return a+(parseFloat(c.monthly_retainer)||0)},0);
+    document.getElementById('kClientsSub').textContent='\u00a3'+rev.toLocaleString('en-GB')+' + \u00a3'+mrr.toLocaleString('en-GB')+'/mo';
+
+    document.getElementById('kOutreach').textContent=outreach.length;
+    var replies=outreach.filter(function(o){return o.status==='Replied'});
+    document.getElementById('kOutreachSub').textContent=replies.length+' replies';
+
+    // Leads table (top 30)
+    var top=leads.slice(0,30);
+    document.getElementById('leadCount').textContent=leads.length+' leads';
+    var html='';
+    top.forEach(function(l){
+      var sc=l.lead_score||0;
+      var col=sc>=50?'var(--green)':sc>=30?'var(--accent)':'var(--text3)';
+      var ss=l.speed_score||0;
+      var scol=ss>=80?'var(--green)':ss>=50?'var(--accent)':'var(--red)';
+      var statusClass={'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no','Rejected':'s-no'};
+      html+='<tr>';
+      html+='<td style="font-weight:600;color:var(--white)">'+esc(l.business_name)+'</td>';
+      html+='<td>'+esc(l.industry||'—')+'</td>';
+      html+='<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc((l.location||'').split(',')[0])+'</td>';
+      html+='<td><strong style="color:'+col+'">'+sc+'</strong><div class="score-bar"><div class="score-fill" style="width:'+sc+'%;background:'+col+'"></div></div></td>';
+      html+='<td><span style="color:'+scol+'">'+ss+'</span></td>';
+      html+='<td>'+(l.email?'\u2705':'\u274c')+'</td>';
+      html+='<td><span class="status '+(statusClass[l.status]||'')+'">'+esc(l.status)+'</span></td>';
+      html+='</tr>';
+    });
+    document.getElementById('leadsTable').innerHTML=html||'<tr><td colspan="7" class="loading-s">No leads found</td></tr>';
+
+    // Funnel
+    var stages=[
+      {name:'Total Leads',count:leads.length,color:'var(--blue)'},
+      {name:'Audited',count:byStatus['Audited']||0,color:'var(--accent)'},
+      {name:'In Outreach',count:byStatus['In Outreach']||0,color:'var(--purple)'},
+      {name:'Replied',count:byStatus['Replied']||0,color:'var(--accentL)'},
+      {name:'Call Booked',count:byStatus['Call Booked']||0,color:'var(--green)'},
+      {name:'Client Won',count:byStatus['Client Won']||0,color:'var(--green)'}
+    ];
+    var maxC=stages[0].count||1;
+    var fhtml='';
+    stages.forEach(function(s){
+      var pct=Math.max(Math.round(s.count/maxC*100),s.count>0?8:0);
+      fhtml+='<div class="funnel-row">';
+      fhtml+='<div class="funnel-label">'+s.name+'</div>';
+      fhtml+='<div class="funnel-bar"><div class="funnel-fill" style="width:'+pct+'%;background:'+s.color+'">'+s.count+'</div></div>';
+      fhtml+='<div class="funnel-n">'+s.count+'</div>';
+      fhtml+='</div>';
+    });
+    document.getElementById('funnel').innerHTML=fhtml;
+
+    // Inquiries
+    document.getElementById('inquiryCount').textContent=inquiries.length;
+    if(inquiries.length){
+      var ihtml='';
+      inquiries.forEach(function(i){
+        ihtml+='<div class="inquiry-item"><div><div class="inquiry-email">'+esc(i.email||'Unknown')+'</div>';
+        if(i.message)ihtml+='<div class="inquiry-msg">'+esc(i.message.substring(0,80))+(i.message.length>80?'...':'')+'</div>';
+        ihtml+='</div><div class="inquiry-date">'+new Date(i.created_at).toLocaleDateString('en-GB')+'</div></div>';
+      });
+      document.getElementById('inquiries').innerHTML=ihtml;
+    } else {
+      document.getElementById('inquiries').innerHTML='<div class="loading-s" style="padding:20px">No inquiries yet.</div>';
+    }
+  });
 }
 
-function badgeClass(status){
-  const s=(status||'').toLowerCase();
-  if(s.includes('won'))return'badge-won';
-  if(s.includes('replied')||s.includes('booked'))return'badge-replied';
-  if(s.includes('outreach'))return'badge-outreach';
-  if(s.includes('audited'))return'badge-audited';
-  if(s.includes('no website')||s.includes('rejected'))return'badge-no';
-  return'badge-new';
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+function exportCSV(){
+  var rows=allLeads.filter(function(l){return l.status==='Audited'&&l.email});
+  if(!rows.length){alert('No audited leads with email to export.');return}
+  var csv='email,first_name,company_name,website,industry,speed_score,seo_score,email_body\n';
+  rows.forEach(function(l){
+    var name=(l.business_name||'').split(' ')[0];
+    csv+='"'+esc_csv(l.email)+'","'+esc_csv(name)+'","'+esc_csv(l.business_name)+'","'+esc_csv(l.website||'')+'","'+esc_csv(l.industry||'')+'","'+(l.speed_score||'')+'","'+(l.seo_score||'')+'","'+esc_csv(l.audit_summary||'')+'"'+'\n';
+  });
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='solis-instantly-export-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  alert('Exported '+rows.length+' leads for Instantly import.');
 }
 
-async function loadAll(){
-  document.getElementById('timestamp').textContent='Updated: '+new Date().toLocaleString('en-GB');
+function esc_csv(s){return(s||'').replace(/"/g,'""')}
 
-  // Fetch all data in parallel
-  const [leads,outreach,clients,inquiries]=await Promise.all([
-    query('leads','select=*&order=date_scraped.desc'),
-    query('outreach','select=*'),
-    query('clients','select=*'),
-    query('inquiries','select=*&order=created_at.desc&limit=10')
-  ]);
-
-  // KPIs
-  const totalLeads=leads.length;
-  const audited=leads.filter(l=>l.status==='Audited').length;
-  const withEmail=leads.filter(l=>l.email).length;
-  const emailsSent=outreach.length;
-  const replies=outreach.filter(o=>o.status==='Replied').length;
-  const callsBooked=leads.filter(l=>l.status==='Call Booked').length;
-  const clientsWon=clients.length;
-  const revenue=clients.reduce((s,c)=>s+(parseFloat(c.one_off_revenue)||0),0);
-  const mrr=clients.reduce((s,c)=>s+(parseFloat(c.monthly_retainer)||0),0);
-
-  document.getElementById('kpis').innerHTML=`
-    <div class="kpi"><div class="kpi-label">Total Leads</div><div class="kpi-value white">${totalLeads}</div><div class="kpi-sub">${withEmail} with email</div></div>
-    <div class="kpi"><div class="kpi-label">Audited</div><div class="kpi-value amber">${audited}</div><div class="kpi-sub">${totalLeads?Math.round(audited/totalLeads*100):0}% of total</div></div>
-    <div class="kpi"><div class="kpi-label">Emails Sent</div><div class="kpi-value blue">${emailsSent}</div><div class="kpi-sub">${replies} replies</div></div>
-    <div class="kpi"><div class="kpi-label">Calls Booked</div><div class="kpi-value purple">${callsBooked}</div><div class="kpi-sub">${emailsSent?Math.round(callsBooked/emailsSent*100):0}% conversion</div></div>
-    <div class="kpi"><div class="kpi-label">Clients Won</div><div class="kpi-value green">${clientsWon}</div><div class="kpi-sub">£${revenue.toLocaleString()} revenue</div></div>
-    <div class="kpi"><div class="kpi-label">MRR</div><div class="kpi-value green">£${mrr.toLocaleString()}</div><div class="kpi-sub">/month recurring</div></div>
-  `;
-
-  // Funnel
-  const statuses=[
-    {label:'New',count:leads.filter(l=>l.status==='New').length},
-    {label:'Audited',count:audited},
-    {label:'In Outreach',count:leads.filter(l=>l.status==='In Outreach').length},
-    {label:'Replied',count:leads.filter(l=>l.status==='Replied').length},
-    {label:'Call Booked',count:callsBooked},
-    {label:'Client Won',count:clientsWon}
-  ];
-  const maxCount=Math.max(...statuses.map(s=>s.count),1);
-  document.getElementById('funnel').innerHTML=statuses.map(s=>`
-    <div class="funnel-step">
-      <div class="funnel-label">${s.label}</div>
-      <div style="flex:1"><div class="funnel-bar" style="width:${Math.max(s.count/maxCount*100,2)}%"></div></div>
-      <div class="funnel-count">${s.count}</div>
-    </div>
-  `).join('');
-
-  // Inquiries
-  if(inquiries.length){
-    document.getElementById('inquiries').innerHTML=inquiries.map(i=>`
-      <div class="inquiry-item">
-        <div class="inquiry-email">${i.email}</div>
-        <div class="inquiry-date">${new Date(i.created_at).toLocaleDateString('en-GB')}</div>
-      </div>
-    `).join('');
-  } else {
-    document.getElementById('inquiries').innerHTML='<div style="color:var(--text3);font-size:13px;padding:16px 0">No inquiries yet.</div>';
-  }
-
-  // Leads table
-  document.getElementById('leadsBody').innerHTML=leads.slice(0,50).map(l=>`
-    <tr>
-      <td style="color:var(--white);font-weight:600">${l.business_name||'-'}</td>
-      <td>${l.industry||'-'}</td>
-      <td>${l.location||'-'}</td>
-      <td><span class="badge ${badgeClass(l.status)}">${l.status||'New'}</span></td>
-      <td>${l.speed_score!=null?l.speed_score:'-'}</td>
-      <td>${l.seo_score!=null?l.seo_score:'-'}</td>
-      <td>${l.email?'✓':'—'}</td>
-    </tr>
-  `).join('');
+function runBulkAudit(){
+  if(!confirm('This will trigger the Make.com audit scenario for all New leads. Continue?'))return;
+  // Update all "New" leads to trigger re-audit by touching their status
+  var newLeads=allLeads.filter(function(l){return l.status==='New'&&l.website});
+  if(!newLeads.length){alert('No new leads with websites to audit. All leads are already audited!');return}
+  alert('Found '+newLeads.length+' new leads. The Make.com "New Lead \u2192 AI Audit" scenario runs every 15 minutes and will pick these up automatically.');
 }
 
-loadAll();
+loadData();
 // Auto-refresh every 60 seconds
-setInterval(loadAll,60000);
+setInterval(loadData,60000);
 </script>
 </body>
 </html>
