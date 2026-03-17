@@ -368,22 +368,35 @@ function ac(){
 var co=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){ac();co.unobserve(e.target)}})},{threshold:.3});
 var ct=document.querySelector('.ctrs');if(ct)co.observe(ct);
 
-// Audit form
+// Audit form — submits to Supabase inquiries table
+var SB_URL='https://zqcpktpnfikmshqeqxlg.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+
 function submitAudit(){
   var email=document.getElementById('auditEmail').value;
+  var btn=document.querySelector('.cf .bm');
   if(!email||!email.includes('@')){alert('Please enter a valid email address.');return}
-  alert('Thanks! Your free audit is on its way to '+email+'. We\'ll be in touch within 24 hours.\n\n— The Solis Digital Team');
-  document.getElementById('auditEmail').value='';
+  btn.textContent='Sending...';btn.style.pointerEvents='none';
+  fetch(SB_URL+'/rest/v1/inquiries',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body:JSON.stringify({email:email,source:'website_audit_form'})
+  }).then(function(r){
+    if(!r.ok) throw new Error('Network error');
+    document.querySelector('.cf').innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:24px;margin-bottom:12px">✓</div><p style="color:var(--accentL);font-weight:700;font-size:17px">Audit requested!</p><p style="color:var(--text2);font-size:14px;margin-top:8px">We\'ll email '+email+' within 24 hours with your detailed report.</p></div>';
+  }).catch(function(){
+    btn.textContent='Get Free Audit →';btn.style.pointerEvents='auto';
+    alert('Something went wrong. Please email us at info@solisdigital.co.uk instead.');
+  });
 }
 </script>
-</body>
-</html>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V7ZVJZKH2W"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-V7ZVJZKH2W');
 </script>
+</body>
+</html>

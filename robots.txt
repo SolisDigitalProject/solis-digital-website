@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /scripts/
+
+Sitemap: https://solisdigital.co.uk/sitemap.xml

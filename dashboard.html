@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solis Digital — Dashboard</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--green:#34d399;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;--white:#fff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;padding:24px;min-height:100vh}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.header h1{font-size:24px;font-weight:800}
+.header h1 span{color:var(--accent)}
+.refresh{padding:8px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s}
+.refresh:hover{border-color:var(--accent);color:var(--white)}
+.timestamp{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* KPI Cards */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+.kpi-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:8px}
+.kpi-value{font-size:32px;font-weight:800;letter-spacing:-1px}
+.kpi-sub{font-size:12px;color:var(--text2);margin-top:4px}
+.green{color:var(--green)}.amber{color:var(--accent)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}.white{color:var(--white)}
+
+/* Sections */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+@media(max-width:768px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:16px;color:var(--white)}
+
+/* Funnel */
+.funnel-step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.funnel-step:last-child{border-bottom:none}
+.funnel-bar{height:8px;border-radius:4px;background:var(--accent);transition:width .6s ease}
+.funnel-label{font-size:13px;color:var(--text2);min-width:100px}
+.funnel-count{font-size:14px;font-weight:700;color:var(--white);min-width:40px;text-align:right}
+
+/* Table */
+.leads-table{width:100%;border-collapse:collapse;font-size:13px}
+.leads-table th{text-align:left;padding:8px 12px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.leads-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+.leads-table tr:hover td{color:var(--white)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-new{background:rgba(96,165,250,.1);color:var(--blue)}
+.badge-audited{background:rgba(232,162,58,.1);color:var(--accent)}
+.badge-outreach{background:rgba(167,139,250,.1);color:var(--purple)}
+.badge-replied{background:rgba(52,211,153,.1);color:var(--green)}
+.badge-won{background:rgba(52,211,153,.2);color:var(--green)}
+.badge-no{background:rgba(248,113,113,.1);color:var(--red)}
+
+/* Inquiries */
+.inquiry-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.inquiry-item:last-child{border-bottom:none}
+.inquiry-email{font-size:14px;color:var(--white)}
+.inquiry-date{font-size:12px;color:var(--text3)}
+
+.loading{text-align:center;padding:40px;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Solis <span>Digital</span> — Dashboard</h1>
+    <div class="timestamp" id="timestamp"></div>
+  </div>
+  <button class="refresh" onclick="loadAll()">Refresh ↻</button>
+</div>
+
+<div class="kpis" id="kpis"><div class="loading">Loading...</div></div>
+
+<div class="grid2">
+  <div class="panel">
+    <h3>Conversion Funnel</h3>
+    <div id="funnel"><div class="loading">Loading...</div></div>
+  </div>
+  <div class="panel">
+    <h3>Recent Inquiries</h3>
+    <div id="inquiries"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div class="panel" style="margin-bottom:32px">
+  <h3>Lead Pipeline</h3>
+  <div style="overflow-x:auto">
+    <table class="leads-table" id="leadsTable">
+      <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Status</th><th>Speed</th><th>SEO</th><th>Email</th></tr></thead>
+      <tbody id="leadsBody"><tr><td colspan="7" class="loading">Loading...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SB='https://zqcpktpnfikmshqeqxlg.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+const H={'apikey':KEY,'Authorization':'Bearer '+KEY};
+
+async function query(table,params){
+  const r=await fetch(`${SB}/rest/v1/${table}?${params}`,{headers:H});
+  return r.json();
+}
+
+function badgeClass(status){
+  const s=(status||'').toLowerCase();
+  if(s.includes('won'))return'badge-won';
+  if(s.includes('replied')||s.includes('booked'))return'badge-replied';
+  if(s.includes('outreach'))return'badge-outreach';
+  if(s.includes('audited'))return'badge-audited';
+  if(s.includes('no website')||s.includes('rejected'))return'badge-no';
+  return'badge-new';
+}
+
+async function loadAll(){
+  document.getElementById('timestamp').textContent='Updated: '+new Date().toLocaleString('en-GB');
+
+  // Fetch all data in parallel
+  const [leads,outreach,clients,inquiries]=await Promise.all([
+    query('leads','select=*&order=date_scraped.desc'),
+    query('outreach','select=*'),
+    query('clients','select=*'),
+    query('inquiries','select=*&order=created_at.desc&limit=10')
+  ]);
+
+  // KPIs
+  const totalLeads=leads.length;
+  const audited=leads.filter(l=>l.status==='Audited').length;
+  const withEmail=leads.filter(l=>l.email).length;
+  const emailsSent=outreach.length;
+  const replies=outreach.filter(o=>o.status==='Replied').length;
+  const callsBooked=leads.filter(l=>l.status==='Call Booked').length;
+  const clientsWon=clients.length;
+  const revenue=clients.reduce((s,c)=>s+(parseFloat(c.one_off_revenue)||0),0);
+  const mrr=clients.reduce((s,c)=>s+(parseFloat(c.monthly_retainer)||0),0);
+
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi"><div class="kpi-label">Total Leads</div><div class="kpi-value white">${totalLeads}</div><div class="kpi-sub">${withEmail} with email</div></div>
+    <div class="kpi"><div class="kpi-label">Audited</div><div class="kpi-value amber">${audited}</div><div class="kpi-sub">${totalLeads?Math.round(audited/totalLeads*100):0}% of total</div></div>
+    <div class="kpi"><div class="kpi-label">Emails Sent</div><div class="kpi-value blue">${emailsSent}</div><div class="kpi-sub">${replies} replies</div></div>
+    <div class="kpi"><div class="kpi-label">Calls Booked</div><div class="kpi-value purple">${callsBooked}</div><div class="kpi-sub">${emailsSent?Math.round(callsBooked/emailsSent*100):0}% conversion</div></div>
+    <div class="kpi"><div class="kpi-label">Clients Won</div><div class="kpi-value green">${clientsWon}</div><div class="kpi-sub">£${revenue.toLocaleString()} revenue</div></div>
+    <div class="kpi"><div class="kpi-label">MRR</div><div class="kpi-value green">£${mrr.toLocaleString()}</div><div class="kpi-sub">/month recurring</div></div>
+  `;
+
+  // Funnel
+  const statuses=[
+    {label:'New',count:leads.filter(l=>l.status==='New').length},
+    {label:'Audited',count:audited},
+    {label:'In Outreach',count:leads.filter(l=>l.status==='In Outreach').length},
+    {label:'Replied',count:leads.filter(l=>l.status==='Replied').length},
+    {label:'Call Booked',count:callsBooked},
+    {label:'Client Won',count:clientsWon}
+  ];
+  const maxCount=Math.max(...statuses.map(s=>s.count),1);
+  document.getElementById('funnel').innerHTML=statuses.map(s=>`
+    <div class="funnel-step">
+      <div class="funnel-label">${s.label}</div>
+      <div style="flex:1"><div class="funnel-bar" style="width:${Math.max(s.count/maxCount*100,2)}%"></div></div>
+      <div class="funnel-count">${s.count}</div>
+    </div>
+  `).join('');
+
+  // Inquiries
+  if(inquiries.length){
+    document.getElementById('inquiries').innerHTML=inquiries.map(i=>`
+      <div class="inquiry-item">
+        <div class="inquiry-email">${i.email}</div>
+        <div class="inquiry-date">${new Date(i.created_at).toLocaleDateString('en-GB')}</div>
+      </div>
+    `).join('');
+  } else {
+    document.getElementById('inquiries').innerHTML='<div style="color:var(--text3);font-size:13px;padding:16px 0">No inquiries yet.</div>';
+  }
+
+  // Leads table
+  document.getElementById('leadsBody').innerHTML=leads.slice(0,50).map(l=>`
+    <tr>
+      <td style="color:var(--white);font-weight:600">${l.business_name||'-'}</td>
+      <td>${l.industry||'-'}</td>
+      <td>${l.location||'-'}</td>
+      <td><span class="badge ${badgeClass(l.status)}">${l.status||'New'}</span></td>
+      <td>${l.speed_score!=null?l.speed_score:'-'}</td>
+      <td>${l.seo_score!=null?l.seo_score:'-'}</td>
+      <td>${l.email?'✓':'—'}</td>
+    </tr>
+  `).join('');
+}
+
+loadAll();
+// Auto-refresh every 60 seconds
+setInterval(loadAll,60000);
+</script>
+</body>
+</html>

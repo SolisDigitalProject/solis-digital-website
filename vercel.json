@@ -1,0 +1,26 @@
+{
+  "headers": [
+    {
+      "source": "/scripts/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    },
+    {
+      "source": "/contract-template.md",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/scripts/:path*",
+      "destination": "/404"
+    },
+    {
+      "source": "/contract-template.md",
+      "destination": "/404"
+    }
+  ]
+}
