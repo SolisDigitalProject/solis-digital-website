@@ -3,4 +3,4 @@ Allow: /
 Disallow: /dashboard.html
 Disallow: /scripts/
 
-Sitemap: https://solisdigital.co.uk/sitemap.xml
+Sitemap: https://www.solisdigital.co.uk/sitemap.xml
