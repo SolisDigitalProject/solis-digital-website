@@ -13,11 +13,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .top{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2)}
 .top h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px}
 .top h1 span{color:var(--accent)}
-.top-r{display:flex;gap:10px}
+.top-r{display:flex;gap:10px;flex-wrap:wrap}
 .btn{padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:var(--font);transition:all .2s}
 .btn-p{background:var(--accent);color:#0a0a0a}.btn-p:hover{background:var(--accentL)}
 .btn-s{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn-s:hover{border-color:var(--accent)}
 .btn-d{background:var(--green);color:#0a0a0a}.btn-d:hover{opacity:.9}
+.btn-sm{padding:6px 14px;font-size:11px;border-radius:6px}
+.btn-call{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.25);padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s}
+.btn-call:hover{background:rgba(52,211,153,.3)}
+.btn-call.called{background:rgba(142,143,163,.1);color:var(--text3);border-color:var(--border);cursor:default}
 .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;padding:24px 32px}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;transition:all .3s}
 .kpi:hover{border-color:rgba(232,162,58,.2)}
@@ -25,14 +29,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .kpi-val{font-size:32px;font-weight:900;letter-spacing:-1px;color:var(--white)}
 .kpi-val.green{color:var(--green)}.kpi-val.accent{color:var(--accent)}.kpi-val.red{color:var(--red)}.kpi-val.blue{color:var(--blue)}.kpi-val.purple{color:var(--purple)}
 .kpi-sub{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* Quick Actions Bar */
+.quick-actions{padding:0 32px 16px;display:flex;gap:10px;flex-wrap:wrap}
+.quick-actions .btn{display:inline-flex;align-items:center;gap:6px}
+
+/* Filter Chips */
+.filter-bar{padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--bg2)}
+.filter-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .2s}
+.filter-chip:hover{border-color:var(--accent);color:var(--text)}
+.filter-chip.active{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+.filter-chip .chip-count{font-size:10px;opacity:.7;margin-left:4px}
+
 .panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:0 32px 24px}
+.panels-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:0 32px 24px}
 .panels-b{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 32px 24px}
+.panels-full{padding:0 32px 24px}
 .inquiry-item{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .inquiry-item:last-child{border-bottom:none}
 .inquiry-email{font-size:13px;color:var(--white);font-weight:600}
 .inquiry-msg{font-size:12px;color:var(--text2);margin-top:2px}
 .inquiry-date{font-size:11px;color:var(--text3)}
-@media(max-width:768px){.panels-b{grid-template-columns:1fr}}
+@media(max-width:768px){.panels-b{grid-template-columns:1fr}.panels-3{grid-template-columns:1fr}}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .panel-h{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
 .panel-h h3{font-size:14px;font-weight:700}
@@ -59,8 +77,47 @@ tr:hover td{background:rgba(232,162,58,.02)}
 .funnel-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 10px;font-size:11px;font-weight:700;color:#0a0a0a;transition:width .8s ease}
 .funnel-n{font-size:14px;font-weight:800;width:40px;text-align:right;color:var(--white)}
 .loading-s{text-align:center;padding:40px;color:var(--text3)}
-@media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.panels{grid-template-columns:1fr}}
-@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}}
+
+/* Call List Styles */
+.call-row{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;transition:background .2s}
+.call-row:hover{background:rgba(232,162,58,.03)}
+.call-row:last-child{border-bottom:none}
+.call-info{flex:1;min-width:0}
+.call-biz{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.call-industry{font-size:11px;color:var(--text3)}
+.call-phone{text-decoration:none;color:var(--accent);font-weight:600;font-size:13px;font-family:var(--mono);transition:color .2s;white-space:nowrap}
+.call-phone:hover{color:var(--accentL)}
+.call-score{font-size:13px;font-weight:800;min-width:36px;text-align:center}
+.call-speed{font-size:12px;min-width:36px;text-align:center}
+.call-actions{display:flex;align-items:center;gap:8px}
+
+/* Revenue Panel */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.rev-item{background:var(--surface);padding:20px;text-align:center}
+.rev-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;margin-bottom:6px}
+.rev-val{font-size:24px;font-weight:900;color:var(--white);letter-spacing:-0.5px}
+.rev-val.green{color:var(--green)}
+.rev-val.accent{color:var(--accent)}
+.rev-val.blue{color:var(--blue)}
+.rev-breakdown{padding:16px 20px}
+.rev-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.rev-row:last-child{border-bottom:none}
+.rev-pkg{font-weight:600;color:var(--text)}
+.rev-pkg-val{color:var(--text2);font-family:var(--mono);font-size:12px}
+
+/* Outreach Stats */
+.outreach-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.outreach-item{background:var(--surface);padding:20px;text-align:center}
+.outreach-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;margin-bottom:6px}
+.outreach-val{font-size:28px;font-weight:900;letter-spacing:-0.5px}
+
+/* Section Divider */
+.section-divider{padding:24px 32px 12px;display:flex;align-items:center;gap:12px}
+.section-divider h2{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px}
+.section-divider .line{flex:1;height:1px;background:var(--border)}
+
+@media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.panels{grid-template-columns:1fr}.panels-3{grid-template-columns:1fr}.outreach-grid{grid-template-columns:repeat(2,1fr)}.rev-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}.quick-actions{flex-direction:column}.filter-bar{overflow-x:auto;flex-wrap:nowrap}}
 </style>
 </head>
 <body>
@@ -68,7 +125,6 @@ tr:hover td{background:rgba(232,162,58,.02)}
 <div class="top">
   <h1>&#9728; Solis <span>Command Centre</span></h1>
   <div class="top-r">
-    <button class="btn btn-s" onclick="exportCSV()">Export CSV for Instantly</button>
     <button class="btn btn-d" onclick="runBulkAudit()">Run Bulk Audit</button>
     <button class="btn btn-p" onclick="loadData()">Refresh</button>
   </div>
@@ -83,16 +139,61 @@ tr:hover td{background:rgba(232,162,58,.02)}
   <div class="kpi"><div class="kpi-label">Outreach Sent</div><div class="kpi-val" id="kOutreach">—</div><div class="kpi-sub" id="kOutreachSub">emails sent</div></div>
 </div>
 
+<!-- Quick Actions Bar -->
+<div class="quick-actions">
+  <button class="btn btn-s btn-sm" onclick="exportCallListCSV()">&#128222; Export Call List CSV</button>
+  <button class="btn btn-s btn-sm" onclick="exportCSV()">&#128231; Export Email List CSV</button>
+</div>
+
+<!-- Outreach Stats + Revenue Panels -->
+<div class="panels-b" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Outreach Performance</h3>
+      <span class="badge" id="outreachBadge">emails</span>
+    </div>
+    <div class="outreach-grid" id="outreachStats">
+      <div class="outreach-item"><div class="outreach-label">Total Sent</div><div class="outreach-val" id="oSent" style="color:var(--white)">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Replied</div><div class="outreach-val" id="oReplied" style="color:var(--blue)">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Interested</div><div class="outreach-val" id="oInterested" style="color:var(--accent)">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Calls Booked</div><div class="outreach-val" id="oBooked" style="color:var(--green)">—</div></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Revenue Overview</h3>
+      <span class="badge" id="revBadge">clients</span>
+    </div>
+    <div class="rev-grid" id="revStats">
+      <div class="rev-item"><div class="rev-label">One-Off Revenue</div><div class="rev-val accent" id="rOneOff">—</div></div>
+      <div class="rev-item"><div class="rev-label">Monthly MRR</div><div class="rev-val green" id="rMRR">—</div></div>
+      <div class="rev-item"><div class="rev-label">Total Clients</div><div class="rev-val blue" id="rClients">—</div></div>
+    </div>
+    <div class="rev-breakdown" id="revBreakdown"></div>
+  </div>
+</div>
+
+<!-- Leads Table with Filters -->
 <div class="panels">
   <div class="panel">
     <div class="panel-h">
       <h3>Top Leads by Score</h3>
       <span class="badge" id="leadCount">0 leads</span>
     </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-chip active" data-filter="All" onclick="filterLeads('All',this)">All</button>
+      <button class="filter-chip" data-filter="New" onclick="filterLeads('New',this)">New</button>
+      <button class="filter-chip" data-filter="Audited" onclick="filterLeads('Audited',this)">Audited</button>
+      <button class="filter-chip" data-filter="In Outreach" onclick="filterLeads('In Outreach',this)">In Outreach</button>
+      <button class="filter-chip" data-filter="Replied" onclick="filterLeads('Replied',this)">Replied</button>
+      <button class="filter-chip" data-filter="Call Booked" onclick="filterLeads('Call Booked',this)">Call Booked</button>
+      <button class="filter-chip" data-filter="Client Won" onclick="filterLeads('Client Won',this)">Client Won</button>
+      <button class="filter-chip" data-filter="No Website" onclick="filterLeads('No Website',this)">No Website</button>
+    </div>
     <div style="overflow-x:auto">
       <table>
-        <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Score</th><th>Speed</th><th>Email</th><th>Status</th></tr></thead>
-        <tbody id="leadsTable"><tr><td colspan="7" class="loading-s">Loading leads...</td></tr></tbody>
+        <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Score</th><th>Speed</th><th>Phone</th><th>Email</th><th>Status</th><th>Audit Summary</th></tr></thead>
+        <tbody id="leadsTable"><tr><td colspan="9" class="loading-s">Loading leads...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -106,7 +207,15 @@ tr:hover td{background:rgba(232,162,58,.02)}
   </div>
 </div>
 
+<!-- Call List + Recent Inquiries -->
 <div class="panels-b">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>&#128222; Call List — Top 15</h3>
+      <span class="badge" id="callCount">0 leads</span>
+    </div>
+    <div id="callList"><div class="loading-s">Loading call list...</div></div>
+  </div>
   <div class="panel">
     <div class="panel-h">
       <h3>Recent Inquiries</h3>
@@ -122,6 +231,9 @@ var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6In
 var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
 
 var allLeads=[];
+var allClients=[];
+var allOutreach=[];
+var currentFilter='All';
 
 function q(endpoint){return fetch(SB+endpoint,{headers:H}).then(function(r){return r.json()})}
 
@@ -134,6 +246,8 @@ function loadData(){
   ]).then(function(res){
     var leads=res[0],clients=res[1],outreach=res[2],inquiries=res[3]||[];
     allLeads=leads;
+    allClients=clients;
+    allOutreach=outreach;
 
     // KPIs
     document.getElementById('kTotal').textContent=leads.length;
@@ -148,7 +262,7 @@ function loadData(){
 
     var emails=leads.filter(function(l){return l.email});
     document.getElementById('kEmails').textContent=emails.length;
-    document.getElementById('kEmailsSub').textContent=Math.round(emails.length/leads.length*100)+'% of leads';
+    document.getElementById('kEmailsSub').textContent=leads.length>0?Math.round(emails.length/leads.length*100)+'% of leads':'0%';
 
     var scores=leads.filter(function(l){return l.lead_score!=null}).map(function(l){return l.lead_score});
     var avg=scores.length?Math.round(scores.reduce(function(a,b){return a+b},0)/scores.length):0;
@@ -163,27 +277,11 @@ function loadData(){
     var replies=outreach.filter(function(o){return o.status==='Replied'});
     document.getElementById('kOutreachSub').textContent=replies.length+' replies';
 
-    // Leads table (top 30)
-    var top=leads.slice(0,30);
-    document.getElementById('leadCount').textContent=leads.length+' leads';
-    var html='';
-    top.forEach(function(l){
-      var sc=l.lead_score||0;
-      var col=sc>=50?'var(--green)':sc>=30?'var(--accent)':'var(--text3)';
-      var ss=l.speed_score||0;
-      var scol=ss>=80?'var(--green)':ss>=50?'var(--accent)':'var(--red)';
-      var statusClass={'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no','Rejected':'s-no'};
-      html+='<tr>';
-      html+='<td style="font-weight:600;color:var(--white)">'+esc(l.business_name)+'</td>';
-      html+='<td>'+esc(l.industry||'—')+'</td>';
-      html+='<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc((l.location||'').split(',')[0])+'</td>';
-      html+='<td><strong style="color:'+col+'">'+sc+'</strong><div class="score-bar"><div class="score-fill" style="width:'+sc+'%;background:'+col+'"></div></div></td>';
-      html+='<td><span style="color:'+scol+'">'+ss+'</span></td>';
-      html+='<td>'+(l.email?'\u2705':'\u274c')+'</td>';
-      html+='<td><span class="status '+(statusClass[l.status]||'')+'">'+esc(l.status)+'</span></td>';
-      html+='</tr>';
-    });
-    document.getElementById('leadsTable').innerHTML=html||'<tr><td colspan="7" class="loading-s">No leads found</td></tr>';
+    // Update filter chip counts
+    updateFilterCounts(byStatus, leads.length);
+
+    // Leads table
+    renderLeadsTable(leads);
 
     // Funnel
     var stages=[
@@ -206,6 +304,15 @@ function loadData(){
     });
     document.getElementById('funnel').innerHTML=fhtml;
 
+    // Outreach Stats Panel
+    renderOutreachStats(outreach);
+
+    // Revenue Panel
+    renderRevenuePanel(clients);
+
+    // Call List
+    renderCallList(leads);
+
     // Inquiries
     document.getElementById('inquiryCount').textContent=inquiries.length;
     if(inquiries.length){
@@ -222,6 +329,182 @@ function loadData(){
   });
 }
 
+function renderLeadsTable(leads){
+  var filtered=leads;
+  if(currentFilter!=='All'){
+    filtered=leads.filter(function(l){return l.status===currentFilter});
+  }
+  var top=filtered.slice(0,30);
+  document.getElementById('leadCount').textContent=filtered.length+' leads';
+  var html='';
+  top.forEach(function(l){
+    var sc=l.lead_score||0;
+    var col=sc>=50?'var(--green)':sc>=30?'var(--accent)':'var(--text3)';
+    var ss=l.speed_score||0;
+    var scol=ss>=80?'var(--green)':ss>=50?'var(--accent)':'var(--red)';
+    var statusClass={'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no','Rejected':'s-no'};
+    var summary=l.audit_summary||'';
+    var truncSummary=summary.length>50?summary.substring(0,50)+'...':summary;
+    html+='<tr>';
+    html+='<td style="font-weight:600;color:var(--white)">'+esc(l.business_name)+'</td>';
+    html+='<td>'+esc(l.industry||'\u2014')+'</td>';
+    html+='<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc((l.location||'').split(',')[0])+'</td>';
+    html+='<td><strong style="color:'+col+'">'+sc+'</strong><div class="score-bar"><div class="score-fill" style="width:'+sc+'%;background:'+col+'"></div></div></td>';
+    html+='<td><span style="color:'+scol+'">'+ss+'</span></td>';
+    html+='<td>'+(l.phone?'<a href="tel:'+esc(l.phone)+'" class="call-phone" style="font-size:11px">'+esc(l.phone)+'</a>':'\u2014')+'</td>';
+    html+='<td>'+(l.email?'\u2705':'\u274c')+'</td>';
+    html+='<td><span class="status '+(statusClass[l.status]||'')+'">'+esc(l.status)+'</span></td>';
+    html+='<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--text2)" title="'+esc(summary)+'">'+esc(truncSummary||'\u2014')+'</td>';
+    html+='</tr>';
+  });
+  document.getElementById('leadsTable').innerHTML=html||'<tr><td colspan="9" class="loading-s">No leads found</td></tr>';
+}
+
+function updateFilterCounts(byStatus, total){
+  var chips=document.querySelectorAll('.filter-chip');
+  for(var i=0;i<chips.length;i++){
+    var f=chips[i].getAttribute('data-filter');
+    var count=f==='All'?total:(byStatus[f]||0);
+    var countSpan=chips[i].querySelector('.chip-count');
+    if(!countSpan){
+      countSpan=document.createElement('span');
+      countSpan.className='chip-count';
+      chips[i].appendChild(countSpan);
+    }
+    countSpan.textContent='('+count+')';
+  }
+}
+
+function filterLeads(status, el){
+  currentFilter=status;
+  var chips=document.querySelectorAll('.filter-chip');
+  for(var i=0;i<chips.length;i++){chips[i].classList.remove('active')}
+  el.classList.add('active');
+  renderLeadsTable(allLeads);
+}
+
+function renderOutreachStats(outreach){
+  var sent=outreach.length;
+  var replied=outreach.filter(function(o){return o.status==='Replied'}).length;
+  var interested=outreach.filter(function(o){return o.status==='Interested'}).length;
+  var booked=outreach.filter(function(o){return o.status==='Call Booked'}).length;
+
+  document.getElementById('oSent').textContent=sent;
+  document.getElementById('oReplied').textContent=replied;
+  document.getElementById('oInterested').textContent=interested;
+  document.getElementById('oBooked').textContent=booked;
+  document.getElementById('outreachBadge').textContent=sent+' emails';
+}
+
+function renderRevenuePanel(clients){
+  var oneOff=clients.reduce(function(a,c){return a+(parseFloat(c.one_off_revenue)||0)},0);
+  var mrr=clients.reduce(function(a,c){return a+(parseFloat(c.monthly_retainer)||0)},0);
+
+  document.getElementById('rOneOff').textContent='\u00a3'+oneOff.toLocaleString('en-GB');
+  document.getElementById('rMRR').textContent='\u00a3'+mrr.toLocaleString('en-GB')+'/mo';
+  document.getElementById('rClients').textContent=clients.length;
+  document.getElementById('revBadge').textContent=clients.length+' clients';
+
+  // Package breakdown
+  var packages={};
+  clients.forEach(function(c){
+    var pkg=c.package_type||c.package||'Other';
+    if(!packages[pkg]){packages[pkg]={count:0,oneOff:0,mrr:0}}
+    packages[pkg].count++;
+    packages[pkg].oneOff+=(parseFloat(c.one_off_revenue)||0);
+    packages[pkg].mrr+=(parseFloat(c.monthly_retainer)||0);
+  });
+  var bhtml='';
+  Object.keys(packages).forEach(function(pkg){
+    var p=packages[pkg];
+    bhtml+='<div class="rev-row">';
+    bhtml+='<span class="rev-pkg">'+esc(pkg)+' <span style="color:var(--text3);font-weight:400">('+p.count+')</span></span>';
+    bhtml+='<span class="rev-pkg-val">\u00a3'+p.oneOff.toLocaleString('en-GB')+' + \u00a3'+p.mrr.toLocaleString('en-GB')+'/mo</span>';
+    bhtml+='</div>';
+  });
+  document.getElementById('revBreakdown').innerHTML=bhtml||'<div style="padding:8px 0;font-size:12px;color:var(--text3)">No package data yet.</div>';
+}
+
+function renderCallList(leads){
+  var phonLeads=leads.filter(function(l){return l.phone&&l.phone.trim()!==''});
+  phonLeads.sort(function(a,b){return(b.lead_score||0)-(a.lead_score||0)});
+  var top15=phonLeads.slice(0,15);
+  document.getElementById('callCount').textContent=top15.length+' of '+phonLeads.length+' with phone';
+
+  if(!top15.length){
+    document.getElementById('callList').innerHTML='<div class="loading-s" style="padding:20px">No leads with phone numbers yet.</div>';
+    return;
+  }
+
+  var html='';
+  top15.forEach(function(l,idx){
+    var sc=l.lead_score||0;
+    var col=sc>=50?'var(--green)':sc>=30?'var(--accent)':'var(--text3)';
+    var ss=l.speed_score||0;
+    var scol=ss>=80?'var(--green)':ss>=50?'var(--accent)':'var(--red)';
+    var statusClass={'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no','Rejected':'s-no'};
+    var alreadyCalled=(l.notes||'').indexOf('Called on')!==-1;
+
+    html+='<div class="call-row">';
+    html+='<div style="font-size:12px;font-weight:800;color:var(--text3);width:20px">'+(idx+1)+'</div>';
+    html+='<div class="call-info">';
+    html+='<div class="call-biz">'+esc(l.business_name)+'</div>';
+    html+='<div class="call-industry">'+esc(l.industry||'\u2014')+'</div>';
+    html+='</div>';
+    html+='<a href="tel:'+esc(l.phone)+'" class="call-phone">'+esc(l.phone)+'</a>';
+    html+='<div class="call-score" style="color:'+col+'">'+sc+'</div>';
+    html+='<div class="call-speed" style="color:'+scol+'">'+ss+'</div>';
+    html+='<span class="status '+(statusClass[l.status]||'')+'" style="min-width:70px;text-align:center">'+esc(l.status)+'</span>';
+    html+='<div class="call-actions">';
+    if(alreadyCalled){
+      html+='<button class="btn-call called" disabled>Called</button>';
+    } else {
+      html+='<button class="btn-call" onclick="markCalled(\''+l.id+'\',this)">Mark Called</button>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+  document.getElementById('callList').innerHTML=html;
+}
+
+function markCalled(leadId, btn){
+  var today=new Date().toLocaleDateString('en-GB');
+  var noteText='Called on '+today;
+  btn.disabled=true;
+  btn.textContent='Saving...';
+
+  fetch(SB+'/leads?id=eq.'+leadId,{
+    method:'PATCH',
+    headers:{
+      'apikey':KEY,
+      'Authorization':'Bearer '+KEY,
+      'Content-Type':'application/json',
+      'Prefer':'return=minimal'
+    },
+    body:JSON.stringify({notes:noteText})
+  }).then(function(r){
+    if(r.ok){
+      btn.textContent='Called';
+      btn.classList.add('called');
+      // Update local data
+      for(var i=0;i<allLeads.length;i++){
+        if(String(allLeads[i].id)===String(leadId)){
+          allLeads[i].notes=noteText;
+          break;
+        }
+      }
+    } else {
+      btn.textContent='Error';
+      btn.disabled=false;
+      setTimeout(function(){btn.textContent='Mark Called'},2000);
+    }
+  }).catch(function(){
+    btn.textContent='Error';
+    btn.disabled=false;
+    setTimeout(function(){btn.textContent='Mark Called'},2000);
+  });
+}
+
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
 function exportCSV(){
@@ -235,16 +518,31 @@ function exportCSV(){
   var blob=new Blob([csv],{type:'text/csv'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url;a.download='solis-instantly-export-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.href=url;a.download='solis-email-export-'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();URL.revokeObjectURL(url);
-  alert('Exported '+rows.length+' leads for Instantly import.');
+  alert('Exported '+rows.length+' leads for email outreach.');
+}
+
+function exportCallListCSV(){
+  var rows=allLeads.filter(function(l){return l.phone&&l.phone.trim()!==''});
+  rows.sort(function(a,b){return(b.lead_score||0)-(a.lead_score||0)});
+  if(!rows.length){alert('No leads with phone numbers to export.');return}
+  var csv='business_name,industry,phone,email,website,lead_score,speed_score,status,location\n';
+  rows.forEach(function(l){
+    csv+='"'+esc_csv(l.business_name)+'","'+esc_csv(l.industry||'')+'","'+esc_csv(l.phone)+'","'+esc_csv(l.email||'')+'","'+esc_csv(l.website||'')+'","'+(l.lead_score||0)+'","'+(l.speed_score||0)+'","'+esc_csv(l.status||'')+'","'+esc_csv(l.location||'')+'"'+'\n';
+  });
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='solis-call-list-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  alert('Exported '+rows.length+' leads with phone numbers.');
 }
 
 function esc_csv(s){return(s||'').replace(/"/g,'""')}
 
 function runBulkAudit(){
   if(!confirm('This will trigger the Make.com audit scenario for all New leads. Continue?'))return;
-  // Update all "New" leads to trigger re-audit by touching their status
   var newLeads=allLeads.filter(function(l){return l.status==='New'&&l.website});
   if(!newLeads.length){alert('No new leads with websites to audit. All leads are already audited!');return}
   alert('Found '+newLeads.length+' new leads. The Make.com "New Lead \u2192 AI Audit" scenario runs every 15 minutes and will pick these up automatically.');
