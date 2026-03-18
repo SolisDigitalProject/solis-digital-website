@@ -128,6 +128,20 @@ tr:hover td{background:rgba(232,162,58,.02)}
 .section-divider h2{font-size:15px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px}
 .section-divider .line{flex:1;height:1px;background:var(--border)}
 
+/* Call/Email Status Pills */
+.pill{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;display:inline-block}
+.pill-not-called{background:rgba(248,113,113,.12);color:var(--red)}
+.pill-called{background:rgba(96,165,250,.12);color:var(--blue)}
+.pill-callback{background:rgba(232,162,58,.12);color:var(--accent)}
+.pill-interested{background:rgba(52,211,153,.12);color:var(--green)}
+.pill-booked{background:rgba(52,211,153,.25);color:var(--green)}
+.pill-sent{background:rgba(142,143,163,.12);color:var(--text2)}
+.pill-opened{background:rgba(96,165,250,.12);color:var(--blue)}
+.pill-replied{background:rgba(232,162,58,.12);color:var(--accent)}
+.call-select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:11px;padding:4px 8px;border-radius:6px;font-family:var(--font);cursor:pointer}
+.call-select:focus{border-color:var(--accent);outline:none}
+.rev-loss{font-weight:700;font-family:var(--mono);font-size:12px}
+
 @media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.panels{grid-template-columns:1fr}.panels-3{grid-template-columns:1fr}.outreach-grid{grid-template-columns:repeat(2,1fr)}.rev-grid{grid-template-columns:1fr}}
 @media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}.quick-actions{flex-direction:column}.filter-bar{overflow-x:auto;flex-wrap:nowrap}}
 </style>
@@ -251,18 +265,60 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   </div>
 </div>
 
-<!-- Call List + Recent Inquiries -->
-<div class="panels-b">
+<!-- SECTION: CALL PRIORITY LIST -->
+<div class="section-divider"><h2>&#128222; Call Priority List</h2><div class="line"></div></div>
+<div class="panels-full">
   <div class="panel">
     <div class="panel-h">
-      <h3>&#128222; Call List — Top 15</h3>
-      <span class="badge" id="callCount">0 leads</span>
+      <h3>Leads To Call — Ranked by Conversion Likelihood</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="filter-chip active" data-callfilter="all" onclick="filterCalls('all',this)">All</button>
+        <button class="filter-chip" data-callfilter="not-called" onclick="filterCalls('not-called',this)">Not Called</button>
+        <button class="filter-chip" data-callfilter="called" onclick="filterCalls('called',this)">Called</button>
+        <button class="filter-chip" data-callfilter="callback" onclick="filterCalls('callback',this)">Callback</button>
+        <span class="badge" id="callCount">0 leads</span>
+      </div>
     </div>
-    <div id="callList"><div class="loading-s">Loading call list...</div></div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>#</th><th>Business</th><th>Industry</th><th>Phone</th><th>Email</th><th>Lead Score</th><th>Speed</th><th>SEO</th><th>Est. Revenue Loss</th><th>Status</th><th>Call Status</th><th>Actions</th></tr></thead>
+        <tbody id="callTable"><tr><td colspan="12" class="loading-s">Loading call list...</td></tr></tbody>
+      </table>
+    </div>
   </div>
+</div>
+
+<!-- SECTION: EMAIL OUTREACH TRACKER -->
+<div class="section-divider"><h2>&#128231; Email Outreach Tracker</h2><div class="line"></div></div>
+<div class="panels-full">
   <div class="panel">
     <div class="panel-h">
-      <h3>Recent Inquiries</h3>
+      <h3>Automated Email Sequences — Sent via Instantly</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="filter-chip active" data-emailfilter="all" onclick="filterEmails('all',this)">All</button>
+        <button class="filter-chip" data-emailfilter="Sent" onclick="filterEmails('Sent',this)">Sent</button>
+        <button class="filter-chip" data-emailfilter="Opened" onclick="filterEmails('Opened',this)">Opened</button>
+        <button class="filter-chip" data-emailfilter="Replied" onclick="filterEmails('Replied',this)">Replied</button>
+        <button class="filter-chip" data-emailfilter="Interested" onclick="filterEmails('Interested',this)">Interested</button>
+        <button class="filter-chip" data-emailfilter="Call Booked" onclick="filterEmails('Call Booked',this)">Call Booked</button>
+        <span class="badge" id="emailCount">0 emails</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>#</th><th>Business</th><th>Email</th><th>Sequence Step</th><th>Last Sent</th><th>Opens</th><th>Email Status</th><th>Lead Score</th><th>Speed</th><th>Action</th></tr></thead>
+        <tbody id="emailTable"><tr><td colspan="10" class="loading-s">Loading outreach data...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: RECENT INQUIRIES -->
+<div class="section-divider"><h2>&#128233; Inbound Inquiries</h2><div class="line"></div></div>
+<div class="panels-full" style="padding-bottom:48px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Website Form Submissions</h3>
       <span class="badge" id="inquiryCount">0</span>
     </div>
     <div id="inquiries"><div class="loading-s">Loading inquiries...</div></div>
@@ -354,8 +410,11 @@ function loadData(){
     // Revenue Panel
     renderRevenuePanel(clients);
 
-    // Call List
+    // Call Priority List
     renderCallList(leads);
+
+    // Email Outreach Tracker
+    renderEmailTracker(leads,outreach);
 
     // Inquiries
     document.getElementById('inquiryCount').textContent=inquiries.length;
@@ -469,85 +528,221 @@ function renderRevenuePanel(clients){
   document.getElementById('revBreakdown').innerHTML=bhtml||'<div style="padding:8px 0;font-size:12px;color:var(--text3)">No package data yet.</div>';
 }
 
+var currentCallFilter='all';
+var currentEmailFilter='all';
+
 function renderCallList(leads){
   var phonLeads=leads.filter(function(l){return l.phone&&l.phone.trim()!==''});
-  phonLeads.sort(function(a,b){return(b.lead_score||0)-(a.lead_score||0)});
-  var top15=phonLeads.slice(0,15);
-  document.getElementById('callCount').textContent=top15.length+' of '+phonLeads.length+' with phone';
+  // Rank by conversion likelihood: lead_score + has email bonus + audited bonus + low speed = needs help
+  phonLeads.sort(function(a,b){
+    var aConv=(a.lead_score||0)+(a.email?10:0)+(a.status==='Audited'?5:0)+(a.speed_score&&a.speed_score<50?10:0);
+    var bConv=(b.lead_score||0)+(b.email?10:0)+(b.status==='Audited'?5:0)+(b.speed_score&&b.speed_score<50?10:0);
+    return bConv-aConv;
+  });
 
-  if(!top15.length){
-    document.getElementById('callList').innerHTML='<div class="loading-s" style="padding:20px">No leads with phone numbers yet.</div>';
+  // Apply call filter
+  var filtered=phonLeads;
+  if(currentCallFilter==='not-called'){
+    filtered=phonLeads.filter(function(l){return!l.notes||l.notes.indexOf('Called')===-1});
+  } else if(currentCallFilter==='called'){
+    filtered=phonLeads.filter(function(l){return l.notes&&l.notes.indexOf('Called')!==-1&&l.notes.indexOf('Callback')===-1});
+  } else if(currentCallFilter==='callback'){
+    filtered=phonLeads.filter(function(l){return l.notes&&l.notes.indexOf('Callback')!==-1});
+  }
+
+  document.getElementById('callCount').textContent=filtered.length+' of '+phonLeads.length+' leads';
+
+  if(!filtered.length){
+    document.getElementById('callTable').innerHTML='<tr><td colspan="12" class="loading-s">No leads match this filter.</td></tr>';
     return;
   }
 
   var html='';
-  top15.forEach(function(l,idx){
+  filtered.forEach(function(l,idx){
     var sc=l.lead_score||0;
     var col=sc>=50?'var(--green)':sc>=30?'var(--accent)':'var(--text3)';
     var ss=l.speed_score||0;
     var scol=ss>=80?'var(--green)':ss>=50?'var(--accent)':'var(--red)';
-    var statusClass={'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no','Rejected':'s-no'};
-    var alreadyCalled=(l.notes||'').indexOf('Called on')!==-1;
+    var seo=l.seo_score||0;
+    var seocol=seo>=80?'var(--green)':seo>=50?'var(--accent)':'var(--red)';
+    var revLoss=l.revenue_loss_estimate||'';
+    var notes=l.notes||'';
+    var callStatus='not-called';
+    if(notes.indexOf('Callback')!==-1)callStatus='callback';
+    else if(notes.indexOf('Called')!==-1)callStatus='called';
+    var pillClass={'not-called':'pill-not-called','called':'pill-called','callback':'pill-callback'};
+    var pillText={'not-called':'Not Called','called':'Called','callback':'Callback'};
 
-    html+='<div class="call-row">';
-    html+='<div style="font-size:12px;font-weight:800;color:var(--text3);width:20px">'+(idx+1)+'</div>';
-    html+='<div class="call-info">';
-    html+='<div class="call-biz">'+esc(l.business_name)+'</div>';
-    html+='<div class="call-industry">'+esc(l.industry||'\u2014')+'</div>';
-    html+='</div>';
-    html+='<a href="tel:'+esc(l.phone)+'" class="call-phone">'+esc(l.phone)+'</a>';
-    html+='<div class="call-score" style="color:'+col+'">'+sc+'</div>';
-    html+='<div class="call-speed" style="color:'+scol+'">'+ss+'</div>';
-    html+='<span class="status '+(statusClass[l.status]||'')+'" style="min-width:70px;text-align:center">'+esc(l.status)+'</span>';
-    html+='<div class="call-actions">';
-    if(alreadyCalled){
-      html+='<button class="btn-call called" disabled>Called</button>';
-    } else {
-      html+='<button class="btn-call" onclick="markCalled(\''+l.id+'\',this)">Mark Called</button>';
-    }
-    html+='</div>';
-    html+='</div>';
+    html+='<tr>';
+    html+='<td style="font-weight:800;color:var(--text3)">'+(idx+1)+'</td>';
+    html+='<td style="font-weight:700;color:var(--white)">'+esc(l.business_name)+'</td>';
+    html+='<td>'+esc(l.industry||'\u2014')+'</td>';
+    html+='<td><a href="tel:'+esc(l.phone)+'" class="call-phone">'+esc(l.phone)+'</a></td>';
+    html+='<td>'+(l.email?'<span style="color:var(--green);font-size:11px">'+esc(l.email)+'</span>':'\u274c')+'</td>';
+    html+='<td><strong style="color:'+col+'">'+sc+'</strong><div class="score-bar"><div class="score-fill" style="width:'+sc+'%;background:'+col+'"></div></div></td>';
+    html+='<td><span style="color:'+scol+'">'+ss+'</span></td>';
+    html+='<td><span style="color:'+seocol+'">'+seo+'</span></td>';
+    html+='<td class="rev-loss" style="color:var(--red)">'+(revLoss?'\u00a3'+revLoss:'—')+'</td>';
+    html+='<td><span class="status '+(({'New':'s-new','Audited':'s-audited','In Outreach':'s-outreach','Replied':'s-replied','Call Booked':'s-booked','Client Won':'s-won','No Website':'s-no'})[l.status]||'')+'">'+esc(l.status)+'</span></td>';
+    html+='<td><span class="pill '+pillClass[callStatus]+'">'+pillText[callStatus]+'</span></td>';
+    html+='<td><select class="call-select" onchange="updateCallStatus(\''+l.id+'\',this.value,this)">';
+    html+='<option value="">Action...</option>';
+    html+='<option value="called"'+(callStatus==='called'?' selected':'')+'>Mark Called</option>';
+    html+='<option value="callback"'+(callStatus==='callback'?' selected':'')+'>Set Callback</option>';
+    html+='<option value="interested">Interested</option>';
+    html+='<option value="booked">Call Booked</option>';
+    html+='<option value="not-interested">Not Interested</option>';
+    html+='</select></td>';
+    html+='</tr>';
   });
-  document.getElementById('callList').innerHTML=html;
+  document.getElementById('callTable').innerHTML=html;
 }
 
-function markCalled(leadId, btn){
+function filterCalls(filter,el){
+  currentCallFilter=filter;
+  var chips=el.parentElement.querySelectorAll('.filter-chip');
+  for(var i=0;i<chips.length;i++){chips[i].classList.remove('active')}
+  el.classList.add('active');
+  renderCallList(allLeads);
+}
+
+function updateCallStatus(leadId,action,select){
   var today=new Date().toLocaleDateString('en-GB');
-  var noteText='Called on '+today;
-  btn.disabled=true;
-  btn.textContent='Saving...';
+  var noteMap={'called':'Called on '+today,'callback':'Callback requested '+today,'interested':'Interested - Called '+today,'booked':'Call Booked '+today,'not-interested':'Not interested '+today};
+  var statusMap={'booked':'Call Booked','interested':'Replied'};
+  var note=noteMap[action]||'';
+  if(!note){return}
+
+  var body={notes:note};
+  if(statusMap[action]){body.status=statusMap[action]}
 
   fetch(SB+'/leads?id=eq.'+leadId,{
     method:'PATCH',
-    headers:{
-      'apikey':KEY,
-      'Authorization':'Bearer '+KEY,
-      'Content-Type':'application/json',
-      'Prefer':'return=minimal'
-    },
-    body:JSON.stringify({notes:noteText})
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(body)
   }).then(function(r){
     if(r.ok){
-      btn.textContent='Called';
-      btn.classList.add('called');
-      // Update local data
       for(var i=0;i<allLeads.length;i++){
         if(String(allLeads[i].id)===String(leadId)){
-          allLeads[i].notes=noteText;
+          allLeads[i].notes=note;
+          if(statusMap[action])allLeads[i].status=statusMap[action];
           break;
         }
       }
-    } else {
-      btn.textContent='Error';
-      btn.disabled=false;
-      setTimeout(function(){btn.textContent='Mark Called'},2000);
+      renderCallList(allLeads);
     }
-  }).catch(function(){
-    btn.textContent='Error';
-    btn.disabled=false;
-    setTimeout(function(){btn.textContent='Mark Called'},2000);
   });
 }
+
+function renderEmailTracker(leads,outreach){
+  // Build a lookup of outreach by lead email
+  var outreachByEmail={};
+  outreach.forEach(function(o){
+    var email=o.email||o.lead_email||'';
+    if(email){
+      if(!outreachByEmail[email])outreachByEmail[email]=[];
+      outreachByEmail[email].push(o);
+    }
+  });
+
+  // Build email rows: leads that have been emailed OR are in outreach
+  var emailRows=[];
+
+  // First add all outreach records matched to leads
+  leads.forEach(function(l){
+    if(!l.email)return;
+    var records=outreachByEmail[l.email]||[];
+    if(records.length>0){
+      // Get the latest outreach record
+      records.sort(function(a,b){return new Date(b.sent_at||b.created_at||0)-new Date(a.sent_at||a.created_at||0)});
+      var latest=records[0];
+      emailRows.push({
+        business:l.business_name,
+        email:l.email,
+        step:latest.sequence_step||latest.step||1,
+        totalSteps:5,
+        lastSent:latest.sent_at||latest.created_at||'',
+        opens:latest.opens||0,
+        status:latest.status||'Sent',
+        leadScore:l.lead_score||0,
+        speedScore:l.speed_score||0,
+        leadId:l.id,
+        outreachId:latest.id
+      });
+    } else if(l.status==='In Outreach'){
+      emailRows.push({
+        business:l.business_name,
+        email:l.email,
+        step:1,
+        totalSteps:5,
+        lastSent:'Queued',
+        opens:0,
+        status:'Queued',
+        leadScore:l.lead_score||0,
+        speedScore:l.speed_score||0,
+        leadId:l.id,
+        outreachId:null
+      });
+    }
+  });
+
+  // Sort by status priority: Interested > Replied > Opened > Sent > Queued
+  var statusPriority={'Interested':5,'Call Booked':5,'Replied':4,'Opened':3,'Sent':2,'Queued':1};
+  emailRows.sort(function(a,b){return(statusPriority[b.status]||0)-(statusPriority[a.status]||0)||(b.leadScore-a.leadScore)});
+
+  // Apply email filter
+  var filtered=emailRows;
+  if(currentEmailFilter!=='all'){
+    filtered=emailRows.filter(function(r){return r.status===currentEmailFilter});
+  }
+
+  document.getElementById('emailCount').textContent=filtered.length+' of '+emailRows.length+' emails';
+
+  if(!filtered.length){
+    document.getElementById('emailTable').innerHTML='<tr><td colspan="10" class="loading-s">No outreach emails sent yet. Emails will appear here once the Instantly automation activates (March 31).</td></tr>';
+    return;
+  }
+
+  var html='';
+  filtered.forEach(function(r,idx){
+    var scol=r.leadScore>=50?'var(--green)':r.leadScore>=30?'var(--accent)':'var(--text3)';
+    var sscol=r.speedScore>=80?'var(--green)':r.speedScore>=50?'var(--accent)':'var(--red)';
+    var statusPill={'Sent':'pill-sent','Queued':'pill-sent','Opened':'pill-opened','Replied':'pill-replied','Interested':'pill-interested','Call Booked':'pill-booked'};
+    var sentDate=r.lastSent;
+    if(sentDate&&sentDate!=='Queued'){
+      try{sentDate=new Date(sentDate).toLocaleDateString('en-GB')}catch(e){}
+    }
+
+    html+='<tr>';
+    html+='<td style="font-weight:800;color:var(--text3)">'+(idx+1)+'</td>';
+    html+='<td style="font-weight:700;color:var(--white)">'+esc(r.business)+'</td>';
+    html+='<td style="font-size:11px;color:var(--text2)">'+esc(r.email)+'</td>';
+    html+='<td><span style="color:var(--accent);font-weight:700">Step '+r.step+'</span><span style="color:var(--text3);font-size:11px"> / '+r.totalSteps+'</span></td>';
+    html+='<td style="font-size:12px">'+esc(sentDate||'—')+'</td>';
+    html+='<td style="font-weight:700;color:'+(r.opens>0?'var(--blue)':'var(--text3)')+'">'+r.opens+'</td>';
+    html+='<td><span class="pill '+(statusPill[r.status]||'pill-sent')+'">'+esc(r.status)+'</span></td>';
+    html+='<td><strong style="color:'+scol+'">'+r.leadScore+'</strong></td>';
+    html+='<td><span style="color:'+sscol+'">'+r.speedScore+'</span></td>';
+    html+='<td>';
+    if(r.status==='Replied'||r.status==='Interested'){
+      html+='<button class="btn-call" onclick="updateCallStatus(\''+r.leadId+'\',\'booked\',null)">Book Call</button>';
+    } else {
+      html+='<span style="color:var(--text3);font-size:11px">Auto</span>';
+    }
+    html+='</td>';
+    html+='</tr>';
+  });
+  document.getElementById('emailTable').innerHTML=html;
+}
+
+function filterEmails(filter,el){
+  currentEmailFilter=filter;
+  var chips=el.parentElement.querySelectorAll('.filter-chip');
+  for(var i=0;i<chips.length;i++){chips[i].classList.remove('active')}
+  el.classList.add('active');
+  renderEmailTracker(allLeads,allOutreach);
+}
+
 
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
