@@ -10,6 +10,18 @@
 :root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--green:#34d399;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;--white:#fff;--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+body.locked>*:not(#authGate){display:none!important}
+#authGate{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#authGate.hidden{display:none}
+#authGate .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:48px;text-align:center;max-width:400px;width:90%}
+#authGate .auth-box h2{font-size:22px;font-weight:800;margin-bottom:6px;color:var(--white)}
+#authGate .auth-box h2 span{color:var(--accent)}
+#authGate .auth-box p{font-size:13px;color:var(--text3);margin-bottom:24px}
+#authGate .auth-input{width:100%;padding:14px 18px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:15px;font-family:var(--font);outline:none;margin-bottom:12px;text-align:center;letter-spacing:2px}
+#authGate .auth-input:focus{border-color:var(--accent)}
+#authGate .auth-btn{width:100%;padding:14px;border-radius:10px;background:var(--accent);color:#0a0a0a;font-weight:700;font-size:14px;border:none;cursor:pointer;font-family:var(--font);transition:all .2s}
+#authGate .auth-btn:hover{background:var(--accentL)}
+#authGate .auth-err{color:var(--red);font-size:12px;margin-top:10px;display:none}
 .top{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2)}
 .top h1{font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px}
 .top h1 span{color:var(--accent)}
@@ -120,7 +132,39 @@ tr:hover td{background:rgba(232,162,58,.02)}
 @media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}.quick-actions{flex-direction:column}.filter-bar{overflow-x:auto;flex-wrap:nowrap}}
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div id="authGate">
+  <div class="auth-box">
+    <h2>&#9728; Solis <span>Command Centre</span></h2>
+    <p>Enter your password to access the dashboard.</p>
+    <input type="password" class="auth-input" id="authPass" placeholder="Password" autocomplete="off">
+    <button class="auth-btn" id="authBtn" onclick="checkAuth()">Unlock Dashboard</button>
+    <div class="auth-err" id="authErr">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<script>
+function checkAuth(){
+  var p=document.getElementById('authPass').value;
+  if(p==='Weetabix'){
+    document.getElementById('authGate').classList.add('hidden');
+    document.body.classList.remove('locked');
+    sessionStorage.setItem('solis_auth','1');
+  } else {
+    document.getElementById('authErr').style.display='block';
+    document.getElementById('authPass').value='';
+    document.getElementById('authPass').focus();
+  }
+}
+document.getElementById('authPass').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();checkAuth()}
+});
+if(sessionStorage.getItem('solis_auth')==='1'){
+  document.getElementById('authGate').classList.add('hidden');
+  document.body.classList.remove('locked');
+}
+</script>
 
 <div class="top">
   <h1>&#9728; Solis <span>Command Centre</span></h1>
