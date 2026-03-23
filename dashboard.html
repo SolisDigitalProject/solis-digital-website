@@ -356,6 +356,29 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   </div>
 </div>
 
+<!-- SECTION: AI ADMIN CHAT — REQUEST CHANGES -->
+<div class="section-divider"><h2>&#128172; AI Admin — Request Changes</h2><div class="line"></div></div>
+<div class="panels-full" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Submit Optimisation Requests &amp; Review AI Suggestions</h3>
+      <span class="badge" id="requestCount">0 pending</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <input type="text" id="adminInput" placeholder="Describe a change or optimisation you want (e.g. 'Make the hero text bigger', 'Add a new service card')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <select id="adminPriority" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+        <button class="btn btn-p" onclick="submitRequest()">Submit</button>
+      </div>
+      <div id="requestsList" style="max-height:400px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
 <!-- SECTION: RECENT INQUIRIES -->
 <div class="section-divider"><h2>&#128233; Inbound Inquiries</h2><div class="line"></div></div>
 <div class="panels-full" style="padding-bottom:48px">
@@ -892,6 +915,96 @@ function renderNurtureTable(seqs){
   document.getElementById('nurtureTable').innerHTML=html;
 }
 
+// ── AI ADMIN REQUEST SYSTEM ──
+
+var allRequests=[];
+
+function loadRequests(){
+  q('/admin_requests?select=*&order=created_at.desc').then(function(requests){
+    allRequests=requests||[];
+    renderRequests(allRequests);
+  });
+}
+
+function submitRequest(){
+  var input=document.getElementById('adminInput');
+  var priority=document.getElementById('adminPriority').value;
+  var text=input.value.trim();
+  if(!text){input.focus();return}
+
+  fetch(SB+'/admin_requests',{
+    method:'POST',
+    headers:H,
+    body:JSON.stringify({request_text:text,priority:priority,status:'pending',submitted_by:'admin'})
+  }).then(function(r){
+    if(r.ok){
+      input.value='';
+      loadRequests();
+      // Log the action
+      fetch(SB+'/admin_actions',{
+        method:'POST',
+        headers:H,
+        body:JSON.stringify({action_type:'admin_request',description:'New request: '+text.substring(0,80),target:'admin_requests',result:'success',details:{priority:priority}})
+      });
+    }
+  });
+}
+
+document.getElementById('adminInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();submitRequest()}
+});
+
+function updateRequest(id,newStatus){
+  fetch(SB+'/admin_requests?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({status:newStatus,reviewed_at:new Date().toISOString()})
+  }).then(function(r){
+    if(r.ok){loadRequests()}
+  });
+}
+
+function renderRequests(requests){
+  var pending=requests.filter(function(r){return r.status==='pending'});
+  document.getElementById('requestCount').textContent=pending.length+' pending';
+
+  if(!requests.length){
+    document.getElementById('requestsList').innerHTML='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px">No requests yet. Submit an optimisation request above — the AI Admin will review it and suggest changes for your approval.</div>';
+    return;
+  }
+
+  var html='';
+  requests.forEach(function(r){
+    var prioCol={'high':'var(--red)','medium':'var(--accent)','low':'var(--text3)'};
+    var statusCol={'pending':'var(--accent)','approved':'var(--green)','rejected':'var(--red)','completed':'var(--blue)'};
+    var statusIcon={'pending':'\u23f3','approved':'\u2705','rejected':'\u274c','completed':'\u2705'};
+
+    html+='<div style="padding:14px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">';
+    html+='<div style="font-size:18px;margin-top:2px">'+statusIcon[r.status]+'</div>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">'+esc(r.request_text)+'</div>';
+    html+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+    html+='<span class="pill" style="background:rgba(232,162,58,.1);color:'+(prioCol[r.priority]||'var(--text3)')+'">'+esc(r.priority)+'</span>';
+    html+='<span class="pill" style="background:rgba(232,162,58,.06);color:'+(statusCol[r.status]||'var(--text2)')+'">'+esc(r.status)+'</span>';
+    html+='<span style="font-size:11px;color:var(--text3)">'+new Date(r.created_at).toLocaleString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>';
+    html+='</div>';
+    if(r.ai_response){
+      html+='<div style="margin-top:8px;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);font-size:12px;color:var(--text2)"><strong style="color:var(--accent)">AI Suggestion:</strong> '+esc(r.ai_response)+'</div>';
+    }
+    html+='</div>';
+    html+='<div style="display:flex;gap:6px;flex-shrink:0">';
+    if(r.status==='pending'){
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'approved\')" style="font-size:10px">Approve</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\')" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
+    } else if(r.status==='approved'){
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'completed\')" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Mark Done</button>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+  document.getElementById('requestsList').innerHTML=html;
+}
+
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
 function exportCSV(){
@@ -936,8 +1049,9 @@ function runBulkAudit(){
 }
 
 loadData();
+loadRequests();
 // Auto-refresh every 60 seconds
-setInterval(loadData,60000);
+setInterval(function(){loadData();loadRequests()},60000);
 </script>
 </body>
 </html>
