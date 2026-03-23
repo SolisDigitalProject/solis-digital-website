@@ -142,6 +142,20 @@ tr:hover td{background:rgba(232,162,58,.02)}
 .call-select:focus{border-color:var(--accent);outline:none}
 .rev-loss{font-weight:700;font-family:var(--mono);font-size:12px}
 
+/* Project Cards */
+.proj-card{padding:20px;border-bottom:1px solid var(--border)}
+.proj-card:last-child{border-bottom:none}
+.proj-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.proj-name{font-size:15px;font-weight:700;color:var(--white)}
+.proj-pkg{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(232,162,58,.1);color:var(--accent)}
+.proj-pipeline{display:flex;gap:3px;margin-bottom:12px;flex-wrap:wrap}
+.proj-pip{padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;text-align:center}
+.proj-pip.done{background:rgba(52,211,153,.1);color:var(--green)}
+.proj-pip.active{background:rgba(232,162,58,.15);color:var(--accent);border:1px solid rgba(232,162,58,.3)}
+.proj-pip.pending{background:rgba(142,143,163,.05);color:var(--text3)}
+.proj-brief{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-top:10px;font-size:12px;color:var(--text2);line-height:1.6;max-height:200px;overflow-y:auto;white-space:pre-line}
+.proj-meta{display:flex;gap:16px;font-size:12px;color:var(--text3);flex-wrap:wrap}
+
 @media(max-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}.panels{grid-template-columns:1fr}.panels-3{grid-template-columns:1fr}.outreach-grid{grid-template-columns:repeat(2,1fr)}.rev-grid{grid-template-columns:1fr}}
 @media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}.top{flex-direction:column;gap:12px}.quick-actions{flex-direction:column}.filter-bar{overflow-x:auto;flex-wrap:nowrap}}
 </style>
@@ -228,6 +242,18 @@ if(sessionStorage.getItem('solis_auth')==='1'){
       <div class="rev-item"><div class="rev-label">Total Clients</div><div class="rev-val blue" id="rClients">—</div></div>
     </div>
     <div class="rev-breakdown" id="revBreakdown"></div>
+  </div>
+</div>
+
+<!-- SECTION: ACTIVE PROJECTS — WEBSITE BUILDS -->
+<div class="section-divider"><h2>&#127959; Active Projects — Website Builds</h2><div class="line"></div></div>
+<div class="panels-full" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Client Website Delivery Tracker</h3>
+      <span class="badge" id="projectCount">0 projects</span>
+    </div>
+    <div id="projectsList"><div class="loading-s">Loading projects...</div></div>
   </div>
 </div>
 
@@ -411,10 +437,11 @@ function loadData(){
     q('/inquiries?select=*&order=created_at.desc&limit=10'),
     q('/health_checks?select=*&order=created_at.desc&limit=50'),
     q('/admin_actions?select=*&order=created_at.desc&limit=20'),
-    q('/nurture_sequences?select=*&order=next_send_at.asc')
+    q('/nurture_sequences?select=*&order=next_send_at.asc'),
+    q('/projects?select=*&order=created_at.desc')
   ]).then(function(res){
     var leads=res[0],clients=res[1],outreach=res[2],inquiries=res[3]||[];
-    var healthChecks=res[4]||[],adminActions=res[5]||[],nurtureSeqs=res[6]||[];
+    var healthChecks=res[4]||[],adminActions=res[5]||[],nurtureSeqs=res[6]||[],projects=res[7]||[];
     allLeads=leads;
     allClients=clients;
     allOutreach=outreach;
@@ -485,6 +512,9 @@ function loadData(){
 
     // Email Outreach Tracker
     renderEmailTracker(leads,outreach);
+
+    // Projects
+    renderProjects(projects);
 
     // AI Admin panels
     renderHealthStatus(healthChecks);
@@ -913,6 +943,63 @@ function renderNurtureTable(seqs){
     html+='</tr>';
   });
   document.getElementById('nurtureTable').innerHTML=html;
+}
+
+// ── PROJECTS RENDER ──
+
+function renderProjects(projects){
+  document.getElementById('projectCount').textContent=projects.length+' projects';
+  if(!projects.length){
+    document.getElementById('projectsList').innerHTML='<div class="loading-s" style="padding:24px">No active projects yet. Projects appear here when a client pays and website build begins.</div>';
+    return;
+  }
+
+  var html='';
+  projects.forEach(function(p){
+    var milestones=[];
+    try{milestones=typeof p.milestones==='string'?JSON.parse(p.milestones):p.milestones||[]}catch(e){}
+    var statusLabel={'discovery':'Discovery','design':'Design','development':'In Development','review':'Client Review','revisions':'Revisions','launched':'Launched','maintenance':'Maintenance'};
+
+    html+='<div class="proj-card">';
+    html+='<div class="proj-header">';
+    html+='<div><span class="proj-name">'+esc(p.business_name)+'</span></div>';
+    html+='<div style="display:flex;gap:8px;align-items:center">';
+    html+='<span class="proj-pkg">'+esc(p.package||'—')+'</span>';
+    html+='<span class="pill '+(p.status==='launched'?'pill-interested':'pill-callback')+'">'+esc(statusLabel[p.status]||p.status)+'</span>';
+    html+='</div></div>';
+
+    // Milestone pipeline
+    html+='<div class="proj-pipeline">';
+    milestones.forEach(function(m){
+      var cls=m.status==='done'?'done':m.status==='active'?'active':'pending';
+      var icon=m.status==='done'?'\u2705':m.status==='active'?'\u1F3D7':'';
+      html+='<div class="proj-pip '+cls+'">'+esc(m.name)+'</div>';
+    });
+    html+='</div>';
+
+    // Meta info
+    html+='<div class="proj-meta">';
+    if(p.estimated_launch)html+='<span>\ud83d\udcc5 Est. Launch: '+new Date(p.estimated_launch).toLocaleDateString('en-GB')+'</span>';
+    if(p.launched_at)html+='<span>\ud83d\ude80 Launched: '+new Date(p.launched_at).toLocaleDateString('en-GB')+'</span>';
+    if(p.new_website_url)html+='<span>\ud83c\udf10 <a href="'+esc(p.new_website_url)+'" target="_blank" style="color:var(--accent)">'+esc(p.new_website_url)+'</a></span>';
+    html+='<span>\ud83d\udcc6 Started: '+new Date(p.started_at||p.created_at).toLocaleDateString('en-GB')+'</span>';
+    html+='</div>';
+
+    // Client brief (if exists)
+    if(p.client_brief){
+      html+='<details style="margin-top:10px"><summary style="font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 0">View Client Brief</summary>';
+      html+='<div class="proj-brief">'+esc(p.client_brief)+'</div>';
+      html+='</details>';
+    }
+
+    // Notes
+    if(p.notes){
+      html+='<div style="margin-top:8px;font-size:11px;color:var(--text3)">'+esc(p.notes)+'</div>';
+    }
+
+    html+='</div>';
+  });
+  document.getElementById('projectsList').innerHTML=html;
 }
 
 // ── AI ADMIN REQUEST SYSTEM ──

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Solis Digital — Demo: Linden Grove Dental Care Pipeline Journey</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#07080a;color:#eaeaef;margin:0;padding:32px}
+  .wrap{max-width:700px;margin:0 auto}
+  h1{font-size:28px;color:#e8a23a;margin-bottom:8px}
+  .subtitle{color:#5c5d72;font-size:14px;margin-bottom:40px}
+  .stage{background:#111216;border:1px solid #1c1d24;border-radius:12px;margin-bottom:24px;overflow:hidden}
+  .stage-header{padding:16px 24px;border-bottom:1px solid #1c1d24;display:flex;justify-content:space-between;align-items:center}
+  .stage-num{background:#e8a23a;color:#0a0a0a;font-weight:800;font-size:12px;padding:4px 10px;border-radius:20px}
+  .stage-title{font-weight:700;font-size:15px}
+  .stage-date{font-size:12px;color:#5c5d72}
+  .stage-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px}
+  .s-done{background:rgba(52,211,153,.15);color:#34d399}
+  .s-active{background:rgba(232,162,58,.15);color:#e8a23a}
+  .email-preview{padding:24px;background:#0c0d10;margin:16px;border-radius:8px;border:1px solid #1c1d24}
+  .email-meta{font-size:12px;color:#5c5d72;margin-bottom:12px}
+  .email-meta strong{color:#8e8fa3}
+  .email-subject{font-size:14px;font-weight:700;color:#fff;margin-bottom:12px}
+  .email-body{font-size:13px;color:#8e8fa3;line-height:1.7;white-space:pre-line}
+  .result-card{padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
+  .result-label{font-size:12px;color:#5c5d72;text-transform:uppercase;letter-spacing:1px}
+  .result-val{font-size:20px;font-weight:900;color:#34d399}
+  .result-val.gold{color:#e8a23a}
+  .divider{height:1px;background:#1c1d24;margin:0 24px}
+  .pipeline{display:flex;gap:4px;padding:16px 24px;flex-wrap:wrap}
+  .pip{flex:1;min-width:80px;text-align:center;padding:10px 8px;border-radius:8px;font-size:11px;font-weight:700}
+  .pip.done{background:rgba(52,211,153,.12);color:#34d399}
+  .pip.current{background:rgba(232,162,58,.15);color:#e8a23a;border:1px solid rgba(232,162,58,.3)}
+  .pip.pending{background:rgba(142,143,163,.06);color:#5c5d72}
+  .note{padding:16px 24px;font-size:12px;color:#5c5d72;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>&#9728;&#65039; Linden Grove Dental Care</h1>
+<p class="subtitle">Full Pipeline Demo — From Lead Scrape to Website Launch</p>
+
+<!-- PIPELINE OVERVIEW -->
+<div class="stage">
+  <div class="stage-header">
+    <span class="stage-title">Pipeline Progress</span>
+    <span class="stage-status s-done">CLIENT WON</span>
+  </div>
+  <div class="pipeline">
+    <div class="pip done">&#x2705; Scraped</div>
+    <div class="pip done">&#x2705; Audited</div>
+    <div class="pip done">&#x2705; Email #1</div>
+    <div class="pip done">&#x2705; Email #2</div>
+    <div class="pip done">&#x2705; Replied</div>
+    <div class="pip done">&#x2705; Call Booked</div>
+    <div class="pip done">&#x2705; Call Done</div>
+    <div class="pip done">&#x2705; Payment</div>
+    <div class="pip current">&#x1F3D7; Website Build</div>
+    <div class="pip pending">Launch</div>
+  </div>
+</div>
+
+<!-- STAGE 1: SCRAPED -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">1</span> <span class="stage-title">Lead Scraped by Apify</span></div>
+    <span class="stage-date">16 Mar 2026</span>
+  </div>
+  <div class="result-card">
+    <div><div class="result-label">Business</div><div style="font-weight:700;font-size:16px;color:#fff">Linden Grove Dental Care</div></div>
+    <div><div class="result-label">Phone</div><div style="color:#e8a23a;font-weight:600">+44 207 639 3001</div></div>
+    <div><div class="result-label">Email</div><div style="color:#e8a23a;font-weight:600">contact@lindendentist.co.uk</div></div>
+  </div>
+  <div class="note">Auto-scraped from Google Maps &rarr; stored in Supabase &rarr; Hunter.io verified email</div>
+</div>
+
+<!-- STAGE 2: AUDITED -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">2</span> <span class="stage-title">Auto-Audited (PageSpeed + AI)</span></div>
+    <span class="stage-date">16 Mar 2026 — 15 min later</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1c1d24">
+    <div class="result-card" style="background:#111216"><div class="result-label">Speed</div><div class="result-val gold">58/100</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">SEO</div><div class="result-val">85/100</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Mobile</div><div class="result-val gold">69/100</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Lead Score</div><div class="result-val gold">58/100</div></div>
+  </div>
+  <div class="note">AI Summary: "Your website performs reasonably but has room for improvement. Speed scores suggest some visitors may drop off on mobile devices. SEO foundations are in place but could be strengthened."</div>
+</div>
+
+<!-- STAGE 3: EMAIL #1 -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">3</span> <span class="stage-title">Cold Email #1 — Sent via Instantly</span></div>
+    <span class="stage-date">16 Mar 2026</span>
+  </div>
+  <div class="email-preview">
+    <div class="email-meta"><strong>From:</strong> zain@solisdigital.co.uk &nbsp;|&nbsp; <strong>To:</strong> contact@lindendentist.co.uk</div>
+    <div class="email-subject">Linden Grove Dental Care — Your website is costing you customers</div>
+    <div class="email-body">Hi there,
+
+I ran a quick audit on your website and found some issues that are likely costing you customers:
+
+&#x2022; Your site speed score is 58/100 — meaning visitors are leaving before the page loads
+&#x2022; Mobile experience scores 69/100 — patients on phones are struggling
+&#x2022; SEO is solid at 85/100 but competitors are ranking higher
+
+I put together a free detailed report — would you like me to send it over?
+
+Best,
+Zain
+Solis Digital
+www.solisdigital.co.uk</div>
+  </div>
+  <div class="note">Auto-personalised with audit data. Sent via Instantly warm email account.</div>
+</div>
+
+<!-- STAGE 4: EMAIL #2 -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">4</span> <span class="stage-title">Follow-Up Email #2 — Day 3</span></div>
+    <span class="stage-date">19 Mar 2026</span>
+  </div>
+  <div class="email-preview">
+    <div class="email-meta"><strong>From:</strong> zain@solisdigital.co.uk &nbsp;|&nbsp; <strong>To:</strong> contact@lindendentist.co.uk</div>
+    <div class="email-subject">Re: Linden Grove Dental Care website audit</div>
+    <div class="email-body">Hi,
+
+Just following up on my previous email about your website performance.
+
+I noticed that competitors in your area are ranking higher on Google — in many cases just because they have faster, better-optimised websites.
+
+I've helped businesses like yours fix these exact issues. Would a quick 10-minute call be useful? I can walk you through what's holding your site back and how to fix it.
+
+No obligation — just trying to help.
+
+Best,
+Zain
+Solis Digital</div>
+  </div>
+</div>
+
+<!-- STAGE 5: REPLIED -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">5</span> <span class="stage-title">Lead Replied — Interested!</span></div>
+    <span class="stage-date">20 Mar 2026</span>
+  </div>
+  <div class="email-preview" style="border-left:3px solid #34d399">
+    <div class="email-meta"><strong>From:</strong> contact@lindendentist.co.uk &nbsp;|&nbsp; <strong>To:</strong> zain@solisdigital.co.uk</div>
+    <div class="email-subject">Re: Re: Linden Grove Dental Care website audit</div>
+    <div class="email-body">"Yes, we'd be interested in seeing the audit report. Can we schedule a quick call?"</div>
+  </div>
+  <div class="note">&#x1F514; Instantly flagged reply as "Interested" &rarr; Calendly link auto-sent &rarr; Lead status updated in Supabase</div>
+</div>
+
+<!-- STAGE 6: CALL BOOKED -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">6</span> <span class="stage-title">Strategy Call Booked via Calendly</span></div>
+    <span class="stage-date">21 Mar 2026</span>
+  </div>
+  <div class="email-preview">
+    <div class="email-meta"><strong>Auto-sent by Calendly</strong></div>
+    <div class="email-subject">Your Solis Digital Strategy Call — Confirmed</div>
+    <div class="email-body">Hi,
+
+Your free 15-minute strategy call has been booked:
+
+&#x1F4C5; Date: 25 March 2026
+&#x23F0; Time: 10:00 AM GMT
+&#x1F4DE; Via: Google Meet
+
+We'll walk through your website audit and discuss how to fix the issues we found.
+
+See you then!
+
+Zain &amp; Alex
+Solis Digital</div>
+  </div>
+  <div class="note">Calendly webhook &rarr; Make.com updates lead status to "Call Booked" in Supabase</div>
+</div>
+
+<!-- STAGE 7: CALL + CLOSE -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">7</span> <span class="stage-title">Strategy Call — Closed on Growth Package</span></div>
+    <span class="stage-date">25 Mar 2026 — 10:00 AM</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1c1d24">
+    <div class="result-card" style="background:#111216"><div class="result-label">Package</div><div class="result-val gold">Growth</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">One-Off</div><div class="result-val gold">&pound;997</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Monthly Retainer</div><div class="result-val">&pound;197/mo</div></div>
+  </div>
+  <div class="note">15-min call. Showed them their audit scores vs competitors. Walked through Growth package deliverables. Sent Stripe payment link on the call.</div>
+</div>
+
+<!-- STAGE 8: PAYMENT -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">8</span> <span class="stage-title">Stripe Payment Received</span></div>
+    <span class="stage-date">25 Mar 2026 — 10:22 AM</span>
+  </div>
+  <div class="email-preview" style="border-left:3px solid #34d399">
+    <div class="email-meta"><strong>Stripe Payment Receipt</strong></div>
+    <div class="email-subject">Payment Confirmed — Linden Grove Dental Care</div>
+    <div class="email-body">&#x2705; Payment received
+
+Customer: Linden Grove Dental Care
+Email: contact@lindendentist.co.uk
+Package: Growth
+One-off: &pound;997.00
+Monthly retainer: &pound;197.00/mo (starts 25 Apr 2026)
+
+Stripe session: cs_live_demo_linden_grove_001
+Status: PAID</div>
+  </div>
+  <div class="note">Stripe webhook &rarr; Make.com auto-creates client record in Supabase &rarr; Triggers onboarding email</div>
+</div>
+
+<!-- STAGE 9: ONBOARDING EMAIL -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">9</span> <span class="stage-title">Client Onboarding Email — Auto-Sent</span></div>
+    <span class="stage-date">25 Mar 2026 — 10:23 AM</span>
+  </div>
+  <div class="email-preview">
+    <div class="email-meta"><strong>From:</strong> info@solisdigital.co.uk &nbsp;|&nbsp; <strong>To:</strong> contact@lindendentist.co.uk</div>
+    <div class="email-subject">Welcome to Solis Digital — Let's Build Something Amazing &#9728;&#65039;</div>
+    <div class="email-body">Hi Linden Grove team,
+
+Thank you for choosing Solis Digital! We're excited to start working on your new website.
+
+Here's what happens next:
+
+&#x1F4CB; STEP 1 — Discovery (Days 1-2)
+We'll send you a short questionnaire about your brand, services, and goals. This helps us understand exactly what you need.
+
+&#x1F3A8; STEP 2 — Design (Days 3-4)
+Our AI-powered design engine creates your initial mockup, tailored to dental practices. You'll get a preview link to review.
+
+&#x1F6E0; STEP 3 — Development (Days 4-5)
+We build the full site: responsive, fast, SEO-optimised, with online booking integration.
+
+&#x2705; STEP 4 — Review &amp; Revisions (Days 5-6)
+You review the site. You get 2 rounds of revisions included in your package.
+
+&#x1F680; STEP 5 — Launch (Day 7)
+We go live! DNS pointed, SSL configured, Google indexed.
+
+&#x1F4CA; ONGOING — Monthly Retainer
+SEO monitoring, speed optimisation, content updates, and monthly performance reports.
+
+Your dedicated project page: solisdigital.co.uk/dashboard.html
+
+Questions? Reply to this email or chat with us at solisdigital.co.uk
+
+Let's go!
+Zain &amp; Alex
+Solis Digital</div>
+  </div>
+</div>
+
+<!-- STAGE 10: WEBSITE BUILD -->
+<div class="stage">
+  <div class="stage-header">
+    <div><span class="stage-num">10</span> <span class="stage-title">Website Build — In Progress</span></div>
+    <span class="stage-status s-active">BUILDING</span>
+  </div>
+  <div class="pipeline" style="justify-content:center">
+    <div class="pip done">&#x2705; Discovery</div>
+    <div class="pip done">&#x2705; Design</div>
+    <div class="pip current">&#x1F3D7; Development</div>
+    <div class="pip pending">Review</div>
+    <div class="pip pending">Revisions</div>
+    <div class="pip pending">Launch</div>
+    <div class="pip pending">Maintenance</div>
+  </div>
+  <div class="note">AI + human builds the website in 5-7 days. Client reviews and provides feedback. 2 rounds of revisions included. Then we launch.</div>
+</div>
+
+<!-- RESULTS SUMMARY -->
+<div class="stage">
+  <div class="stage-header">
+    <span class="stage-title">&#x1F4B0; Results Summary</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1c1d24">
+    <div class="result-card" style="background:#111216"><div class="result-label">Time to Close</div><div class="result-val gold">9 days</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Emails Sent</div><div class="result-val gold">2</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Revenue</div><div class="result-val">&pound;997</div></div>
+    <div class="result-card" style="background:#111216"><div class="result-label">Recurring</div><div class="result-val">&pound;197/mo</div></div>
+  </div>
+  <div style="padding:20px 24px;text-align:center">
+    <div style="font-size:13px;color:#5c5d72;margin-bottom:8px">Annual Value of This Client</div>
+    <div style="font-size:36px;font-weight:900;color:#34d399">&pound;3,361</div>
+    <div style="font-size:12px;color:#5c5d72">&pound;997 one-off + &pound;197 &times; 12 months = &pound;3,361/year</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:32px 0;color:#5c5d72;font-size:12px">
+  &#9728;&#65039; Solis Digital — Full Pipeline Demo<br>
+  This entire journey was automated. You only touched it twice: the strategy call and building the website.
+</div>
+
+</div>
+</body>
+</html>
