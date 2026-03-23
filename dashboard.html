@@ -313,6 +313,49 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   </div>
 </div>
 
+<!-- SECTION: AI ADMIN — SYSTEM HEALTH -->
+<div class="section-divider"><h2>&#129302; AI Admin — System Health</h2><div class="line"></div></div>
+<div class="panels-b">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>System Status</h3>
+      <span class="badge" id="healthBadge">checking...</span>
+    </div>
+    <div id="healthGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border)">
+      <div class="outreach-item"><div class="outreach-label">Website</div><div class="outreach-val" id="hWeb" style="font-size:20px">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Database</div><div class="outreach-val" id="hDB" style="font-size:20px">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">PageSpeed API</div><div class="outreach-val" id="hPS" style="font-size:20px">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Live Chat</div><div class="outreach-val" id="hChat" style="font-size:20px">—</div></div>
+      <div class="outreach-item"><div class="outreach-label">Dashboard</div><div class="outreach-val" id="hDash" style="font-size:20px">—</div></div>
+    </div>
+    <div style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:12px;color:var(--text3)" id="healthTime">Last check: —</span>
+      <span style="font-size:12px;font-weight:700" id="healthUptime">Uptime: —</span>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Recent Admin Actions</h3>
+      <span class="badge" id="actionCount">0</span>
+    </div>
+    <div id="adminActions" style="max-height:250px;overflow-y:auto"><div class="loading-s">Loading...</div></div>
+  </div>
+</div>
+<div class="panels-full" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Lead Nurture Sequences</h3>
+      <span class="badge" id="nurtureCount">0 active</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Business</th><th>Email</th><th>Step</th><th>Next Send</th><th>Status</th><th>Last Sent</th></tr></thead>
+        <tbody id="nurtureTable"><tr><td colspan="6" class="loading-s">Loading nurture data...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- SECTION: RECENT INQUIRIES -->
 <div class="section-divider"><h2>&#128233; Inbound Inquiries</h2><div class="line"></div></div>
 <div class="panels-full" style="padding-bottom:48px">
@@ -342,9 +385,13 @@ function loadData(){
     q('/leads?select=*&order=lead_score.desc.nullslast'),
     q('/clients?select=*'),
     q('/outreach?select=*'),
-    q('/inquiries?select=*&order=created_at.desc&limit=10')
+    q('/inquiries?select=*&order=created_at.desc&limit=10'),
+    q('/health_checks?select=*&order=created_at.desc&limit=50'),
+    q('/admin_actions?select=*&order=created_at.desc&limit=20'),
+    q('/nurture_sequences?select=*&order=next_send_at.asc')
   ]).then(function(res){
     var leads=res[0],clients=res[1],outreach=res[2],inquiries=res[3]||[];
+    var healthChecks=res[4]||[],adminActions=res[5]||[],nurtureSeqs=res[6]||[];
     allLeads=leads;
     allClients=clients;
     allOutreach=outreach;
@@ -415,6 +462,11 @@ function loadData(){
 
     // Email Outreach Tracker
     renderEmailTracker(leads,outreach);
+
+    // AI Admin panels
+    renderHealthStatus(healthChecks);
+    renderAdminActions(adminActions);
+    renderNurtureTable(nurtureSeqs);
 
     // Inquiries
     document.getElementById('inquiryCount').textContent=inquiries.length;
@@ -743,6 +795,102 @@ function filterEmails(filter,el){
   renderEmailTracker(allLeads,allOutreach);
 }
 
+
+// ── AI ADMIN RENDER FUNCTIONS ──
+
+function renderHealthStatus(checks){
+  if(!checks.length){
+    document.getElementById('healthBadge').textContent='no data';
+    document.getElementById('hWeb').textContent='—';
+    document.getElementById('hDB').textContent='—';
+    document.getElementById('hPS').textContent='—';
+    document.getElementById('hChat').textContent='—';
+    document.getElementById('hDash').textContent='—';
+    document.getElementById('healthTime').textContent='Run health-monitor.mjs to populate';
+    return;
+  }
+
+  // Get latest check for each type
+  var typeMap={uptime:'hWeb',supabase:'hDB',pagespeed_api:'hPS',tawkto:'hChat',dashboard:'hDash'};
+  var seen={};
+  checks.forEach(function(c){
+    if(!seen[c.check_type]){
+      seen[c.check_type]=c;
+    }
+  });
+
+  Object.keys(typeMap).forEach(function(type){
+    var el=document.getElementById(typeMap[type]);
+    var c=seen[type];
+    if(c){
+      if(c.status==='ok'){el.textContent='\u2705';el.style.color='var(--green)'}
+      else if(c.status==='warning'){el.textContent='\u26a0\ufe0f';el.style.color='var(--accent)'}
+      else{el.textContent='\u274c';el.style.color='var(--red)'}
+    } else {
+      el.textContent='—';
+    }
+  });
+
+  // Uptime percentage (last 24h)
+  var total=checks.length;
+  var ok=checks.filter(function(c){return c.status==='ok'}).length;
+  var pct=total>0?Math.round(ok/total*100):0;
+  var pctColor=pct>=99?'var(--green)':pct>=95?'var(--accent)':'var(--red)';
+  document.getElementById('healthUptime').innerHTML='Uptime: <span style="color:'+pctColor+'">'+pct+'%</span>';
+  document.getElementById('healthBadge').textContent=pct+'% uptime';
+
+  // Last check time
+  var latest=checks[0];
+  if(latest){
+    document.getElementById('healthTime').textContent='Last check: '+new Date(latest.created_at).toLocaleString('en-GB');
+  }
+}
+
+function renderAdminActions(actions){
+  document.getElementById('actionCount').textContent=actions.length;
+  if(!actions.length){
+    document.getElementById('adminActions').innerHTML='<div class="loading-s" style="padding:20px">No admin actions yet. Run health-monitor.mjs to start.</div>';
+    return;
+  }
+  var html='';
+  actions.slice(0,15).forEach(function(a){
+    var icon=a.result==='success'?'\u2705':a.result==='failed'?'\u274c':'\u26a0\ufe0f';
+    var typeCol={'health_check':'var(--blue)','nurture_email':'var(--purple)','kpi_report':'var(--accent)','auto_fix':'var(--green)','alert_sent':'var(--red)','lead_status_update':'var(--accentL)'};
+    html+='<div class="inquiry-item">';
+    html+='<div><div class="inquiry-email">'+icon+' '+esc(a.description)+'</div>';
+    html+='<div class="inquiry-msg" style="margin-top:2px"><span class="pill" style="background:rgba(232,162,58,.1);color:'+(typeCol[a.action_type]||'var(--text2)')+'">'+esc(a.action_type)+'</span></div>';
+    html+='</div>';
+    html+='<div class="inquiry-date">'+new Date(a.created_at).toLocaleString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('adminActions').innerHTML=html;
+}
+
+function renderNurtureTable(seqs){
+  var active=seqs.filter(function(s){return s.status==='active'});
+  document.getElementById('nurtureCount').textContent=active.length+' active';
+
+  if(!seqs.length){
+    document.getElementById('nurtureTable').innerHTML='<tr><td colspan="6" class="loading-s">No nurture sequences yet. Run: node scripts/lead-nurture.mjs enqueue</td></tr>';
+    return;
+  }
+
+  var html='';
+  seqs.slice(0,20).forEach(function(s){
+    var statusPill={'active':'pill-sent','replied':'pill-replied','completed':'pill-called','paused':'pill-not-called'};
+    var nextSend=s.next_send_at?new Date(s.next_send_at).toLocaleDateString('en-GB'):'—';
+    var lastSent=s.last_sent_at?new Date(s.last_sent_at).toLocaleDateString('en-GB'):'Not yet';
+    html+='<tr>';
+    html+='<td style="font-weight:600;color:var(--white)">'+esc(s.business_name||'—')+'</td>';
+    html+='<td style="font-size:11px;color:var(--text2)">'+esc(s.email)+'</td>';
+    html+='<td><span style="color:var(--accent);font-weight:700">Step '+s.sequence_step+'</span><span style="color:var(--text3);font-size:11px"> / 4</span></td>';
+    html+='<td style="font-size:12px">'+nextSend+'</td>';
+    html+='<td><span class="pill '+(statusPill[s.status]||'pill-sent')+'">'+esc(s.status)+'</span></td>';
+    html+='<td style="font-size:12px;color:var(--text3)">'+lastSent+'</td>';
+    html+='</tr>';
+  });
+  document.getElementById('nurtureTable').innerHTML=html;
+}
 
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
