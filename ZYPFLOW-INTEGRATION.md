@@ -12,7 +12,7 @@ Everything built into the Solis Digital platform, structured for Zypflow (Make.c
 | REST API | `https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1` |
 | Edge Functions | `https://zqcpktpnfikmshqeqxlg.supabase.co/functions/v1/` |
 | Instantly Campaign ID | `591dbb42-a2ba-4ade-933a-ef3466584f67` |
-| Instantly Campaign | "UK Website Speed Outreach" (3 steps, 8am-11am + 2pm-4pm) |
+| Instantly Campaign | "UK Website Speed Outreach" (5 steps over 14 days, 8am-11am + 2pm-4pm weekdays) |
 | PageSpeed API Key | `AIzaSyCCd15XjzZE5aoAJ8zJjCLkkW9evdkuHj0` |
 | Google Analytics | `G-V7ZVJZKH2W` |
 | Tawk.to Widget | `69b9a21c7f0aa71c36e441e0/1jjui2gh9` |
@@ -23,23 +23,31 @@ Everything built into the Solis Digital platform, structured for Zypflow (Make.c
 
 ## Launch Checklist
 
+### Code & Infrastructure (COMPLETE)
 - [x] Supabase tables + RLS configured (13 tables)
 - [x] pg_cron auto-scraper running (hourly check)
 - [x] Edge functions deployed (apify-proxy, auto-scraper, scrape-callback)
-- [x] Instantly campaign created ("UK Website Speed Outreach")
+- [x] Instantly campaign created ("UK Website Speed Outreach" — 5 steps)
 - [x] Instantly API v2 key created (scopes: leads, campaigns)
 - [x] Instantly open tracking enabled
-- [x] 6 email accounts warming (alex@/zain@ x 3 domains)
-- [x] instantly-sync.mjs built (auto-push leads with merge tags)
-- [x] instantly-webhook.mjs built (track opens/replies/bounces)
-- [x] All automation scripts ready (10 scripts)
-- [ ] Upgrade Apify to Starter ($49/mo) — scraper blocked at $5 limit
-- [ ] Email warmup complete (14 days, need 90%+ warmup score)
-- [ ] Create 6 Zypflow/Make.com scenarios (see Scenario Order table)
-- [ ] Add Steps 4+5 to Instantly campaign (nudge + breakup emails)
-- [ ] Set up Instantly webhook in Zypflow for event tracking
-- [ ] First test run: push 5 leads, verify emails render correctly
-- [ ] Activate Instantly campaign (only after warmup complete)
+- [x] Instantly campaign has all 5 email steps (Day 0, +3, +4, +3, +4 = 14 days)
+- [x] 6 email accounts warming (alex@/zain@ x solisagency/solisdigital/team-solisdigital)
+- [x] instantly-sync.mjs built (auto-push leads with personalised merge tags)
+- [x] instantly-webhook.mjs built (track opens/replies/bounces, pause nurture on reply)
+- [x] All 10 automation scripts verified — correct URLs, headers, data flow
+- [x] Dashboard: GO LIVE button, scraper panel, admin requests, call list, email tracker
+- [x] Client portal: token auth, scores, milestones, sign out, contact footer
+- [x] Landing page: SEO meta tags, structured data, LCP optimised
+- [x] Linden Grove demo: hero text, meta description, address consistency
+- [x] System-wide audit: XSS fix, error handlers, mobile responsive
+
+### Waiting On (External)
+- [ ] Upgrade Apify to Starter ($49/mo) — scraper blocked at $5 free limit
+- [ ] Email warmup complete (~14 days from March 13, target: March 27+)
+- [ ] Create 6 Zypflow/Make.com scenarios (see Scenario Order table below)
+- [ ] Set up Instantly webhook URL in Zypflow for event tracking
+- [ ] First test run: push 5 leads to Instantly, verify emails render with merge tags
+- [ ] Activate Instantly campaign (only after warmup scores hit 90%+)
 
 ---
 
