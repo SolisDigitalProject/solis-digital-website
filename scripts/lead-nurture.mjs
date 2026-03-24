@@ -11,9 +11,7 @@
  * Or via Make.com: enqueue daily, process every 2 hours
  */
 
-const SB_URL = 'https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-const HEADERS = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+import { SB_REST as SB_URL, sbHeaders as HEADERS } from './config.mjs';
 
 // Sequence timing: when to send each step (days after initial)
 const SEQUENCE_SCHEDULE = {

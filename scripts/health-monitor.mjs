@@ -6,14 +6,12 @@
  * Or via Make.com HTTP module calling this as a Vercel serverless function.
  */
 
-const SB_URL = 'https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-const HEADERS = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+import { SB_REST as SB_URL, PAGESPEED_KEY, sbHeaders as HEADERS } from './config.mjs';
 
 const CHECKS = [
   { type: 'uptime', url: 'https://www.solisdigital.co.uk/', name: 'Main Website' },
   { type: 'supabase', url: `${SB_URL}/leads?select=id&limit=1`, name: 'Supabase API' },
-  { type: 'pagespeed_api', url: 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=MOBILE&category=performance&url=https://example.com&key=AIzaSyCCd15XjzZE5aoAJ8zJjCLkkW9evdkuHj0', name: 'PageSpeed API' },
+  { type: 'pagespeed_api', url: `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=MOBILE&category=performance&url=https://example.com&key=${PAGESPEED_KEY}`, name: 'PageSpeed API' },
   { type: 'tawkto', url: 'https://embed.tawk.to/69b9a21c7f0aa71c36e441e0/1jjui2gh9', name: 'Tawk.to Widget' },
   { type: 'dashboard', url: 'https://www.solisdigital.co.uk/dashboard.html', name: 'Command Centre' },
 ];
