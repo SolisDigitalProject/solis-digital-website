@@ -285,14 +285,74 @@ if(sessionStorage.getItem('solis_auth')==='1'){
           </div>
         </div>
       </div>
+      <!-- Apify API Connection -->
       <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
-        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Google Maps Search Queries (copy into Apify)</div>
-        <textarea id="scraperQueries" readonly rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.6;resize:vertical;outline:none"></textarea>
-        <div style="display:flex;gap:8px;margin-top:8px">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Apify API Connection</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+          <input type="password" id="apifyToken" placeholder="Enter Apify API token" style="flex:1;padding:8px 12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;font-family:var(--mono);font-size:12px;outline:none" value="">
+          <button class="btn btn-s btn-sm" onclick="saveApifyToken()">Save Token</button>
+          <div id="apifyTokenStatus" style="font-size:11px;color:var(--text3)"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px">
+            Max results per query: <input type="number" id="apifyMaxResults" value="20" min="1" max="100" style="width:60px;padding:4px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;font-size:12px;outline:none">
+          </label>
+          <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-left:12px">
+            <input type="checkbox" id="apifyScrapeContacts" checked> Extract emails
+          </label>
+        </div>
+      </div>
+
+      <!-- Generated Queries -->
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Google Maps Search Queries</div>
+        <textarea id="scraperQueries" readonly rows="4" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.6;resize:vertical;outline:none"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
           <button class="btn btn-p btn-sm" onclick="generateScraperQueries()">Generate Queries</button>
           <button class="btn btn-s btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('scraperQueries').value);showToast('Queries copied to clipboard!','green')">Copy All</button>
-          <span style="font-size:11px;color:var(--text3);align-self:center;margin-left:auto">Paste these into Apify Google Maps Scraper &rarr; Search Terms</span>
+          <button class="btn btn-d btn-sm" id="btnRunScraper" onclick="runApifyScraper()" style="margin-left:auto">&#9654; Run Scraper Now</button>
         </div>
+      </div>
+
+      <!-- Scraper Run Status -->
+      <div id="scraperStatus" style="display:none;margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-weight:700;color:var(--white)" id="scraperStatusTitle">Scraper Running...</span>
+          <span style="font-size:11px;color:var(--text3)" id="scraperStatusTime"></span>
+        </div>
+        <div style="width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:8px">
+          <div id="scraperProgressBar" style="width:0%;height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2)" id="scraperStatusMsg">Starting actor run...</div>
+        <div id="scraperRunLog" style="margin-top:8px;max-height:120px;overflow-y:auto;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8"></div>
+      </div>
+
+      <!-- 24/7 Auto-Scrape Toggle -->
+      <div style="margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--white)">24/7 Automated Scraping</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Runs automatically every 24 hours via Supabase Edge Function</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="autoScrapeLastRun"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <select id="autoScrapeInterval" style="padding:4px 8px;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:4px;font-size:11px;outline:none">
+            <option value="6">Every 6 hours</option>
+            <option value="12">Every 12 hours</option>
+            <option value="24" selected>Every 24 hours</option>
+            <option value="48">Every 48 hours</option>
+            <option value="168">Weekly</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="autoScrapeEnabled" onchange="toggleAutoScrape()">
+            <span style="font-size:12px;font-weight:700;color:var(--accent)" id="autoScrapeLabel">OFF</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Recent Scraper Runs -->
+      <div style="margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Recent Scraper Runs</div>
+        <div id="scraperRunHistory" style="font-size:11px;color:var(--text3)">Loading...</div>
       </div>
     </div>
   </div>
@@ -1883,7 +1943,301 @@ function generateScraperQueries(){
     });
   });
   document.getElementById('scraperQueries').value=queries.join('\n');
-  showToast(queries.length+' search queries generated! Copy and paste into Apify.','green');
+  showToast(queries.length+' search queries generated!','green');
+}
+
+// ── Apify Integration ──
+var APIFY_ACTOR='compass/crawler-google-places';
+var scraperRunId=null;
+var scraperPollTimer=null;
+
+function saveApifyToken(){
+  var token=document.getElementById('apifyToken').value.trim();
+  if(!token){showToast('Enter your Apify API token','red');return}
+  localStorage.setItem('solis_apify_token',token);
+  // Also save to Supabase scraper_config so edge functions can use it
+  fetch(SB+'/scraper_config?id=eq.1',{
+    method:'PATCH',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify({apify_token:token,updated_at:new Date().toISOString()})
+  }).then(function(r){
+    if(r.ok){
+      document.getElementById('apifyTokenStatus').textContent='Saved (local + server)';
+      document.getElementById('apifyTokenStatus').style.color='var(--green)';
+      showToast('Apify token saved to browser and server (enables 24/7 auto-scraping)','green');
+    } else {
+      document.getElementById('apifyTokenStatus').textContent='Saved (local only)';
+      document.getElementById('apifyTokenStatus').style.color='var(--accent)';
+      showToast('Token saved locally. Server save failed — auto-scraping may not work.','red');
+    }
+  });
+}
+
+function getApifyToken(){
+  return localStorage.getItem('solis_apify_token')||document.getElementById('apifyToken').value.trim();
+}
+
+// Load saved token on page load
+(function(){
+  var saved=localStorage.getItem('solis_apify_token');
+  if(saved){
+    document.getElementById('apifyToken').value=saved;
+    document.getElementById('apifyTokenStatus').textContent='Saved';
+    document.getElementById('apifyTokenStatus').style.color='var(--green)';
+  }
+})();
+
+function scraperLog(msg){
+  var log=document.getElementById('scraperRunLog');
+  var t=new Date().toLocaleTimeString();
+  log.innerHTML+='<div>['+t+'] '+msg+'</div>';
+  log.scrollTop=log.scrollHeight;
+}
+
+function runApifyScraper(){
+  var token=getApifyToken();
+  if(!token){showToast('Set your Apify API token first','red');return}
+
+  // Generate queries from selected chips
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  if(!cities.length||!industries.length){showToast('Select at least one city and one industry','red');return}
+
+  var queries=[];
+  industries.forEach(function(ind){cities.forEach(function(city){queries.push(ind+' in '+city)})});
+
+  var maxResults=parseInt(document.getElementById('apifyMaxResults').value)||20;
+  var scrapeContacts=document.getElementById('apifyScrapeContacts').checked;
+
+  // Show status panel
+  document.getElementById('scraperStatus').style.display='block';
+  document.getElementById('scraperStatusTitle').textContent='Starting Scraper...';
+  document.getElementById('scraperStatusMsg').textContent='Sending '+queries.length+' queries to Apify...';
+  document.getElementById('scraperProgressBar').style.width='5%';
+  document.getElementById('scraperRunLog').innerHTML='';
+  document.getElementById('btnRunScraper').disabled=true;
+  document.getElementById('btnRunScraper').textContent='Running...';
+
+  scraperLog('Starting Apify actor: '+APIFY_ACTOR);
+  scraperLog('Queries: '+queries.length+' | Max per query: '+maxResults+' | Contacts: '+(scrapeContacts?'Yes':'No'));
+
+  // Call Apify REST API to start actor run
+  // We batch queries — Apify actor accepts searchStringsArray
+  // For large query sets, we run in batches of 50 to avoid timeouts
+  var batchSize=50;
+  var batches=[];
+  for(var i=0;i<queries.length;i+=batchSize){
+    batches.push(queries.slice(i,i+batchSize));
+  }
+
+  scraperLog('Split into '+batches.length+' batch(es) of up to '+batchSize+' queries each');
+
+  // Start first batch (chain remaining batches after completion)
+  startApifyBatch(token,batches,0,maxResults,scrapeContacts,[]);
+}
+
+function startApifyBatch(token,batches,batchIdx,maxResults,scrapeContacts,allResults){
+  if(batchIdx>=batches.length){
+    // All batches done — process results
+    scraperLog('All batches complete! Total results: '+allResults.length);
+    processScraperResults(allResults);
+    return;
+  }
+
+  var batch=batches[batchIdx];
+  var pct=Math.round(((batchIdx)/batches.length)*80)+5;
+  document.getElementById('scraperProgressBar').style.width=pct+'%';
+  document.getElementById('scraperStatusTitle').textContent='Scraper Running — Batch '+(batchIdx+1)+'/'+batches.length;
+  document.getElementById('scraperStatusMsg').textContent='Running batch '+(batchIdx+1)+' ('+batch.length+' queries)...';
+  scraperLog('Starting batch '+(batchIdx+1)+'/'+batches.length+': '+batch.length+' queries');
+
+  var input={
+    searchStringsArray:batch,
+    countryCode:'gb',
+    maxCrawledPlacesPerSearch:maxResults,
+    scrapeContacts:scrapeContacts,
+    language:'en',
+    deeperCityScrape:false,
+    onePerQuery:false
+  };
+
+  fetch('https://api.apify.com/v2/acts/'+APIFY_ACTOR+'/runs?token='+token,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(input)
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(t){throw new Error('Apify API error ('+r.status+'): '+t)});
+    return r.json();
+  }).then(function(data){
+    var runId=data.data.id;
+    var datasetId=data.data.defaultDatasetId;
+    scraperLog('Actor run started: '+runId);
+    scraperLog('Dataset: '+datasetId);
+    // Record run in DB
+    fetch(SB+'/scraper_runs',{method:'POST',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({apify_run_id:runId,dataset_id:datasetId,status:'RUNNING',queries_count:batch.length})});
+    // Poll for completion
+    pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeContacts,allResults);
+  }).catch(function(err){
+    scraperLog('ERROR: '+err.message);
+    document.getElementById('scraperStatusTitle').textContent='Scraper Error';
+    document.getElementById('scraperStatusTitle').style.color='var(--red)';
+    document.getElementById('scraperStatusMsg').textContent=err.message;
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperProgressBar').style.background='var(--red)';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    showToast('Scraper failed: '+err.message,'red');
+  });
+}
+
+function pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeContacts,allResults){
+  scraperPollTimer=setInterval(function(){
+    fetch('https://api.apify.com/v2/actor-runs/'+runId+'?token='+token)
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var status=data.data.status;
+      var stats=data.data.stats||{};
+      document.getElementById('scraperStatusMsg').textContent='Status: '+status+' | Items scraped: '+(stats.itemCount||0);
+
+      if(status==='SUCCEEDED'){
+        clearInterval(scraperPollTimer);
+        scraperLog('Batch '+(batchIdx+1)+' complete! Items: '+(stats.itemCount||0));
+        // Fetch results from dataset
+        fetch('https://api.apify.com/v2/datasets/'+datasetId+'/items?token='+token+'&limit=1000')
+        .then(function(r){return r.json()})
+        .then(function(items){
+          scraperLog('Fetched '+items.length+' results from dataset');
+          allResults=allResults.concat(items);
+          // Start next batch
+          startApifyBatch(token,batches,batchIdx+1,maxResults,scrapeContacts,allResults);
+        });
+      } else if(status==='FAILED'||status==='ABORTED'||status==='TIMED-OUT'){
+        clearInterval(scraperPollTimer);
+        scraperLog('ERROR: Run '+status);
+        document.getElementById('scraperStatusTitle').textContent='Batch '+(batchIdx+1)+' '+status;
+        document.getElementById('scraperStatusTitle').style.color='var(--red)';
+        // Continue with next batch despite failure
+        startApifyBatch(token,batches,batchIdx+1,maxResults,scrapeContacts,allResults);
+      }
+    }).catch(function(err){
+      scraperLog('Poll error: '+err.message);
+    });
+  },10000); // Poll every 10 seconds
+}
+
+function processScraperResults(items){
+  document.getElementById('scraperProgressBar').style.width='90%';
+  document.getElementById('scraperStatusTitle').textContent='Processing '+items.length+' Results...';
+  document.getElementById('scraperStatusMsg').textContent='Deduplicating and inserting into leads database...';
+  scraperLog('Processing '+items.length+' raw results...');
+
+  // Map Apify output to our leads schema
+  var leads=[];
+  var seen={};
+  items.forEach(function(item){
+    // Deduplicate by business name + location
+    var key=(item.title||'').toLowerCase()+'|'+(item.city||item.address||'').toLowerCase();
+    if(seen[key])return;
+    seen[key]=true;
+
+    var lead={
+      business_name:item.title||item.name||'Unknown',
+      industry:item.categoryName||item.categories&&item.categories[0]||'',
+      location:item.city||item.address||'',
+      website:item.website||item.url||null,
+      has_website:!!(item.website||item.url),
+      phone:item.phone||item.phoneUnformatted||null,
+      email:item.email||item.emails&&item.emails[0]||null,
+      google_rating:item.totalScore||item.rating||null,
+      review_count:item.reviewsCount||item.reviews||0,
+      status:'New',
+      source:'apify_scraper',
+      place_id:item.placeId||null
+    };
+
+    // Skip entries without a business name
+    if(lead.business_name==='Unknown')return;
+    leads.push(lead);
+  });
+
+  scraperLog('Deduplicated: '+leads.length+' unique leads (removed '+(items.length-leads.length)+' duplicates)');
+
+  if(!leads.length){
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperStatusTitle').textContent='No New Leads Found';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    showToast('Scraper finished but found no new leads','red');
+    return;
+  }
+
+  // Check existing leads to avoid duplicates
+  fetch(SB+'/leads?select=business_name,location',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(existing){
+    var existingKeys={};
+    existing.forEach(function(e){existingKeys[(e.business_name||'').toLowerCase()+'|'+(e.location||'').toLowerCase()]=true});
+
+    var newLeads=leads.filter(function(l){
+      return!existingKeys[(l.business_name||'').toLowerCase()+'|'+(l.location||'').toLowerCase()];
+    });
+
+    scraperLog('Existing leads in DB: '+existing.length+' | Truly new: '+newLeads.length);
+
+    if(!newLeads.length){
+      document.getElementById('scraperProgressBar').style.width='100%';
+      document.getElementById('scraperStatusTitle').textContent='All Leads Already Exist';
+      document.getElementById('scraperStatusMsg').textContent='All '+leads.length+' scraped leads are already in the database.';
+      document.getElementById('btnRunScraper').disabled=false;
+      document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+      showToast('All scraped leads already exist in database','blue');
+      return;
+    }
+
+    // Insert in batches of 50
+    insertLeadBatch(newLeads,0,50,0);
+  });
+}
+
+function insertLeadBatch(leads,offset,batchSize,inserted){
+  if(offset>=leads.length){
+    // All done
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperProgressBar').style.background='var(--green)';
+    document.getElementById('scraperStatusTitle').textContent='Scraper Complete!';
+    document.getElementById('scraperStatusTitle').style.color='var(--green)';
+    document.getElementById('scraperStatusMsg').textContent='Inserted '+inserted+' new leads into the database.';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    scraperLog('DONE! Inserted '+inserted+' new leads.');
+    showToast(inserted+' new leads scraped and added to database!','green');
+    loadData();
+    loadScraperHistory();
+    return;
+  }
+
+  var batch=leads.slice(offset,offset+batchSize);
+  var pct=90+Math.round((offset/leads.length)*10);
+  document.getElementById('scraperProgressBar').style.width=pct+'%';
+  document.getElementById('scraperStatusMsg').textContent='Inserting leads... ('+offset+'/'+leads.length+')';
+
+  fetch(SB+'/leads',{
+    method:'POST',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify(batch)
+  }).then(function(r){
+    if(r.ok){
+      inserted+=batch.length;
+      scraperLog('Inserted batch: '+batch.length+' leads (total: '+inserted+')');
+    } else {
+      scraperLog('Insert error (batch at offset '+offset+'): HTTP '+r.status);
+    }
+    insertLeadBatch(leads,offset+batchSize,batchSize,inserted);
+  }).catch(function(err){
+    scraperLog('Insert error: '+err.message);
+    insertLeadBatch(leads,offset+batchSize,batchSize,inserted);
+  });
 }
 
 // Toggle chip tags on click
@@ -1900,10 +2254,89 @@ function runBulkAudit(){
   alert('Found '+newLeads.length+' new leads. The Make.com "New Lead \u2192 AI Audit" scenario runs every 15 minutes and will pick these up automatically.');
 }
 
+// ── Auto-Scrape Config & History ──
+function toggleAutoScrape(){
+  var enabled=document.getElementById('autoScrapeEnabled').checked;
+  var interval=parseInt(document.getElementById('autoScrapeInterval').value)||24;
+  document.getElementById('autoScrapeLabel').textContent=enabled?'ON':'OFF';
+  document.getElementById('autoScrapeLabel').style.color=enabled?'var(--green)':'var(--accent)';
+
+  // Save config to Supabase
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+
+  fetch(SB+'/scraper_config?id=eq.1',{
+    method:'PATCH',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify({
+      auto_run_enabled:enabled,
+      auto_run_interval_hours:interval,
+      cities:cities,
+      industries:industries,
+      max_results_per_query:parseInt(document.getElementById('apifyMaxResults').value)||20,
+      scrape_contacts:document.getElementById('apifyScrapeContacts').checked,
+      updated_at:new Date().toISOString()
+    })
+  }).then(function(r){
+    if(r.ok) showToast(enabled?'Auto-scraping enabled! Runs every '+interval+' hours.':'Auto-scraping disabled.',enabled?'green':'blue');
+  });
+}
+
+function loadScraperConfig(){
+  fetch(SB+'/scraper_config?id=eq.1&select=*',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data||!data.length)return;
+    var cfg=data[0];
+    if(cfg.auto_run_enabled){
+      document.getElementById('autoScrapeEnabled').checked=true;
+      document.getElementById('autoScrapeLabel').textContent='ON';
+      document.getElementById('autoScrapeLabel').style.color='var(--green)';
+    }
+    if(cfg.auto_run_interval_hours){
+      document.getElementById('autoScrapeInterval').value=cfg.auto_run_interval_hours;
+    }
+    if(cfg.last_auto_run){
+      document.getElementById('autoScrapeLastRun').textContent='Last auto-run: '+new Date(cfg.last_auto_run).toLocaleString();
+    }
+    if(cfg.apify_token){
+      localStorage.setItem('solis_apify_token',cfg.apify_token);
+      document.getElementById('apifyToken').value=cfg.apify_token;
+      document.getElementById('apifyTokenStatus').textContent='Saved (server)';
+      document.getElementById('apifyTokenStatus').style.color='var(--green)';
+    }
+  }).catch(function(){});
+}
+
+function loadScraperHistory(){
+  fetch(SB+'/scraper_runs?select=*&order=started_at.desc&limit=10',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(runs){
+    var el=document.getElementById('scraperRunHistory');
+    if(!runs||!runs.length){el.innerHTML='<div style="color:var(--text3);padding:8px 0">No scraper runs yet. Click "Run Scraper Now" to start.</div>';return}
+    var html='<table style="width:100%"><tr><th>Time</th><th>Status</th><th>Queries</th><th>Results</th><th>New Leads</th></tr>';
+    runs.forEach(function(r){
+      var statusColor=r.status==='SUCCEEDED'?'var(--green)':r.status==='RUNNING'?'var(--accent)':'var(--red)';
+      html+='<tr>';
+      html+='<td style="font-size:11px">'+new Date(r.started_at).toLocaleString()+'</td>';
+      html+='<td><span style="color:'+statusColor+';font-weight:700;font-size:11px">'+r.status+'</span></td>';
+      html+='<td style="font-size:11px;text-align:center">'+(r.queries_count||0)+'</td>';
+      html+='<td style="font-size:11px;text-align:center">'+(r.results_count||0)+'</td>';
+      html+='<td style="font-size:11px;text-align:center;color:var(--green);font-weight:700">'+(r.new_leads_count||0)+'</td>';
+      html+='</tr>';
+    });
+    html+='</table>';
+    el.innerHTML=html;
+  }).catch(function(){});
+}
+
 loadData();
 loadRequests();
+loadScraperConfig();
+loadScraperHistory();
 // Auto-refresh every 60 seconds
-setInterval(function(){loadData();loadRequests()},60000);
+setInterval(function(){loadData();loadRequests();loadScraperHistory()},60000);
 </script>
 </body>
 </html>
