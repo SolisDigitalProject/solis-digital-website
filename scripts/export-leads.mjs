@@ -36,7 +36,7 @@ async function main() {
   if (!leads.length) { console.error('No audited leads with emails found.'); process.exit(0); }
 
   // Instantly.ai CSV columns
-  const header = 'email,first_name,company_name,website,industry,speed_score,seo_score,email_body';
+  const header = 'email,first_name,company_name,website,industry,speed_score,seo_score,audit_summary';
   console.log(header);
 
   for (const lead of leads) {
