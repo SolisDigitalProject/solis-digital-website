@@ -179,8 +179,8 @@ async function process() {
     console.log(`  📧 Step ${seq.sequence_step}/4 → ${seq.email} (${seq.business_name})`);
     console.log(`     Subject: ${subject}`);
 
-    // In production: this sends via Instantly API or Resend
-    // For now: log the email content and advance the sequence
+    // Emails are sent via Instantly.ai campaign (see instantly-sync.mjs)
+    // This script tracks sequence progression and logs to outreach table
 
     // Record in outreach table
     await fetch(`${SB_URL}/outreach`, {

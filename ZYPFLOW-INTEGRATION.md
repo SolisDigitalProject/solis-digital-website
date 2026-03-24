@@ -288,44 +288,124 @@ For each lead:
 
 ## Scripts Reference (run via Zypflow HTTP/CLI module)
 
-| Script | Command | Schedule |
-|--------|---------|----------|
-| Lead Scoring | `node scripts/lead-scoring.mjs` | After scrape/audit |
-| Bulk Audit | `ANTHROPIC_API_KEY=sk-... node scripts/bulk-audit.mjs` | After scrape |
-| Lead Nurture (enqueue) | `node scripts/lead-nurture.mjs enqueue` | Every 6h |
-| Lead Nurture (process) | `node scripts/lead-nurture.mjs process` | Every 6h |
-| Daily KPI Report | `node scripts/daily-kpi-report.mjs` | Daily 8am |
-| Health Monitor | `node scripts/health-monitor.mjs` | Every 30min |
-| Export Leads CSV | `node scripts/export-leads.mjs` | On-demand |
-| Generate Copy | `ANTHROPIC_API_KEY=sk-... node scripts/generate-copy.mjs --name "X" --industry "Y"` | On-demand |
+| Script | Command | Schedule | Status |
+|--------|---------|----------|--------|
+| Lead Scoring | `node scripts/lead-scoring.mjs` | After scrape/audit | ✅ Ready |
+| Bulk Audit | `ANTHROPIC_API_KEY=sk-... node scripts/bulk-audit.mjs` | After scrape | ✅ Ready |
+| Instantly Push | `INSTANTLY_API_KEY=... INSTANTLY_CAMPAIGN_ID=... node scripts/instantly-sync.mjs push` | After audit | ✅ Ready |
+| Instantly Campaigns | `INSTANTLY_API_KEY=... node scripts/instantly-sync.mjs campaigns` | One-time setup | ✅ Ready |
+| Instantly Webhook | `echo '{"event_type":"email_replied","email":"..."}' \| node scripts/instantly-webhook.mjs` | On event | ✅ Ready |
+| Lead Nurture (enqueue) | `node scripts/lead-nurture.mjs enqueue` | Every 6h | ✅ Ready |
+| Lead Nurture (process) | `node scripts/lead-nurture.mjs process` | Every 6h | ✅ Ready |
+| Daily KPI Report | `node scripts/daily-kpi-report.mjs` | Daily 8am | ✅ Ready |
+| Health Monitor | `node scripts/health-monitor.mjs` | Every 30min | ✅ Ready |
+| Export Leads CSV | `node scripts/export-leads.mjs` | On-demand (legacy) | Replaced by instantly-sync |
+| Generate Copy | `ANTHROPIC_API_KEY=sk-... node scripts/generate-copy.mjs --name "X" --industry "Y"` | On-demand | ✅ Ready |
 
 ---
 
-## Full Pipeline (End-to-End)
+## Instantly.ai Integration (NEW)
+
+### Setup Steps
+
+1. **Get API key**: Instantly dashboard → Settings → API → Create V2 key with `leads:all` + `campaigns:all` scopes
+2. **Find campaign ID**: `INSTANTLY_API_KEY=xxx node scripts/instantly-sync.mjs campaigns`
+3. **Set env vars**: `INSTANTLY_API_KEY` and `INSTANTLY_CAMPAIGN_ID`
+
+### How Emails Get Personalised
+
+`instantly-sync.mjs` pushes leads with these merge tags (custom_variables):
+
+| Merge Tag | Source | Example |
+|-----------|--------|---------|
+| `{{business_name}}` | leads.business_name | "Smith's Plumbing" |
+| `{{website}}` | leads.website | "smithplumbing.co.uk" |
+| `{{first_name}}` | Extracted from email | "John" |
+| `{{industry}}` | leads.industry | "plumber" |
+| `{{location}}` | leads.location | "Manchester" |
+| `{{speed_score}}` | leads.speed_score | "34" |
+| `{{issue_1}}` | Auto-generated from scores | "Site speed score is 34/100 — visitors leave before the page loads" |
+| `{{issue_2}}` | Auto-generated from scores | "SEO score is 28/100 — you're invisible on Google" |
+| `{{issue_3}}` | Auto-generated from scores | "No SSL certificate — Google marks your site as 'Not Secure'" |
+| `{{number_of_issues}}` | Count of issues | "3" |
+| `{{calendly_link}}` | Hardcoded | "https://calendly.com/solisdigital/strategy-call" |
+
+### Email Templates (in Instantly campaign)
+
+Use the templates from `templates/outreach-emails.md`:
+- **Email 1 (Day 0)**: "I found {{number_of_issues}} issues with {{website}}"
+- **Email 2 (Day 3)**: "Quick thought about {{business_name}}'s website"
+- **Email 3 (Day 7)**: "How a {{industry}} in {{location}} got 280% more enquiries"
+- **Email 4 (Day 10)**: "Re: {{business_name}} website"
+- **Email 5 (Day 14)**: "Should I close your file?"
+
+### Webhook Handler (instantly-webhook.mjs)
+
+Receives events from Instantly and updates Supabase:
+
+| Instantly Event | → Outreach Status | → Lead Status | → Nurture Action |
+|----------------|-------------------|---------------|------------------|
+| `email_opened` | Opened (opens +1) | — | — |
+| `email_replied` | Replied | Replied | Pause sequence |
+| `email_bounced` | Bounced | Bounced | — |
+
+**Zypflow setup**: Create a webhook scenario → receive Instantly event → HTTP module calls `instantly-webhook.mjs`
+
+---
+
+## Full Pipeline (End-to-End) — FULLY AUTOMATED
 
 ```
-SCRAPE (Apify/Google Maps)
-  ↓ 26 industries × 19 cities
-SCORE (lead-scoring.mjs)
-  ↓ 0-100 conversion likelihood
-AUDIT (bulk-audit.mjs)
-  ↓ PageSpeed + AI summary
-NURTURE (lead-nurture.mjs)
-  ↓ 4-step email sequence (Day 1,3,7,14)
-OUTREACH (Instantly.ai)
-  ↓ Track opens/replies
-CALL (Dashboard call list)
-  ↓ Sales team follow-up
-CLOSE (Client won)
-  ↓ Create project + send portal token
-ONBOARD (Client brief form)
-  ↓ Brief submitted → Framer AI prompt
-BUILD (Framer)
-  ↓ Design → Development → Review
-LAUNCH (DNS + SSL)
-  ↓ Go live
-MAINTAIN (Health monitoring + retainer)
+SCRAPE (Apify + pg_cron — runs every 24h automatically)
+  │  26 industries × 19 cities → leads table (status: New)
+  │  Trigger: pg_cron → auto-scraper edge function
+  ↓
+SCORE (lead-scoring.mjs — runs after scrape)
+  │  Algorithm: 0-130 points based on website quality + industry + location
+  │  Trigger: Zypflow scenario after scrape completes
+  ↓
+AUDIT (bulk-audit.mjs — runs after scoring)
+  │  PageSpeed API + Claude AI summary → status: Audited
+  │  Trigger: Zypflow scenario (every 15 min for new leads)
+  ↓
+PUSH TO INSTANTLY (instantly-sync.mjs — runs after audit)
+  │  Audited leads + merge tags → Instantly campaign
+  │  Trigger: Zypflow scenario after audit batch
+  │  Dedup: skips leads already in outreach table
+  ↓
+EMAIL SEQUENCE (Instantly.ai — fully automated)
+  │  5 personalised emails over 14 days
+  │  Email 1 (Day 0) → Email 2 (Day 3) → Email 3 (Day 7) → Email 4 (Day 10) → Email 5 (Day 14)
+  │  Sends from 6 warmed accounts, rotates automatically
+  ↓
+TRACK EVENTS (instantly-webhook.mjs — on each event)
+  │  Opens → update outreach table
+  │  Replies → update lead status, pause nurture sequence
+  │  Bounces → mark lead as bounced
+  │  Trigger: Instantly webhook → Zypflow → script
+  ↓
+CALL (Dashboard call list — sales team)
+  │  Top leads ranked by score + reply status
+  │  Track: Called, Callback, Interested, Call Booked
+  ↓
+CLOSE → Create project + send portal token
+ONBOARD → Client brief form → Framer AI prompt
+BUILD → Design → Development → Review
+LAUNCH → DNS + SSL → Go live
+MONITOR (health-monitor.mjs — every 30 min)
+REPORT (daily-kpi-report.mjs — 8am daily)
 ```
+
+### Zypflow Scenario Order (create these 6 scenarios)
+
+| # | Scenario | Trigger | Actions |
+|---|----------|---------|---------|
+| 1 | Health Monitor | Every 30 min | Run health-monitor.mjs |
+| 2 | Daily KPI Report | Daily 8am | Run daily-kpi-report.mjs → send email |
+| 3 | Audit & Score Pipeline | Every 15 min | Run bulk-audit.mjs → run lead-scoring.mjs |
+| 4 | Push to Instantly | Every 1h | Run instantly-sync.mjs push |
+| 5 | Instantly Webhook | On event | Receive webhook → run instantly-webhook.mjs |
+| 6 | Nurture Tracker | Every 6h | Run lead-nurture.mjs enqueue → process |
 
 ---
 
