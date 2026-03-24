@@ -383,24 +383,50 @@ if(sessionStorage.getItem('solis_auth')==='1'){
 </div>
 
 <!-- SECTION: AI ADMIN CHAT — REQUEST CHANGES -->
-<div class="section-divider"><h2>&#128172; AI Admin — Request Changes</h2><div class="line"></div></div>
+<div class="section-divider"><h2>&#128172; Change Requests — Task Queue</h2><div class="line"></div></div>
 <div class="panels-full" style="padding-bottom:16px">
   <div class="panel">
     <div class="panel-h">
-      <h3>Submit Optimisation Requests &amp; Review AI Suggestions</h3>
+      <h3>Submit &amp; Track Changes</h3>
       <span class="badge" id="requestCount">0 pending</span>
     </div>
     <div style="padding:16px 20px">
+      <!-- Workflow explainer -->
+      <div style="display:flex;gap:4px;margin-bottom:16px;font-size:10px;font-weight:700;flex-wrap:wrap">
+        <span style="padding:4px 10px;border-radius:4px;background:rgba(232,162,58,.1);color:var(--accent)">1. Submit Request</span>
+        <span style="color:var(--text3);padding:4px 0">&rarr;</span>
+        <span style="padding:4px 10px;border-radius:4px;background:rgba(96,165,250,.1);color:var(--blue)">2. Approve &amp; Assign</span>
+        <span style="color:var(--text3);padding:4px 0">&rarr;</span>
+        <span style="padding:4px 10px;border-radius:4px;background:rgba(167,139,250,.1);color:var(--purple)">3. In Progress</span>
+        <span style="color:var(--text3);padding:4px 0">&rarr;</span>
+        <span style="padding:4px 10px;border-radius:4px;background:rgba(52,211,153,.1);color:var(--green)">4. Complete &amp; Verified</span>
+      </div>
       <div style="display:flex;gap:10px;margin-bottom:16px">
-        <input type="text" id="adminInput" placeholder="Describe a change or optimisation you want (e.g. 'Make the hero text bigger', 'Add a new service card')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <input type="text" id="adminInput" placeholder="What needs changing? (e.g. 'Update pricing to £1,297', 'Add testimonial section', 'Fix mobile nav')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
         <select id="adminPriority" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer">
           <option value="low">Low</option>
           <option value="medium" selected>Medium</option>
           <option value="high">High</option>
         </select>
+        <select id="adminCategory" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer">
+          <option value="website">Website</option>
+          <option value="seo">SEO</option>
+          <option value="client_site">Client Site</option>
+          <option value="automation">Automation</option>
+          <option value="dashboard">Dashboard</option>
+          <option value="general" selected>General</option>
+        </select>
         <button class="btn btn-p" onclick="submitRequest()">Submit</button>
       </div>
-      <div id="requestsList" style="max-height:400px;overflow-y:auto"></div>
+      <!-- Filter tabs for request status -->
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="reqFilterBar">
+        <button class="filter-chip active" onclick="filterRequests('all',this)">All</button>
+        <button class="filter-chip" onclick="filterRequests('pending',this)">Pending</button>
+        <button class="filter-chip" onclick="filterRequests('in_progress',this)">In Progress</button>
+        <button class="filter-chip" onclick="filterRequests('completed',this)">Completed</button>
+        <button class="filter-chip" onclick="filterRequests('rejected',this)">Rejected</button>
+      </div>
+      <div id="requestsList" style="max-height:500px;overflow-y:auto"></div>
     </div>
   </div>
 </div>
@@ -977,11 +1003,23 @@ function renderProjects(projects){
     });
     html+='</div>';
 
-    // Before vs After website links
-    if(p.old_website_url||p.new_website_url){
-      html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">';
-      if(p.old_website_url)html+='<a href="'+esc(p.old_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(248,113,113,.08);color:var(--red);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(248,113,113,.15)">Old Site \u2192</a>';
-      if(p.new_website_url)html+='<a href="'+esc(p.new_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.08);color:var(--green);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(52,211,153,.15)">New Site \u2192</a>';
+    // Website links row
+    html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">';
+    if(p.old_website_url)html+='<a href="'+esc(p.old_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(248,113,113,.08);color:var(--red);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(248,113,113,.15)">Old Site \u2192</a>';
+    if(p.framer_url)html+='<a href="'+esc(p.framer_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(167,139,250,.08);color:var(--purple);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(167,139,250,.15)">Framer Draft \u2192</a>';
+    if(p.new_website_url)html+='<a href="'+esc(p.new_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.08);color:var(--green);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(52,211,153,.15)">Live Site \u2192</a>';
+    html+='</div>';
+
+    // DNS & Go-Live status
+    if(p.custom_domain||p.dns_status){
+      var dnsCol={'not_started':'var(--text3)','pending':'var(--accent)','configured':'var(--blue)','propagating':'var(--purple)','live':'var(--green)','failed':'var(--red)'};
+      var dnsLabel={'not_started':'Not Started','pending':'Awaiting DNS','configured':'DNS Configured','propagating':'Propagating','live':'Live','failed':'Failed'};
+      var sslCol={'pending':'var(--accent)','active':'var(--green)','failed':'var(--red)'};
+      html+='<div style="display:flex;gap:16px;margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;flex-wrap:wrap">';
+      if(p.custom_domain)html+='<span style="color:var(--text2)"><strong style="color:var(--text3)">Domain:</strong> '+esc(p.custom_domain)+'</span>';
+      html+='<span><strong style="color:var(--text3)">DNS:</strong> <span style="color:'+(dnsCol[p.dns_status]||'var(--text3)')+';font-weight:700">'+(dnsLabel[p.dns_status]||p.dns_status||'—')+'</span></span>';
+      html+='<span><strong style="color:var(--text3)">SSL:</strong> <span style="color:'+(sslCol[p.ssl_status]||'var(--text3)')+';font-weight:700">'+(p.ssl_status==='active'?'Active':p.ssl_status==='failed'?'Failed':'Pending')+'</span></span>';
+      if(p.dns_provider)html+='<span style="color:var(--text3)">Provider: '+esc(p.dns_provider)+'</span>';
       html+='</div>';
     }
 
@@ -1020,27 +1058,25 @@ function loadRequests(){
   });
 }
 
+var currentReqFilter='all';
+
 function submitRequest(){
   var input=document.getElementById('adminInput');
   var priority=document.getElementById('adminPriority').value;
+  var category=document.getElementById('adminCategory').value;
   var text=input.value.trim();
   if(!text){input.focus();return}
 
   fetch(SB+'/admin_requests',{
     method:'POST',
     headers:H,
-    body:JSON.stringify({request_text:text,priority:priority,status:'pending',submitted_by:'admin'})
+    body:JSON.stringify({request_text:text,priority:priority,category:category,status:'pending',submitted_by:'admin'})
   }).then(function(r){
     if(r.ok){
       input.value='';
-      showToast('Request submitted — awaiting review','green');
+      showToast('Request submitted — appears in Pending queue','green');
       loadRequests();
-      // Log the action
-      fetch(SB+'/admin_actions',{
-        method:'POST',
-        headers:H,
-        body:JSON.stringify({action_type:'admin_request',description:'New request: '+text.substring(0,80),target:'admin_requests',result:'success',details:{priority:priority}})
-      });
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'admin_request',description:'New request: '+text.substring(0,80),target:'admin_requests',result:'success',details:{priority:priority,category:category}})});
     } else {
       showToast('Failed to submit request','red');
     }
@@ -1051,28 +1087,50 @@ document.getElementById('adminInput').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();submitRequest()}
 });
 
-function updateRequest(id,newStatus,btn){
+function filterRequests(status,btn){
+  currentReqFilter=status;
+  document.querySelectorAll('#reqFilterBar .filter-chip').forEach(function(c){c.classList.remove('active')});
+  if(btn)btn.classList.add('active');
+  renderRequests(allRequests);
+}
+
+function updateRequest(id,newStatus,btn,notes){
   if(btn){btn.disabled=true;btn.textContent='Saving...';}
+  var patch={status:newStatus,reviewed_at:new Date().toISOString()};
+  if(newStatus==='completed')patch.completed_at=new Date().toISOString();
+  if(notes)patch.execution_notes=notes;
+
   fetch(SB+'/admin_requests?id=eq.'+id,{
     method:'PATCH',
     headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-    body:JSON.stringify({status:newStatus,reviewed_at:new Date().toISOString()})
+    body:JSON.stringify(patch)
   }).then(function(r){
     if(r.ok){
-      // Log the action
       var req=allRequests.find(function(x){return x.id===id});
-      var desc='Request '+(newStatus==='approved'?'approved':newStatus==='rejected'?'rejected':'marked complete')+': '+(req?req.request_text.substring(0,60):'#'+id);
-      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'request_'+newStatus,description:desc,target:'admin_requests',result:'success',details:{request_id:id}})});
-      showToast(newStatus==='approved'?'Request approved — ready for action':newStatus==='rejected'?'Request rejected':'Request marked as completed',newStatus==='rejected'?'red':'green');
+      var reqText=req?req.request_text.substring(0,60):'#'+id;
+      var msgs={
+        'in_progress':'Approved \u2192 now In Progress. Go make the change, then come back and mark it Complete.',
+        'completed':'Marked complete. Change is done and verified.',
+        'rejected':'Rejected and archived.'
+      };
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'request_'+newStatus,description:'Request '+newStatus+': '+reqText,target:'admin_requests',result:'success',details:{request_id:id,notes:notes||''}})});
+      showToast(msgs[newStatus]||'Updated',newStatus==='rejected'?'red':'green');
       loadRequests();
     } else {
       showToast('Failed to update — please try again','red');
-      if(btn){btn.disabled=false;btn.textContent=newStatus==='approved'?'Approve':newStatus==='rejected'?'Reject':'Mark Done';}
+      if(btn){btn.disabled=false;}
     }
   }).catch(function(){
     showToast('Network error — check connection','red');
-    if(btn){btn.disabled=false;btn.textContent=newStatus==='approved'?'Approve':newStatus==='rejected'?'Reject':'Mark Done';}
+    if(btn){btn.disabled=false;}
   });
+}
+
+function completeRequest(id,btn){
+  var notes=prompt('What was done? (e.g. "Updated hero text in Framer and published", "Fixed mobile nav CSS")');
+  if(notes===null)return;
+  if(!notes.trim()){showToast('Please describe what was changed so it\u2019s tracked','red');return;}
+  updateRequest(id,'completed',btn,notes.trim());
 }
 
 // Toast notification system
@@ -1090,39 +1148,69 @@ function showToast(msg,color){
 (function(){var s=document.createElement('style');s.textContent='@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}';document.head.appendChild(s)})();
 
 function renderRequests(requests){
-  var pending=requests.filter(function(r){return r.status==='pending'});
-  document.getElementById('requestCount').textContent=pending.length+' pending';
+  var counts={all:requests.length,pending:0,in_progress:0,completed:0,rejected:0};
+  requests.forEach(function(r){if(counts[r.status]!==undefined)counts[r.status]++;});
+  document.getElementById('requestCount').textContent=counts.pending+' pending'+(counts.in_progress?', '+counts.in_progress+' active':'');
 
-  if(!requests.length){
-    document.getElementById('requestsList').innerHTML='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px">No requests yet. Submit an optimisation request above — the AI Admin will review it and suggest changes for your approval.</div>';
+  // Update filter chip counts
+  document.querySelectorAll('#reqFilterBar .filter-chip').forEach(function(c){
+    var f=c.textContent.replace(/\(.*\)/,'').trim().toLowerCase().replace(/ /g,'_');
+    if(f==='all')c.textContent='All('+counts.all+')';
+    else if(f==='pending')c.textContent='Pending('+counts.pending+')';
+    else if(f==='in_progress'||f==='in')c.textContent='In Progress('+counts.in_progress+')';
+    else if(f==='completed')c.textContent='Completed('+counts.completed+')';
+    else if(f==='rejected')c.textContent='Rejected('+counts.rejected+')';
+  });
+
+  // Apply filter
+  var filtered=currentReqFilter==='all'?requests:requests.filter(function(r){return r.status===currentReqFilter});
+
+  if(!filtered.length){
+    var emptyMsg=currentReqFilter==='all'?'No requests yet. Submit a change request above.':'No '+currentReqFilter+' requests.';
+    document.getElementById('requestsList').innerHTML='<div style="text-align:center;padding:24px;color:var(--text3);font-size:13px">'+emptyMsg+'</div>';
     return;
   }
 
   var html='';
-  requests.forEach(function(r){
+  filtered.forEach(function(r){
     var prioCol={'high':'var(--red)','medium':'var(--accent)','low':'var(--text3)'};
-    var statusCol={'pending':'var(--accent)','approved':'var(--green)','rejected':'var(--red)','completed':'var(--blue)'};
-    var statusIcon={'pending':'\u23f3','approved':'\u2705','rejected':'\u274c','completed':'\u2705'};
+    var statusCol={'pending':'var(--accent)','in_progress':'var(--blue)','completed':'var(--green)','rejected':'var(--red)'};
+    var statusIcon={'pending':'\u23f3','in_progress':'\ud83d\udd27','completed':'\u2705','rejected':'\u274c'};
+    var statusLabel={'pending':'Pending','in_progress':'In Progress','completed':'Completed','rejected':'Rejected'};
+    var catIcon={'website':'\ud83c\udf10','seo':'\ud83d\udd0d','client_site':'\ud83c\udfe0','automation':'\u2699\ufe0f','dashboard':'\ud83d\udcca','general':'\ud83d\udcdd'};
 
-    html+='<div style="padding:14px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start">';
-    html+='<div style="font-size:18px;margin-top:2px">'+statusIcon[r.status]+'</div>';
+    html+='<div style="padding:14px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start'+(r.status==='in_progress'?';background:rgba(96,165,250,.03);margin:0 -20px;padding-left:20px;padding-right:20px':'')+'">';
+    html+='<div style="font-size:18px;margin-top:2px">'+(statusIcon[r.status]||'\u23f3')+'</div>';
     html+='<div style="flex:1;min-width:0">';
     html+='<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">'+esc(r.request_text)+'</div>';
-    html+='<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">';
+    html+='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
     html+='<span class="pill" style="background:rgba(232,162,58,.1);color:'+(prioCol[r.priority]||'var(--text3)')+'">'+esc(r.priority)+'</span>';
-    html+='<span class="pill" style="background:rgba(232,162,58,.06);color:'+(statusCol[r.status]||'var(--text2)')+'">'+esc(r.status)+'</span>';
+    html+='<span class="pill" style="background:rgba(232,162,58,.06);color:'+(statusCol[r.status]||'var(--text2)')+'">'+(statusLabel[r.status]||r.status)+'</span>';
+    if(r.category&&r.category!=='general')html+='<span class="pill" style="background:rgba(142,143,163,.06);color:var(--text3)">'+(catIcon[r.category]||'')+' '+esc(r.category)+'</span>';
     html+='<span style="font-size:11px;color:var(--text3)">'+new Date(r.created_at).toLocaleString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+'</span>';
     html+='</div>';
+
+    // AI suggestion
     if(r.ai_response){
       html+='<div style="margin-top:8px;padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);font-size:12px;color:var(--text2)"><strong style="color:var(--accent)">AI Suggestion:</strong> '+esc(r.ai_response)+'</div>';
     }
+
+    // Execution notes (shown when completed)
+    if(r.execution_notes){
+      html+='<div style="margin-top:8px;padding:10px 14px;background:rgba(52,211,153,.04);border-radius:8px;border:1px solid rgba(52,211,153,.15);font-size:12px;color:var(--text2)"><strong style="color:var(--green)">Done:</strong> '+esc(r.execution_notes);
+      if(r.completed_at)html+=' <span style="color:var(--text3);font-size:10px">('+new Date(r.completed_at).toLocaleString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})+')</span>';
+      html+='</div>';
+    }
+
     html+='</div>';
-    html+='<div style="display:flex;gap:6px;flex-shrink:0">';
+
+    // Action buttons based on status
+    html+='<div style="display:flex;gap:6px;flex-shrink:0;flex-direction:column;align-items:flex-end">';
     if(r.status==='pending'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'approved\',this)" style="font-size:10px">Approve</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'in_progress\',this)" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Approve</button>';
       html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
-    } else if(r.status==='approved'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'completed\',this)" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Mark Done</button>';
+    } else if(r.status==='in_progress'){
+      html+='<button class="btn-call" onclick="completeRequest('+r.id+',this)" style="font-size:10px">Mark Done</button>';
     }
     html+='</div>';
     html+='</div>';
