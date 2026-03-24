@@ -284,7 +284,42 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="panel">
     <div class="panel-h">
       <h3>Top Leads by Score</h3>
-      <span class="badge" id="leadCount">0 leads</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-p btn-sm" onclick="showAddLeadForm()">+ Add Lead</button>
+        <span class="badge" id="leadCount">0 leads</span>
+      </div>
+    </div>
+    <div id="addLeadForm" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Manually Add Lead</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_name" placeholder="Business name *" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="al_industry" placeholder="Industry (e.g. Salon, Restaurant)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_location" placeholder="Location / address" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="al_website" placeholder="Current website URL (optional)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_phone" placeholder="Phone number" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="email" id="al_email" placeholder="Email address" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <select id="al_source" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);cursor:pointer">
+          <option value="direct_contact">Direct Contact</option>
+          <option value="referral">Referral</option>
+          <option value="walk_in">Walk-in / In Person</option>
+          <option value="social_media">Social Media</option>
+          <option value="cold_outreach">Cold Outreach</option>
+          <option value="website_inquiry">Website Inquiry</option>
+          <option value="other">Other</option>
+        </select>
+        <textarea id="al_notes" placeholder="Notes (e.g. how they found us, what they need)" rows="1" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none;resize:vertical"></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-p btn-sm" onclick="createManualLead()">Add Lead</button>
+        <button class="btn btn-s btn-sm" onclick="document.getElementById('addLeadForm').style.display='none'">Cancel</button>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3);margin-left:auto"><input type="checkbox" id="al_create_project"> Also create project &amp; send brief link</label>
+      </div>
     </div>
     <div class="filter-bar" id="filterBar">
       <button class="filter-chip active" data-filter="All" onclick="filterLeads('All',this)">All</button>
@@ -1175,6 +1210,91 @@ function createNewProject(){
       loadData();
       fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_created',description:'New project: '+name+' ('+pkg+')',target:'projects',result:'success',details:{business_name:name,package:pkg}})});
     } else {showToast('Failed to create project','red')}
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function showAddLeadForm(){
+  document.getElementById('addLeadForm').style.display='block';
+  document.getElementById('al_name').focus();
+}
+
+function createManualLead(){
+  var name=document.getElementById('al_name').value.trim();
+  if(!name){showToast('Business name is required','red');return}
+  var industry=document.getElementById('al_industry').value.trim();
+  var location=document.getElementById('al_location').value.trim();
+  var website=document.getElementById('al_website').value.trim();
+  var phone=document.getElementById('al_phone').value.trim();
+  var email=document.getElementById('al_email').value.trim();
+  var source=document.getElementById('al_source').value;
+  var notes=document.getElementById('al_notes').value.trim();
+  var alsoProject=document.getElementById('al_create_project').checked;
+
+  var hasWeb=!!website;
+  if(website&&website.indexOf('http')!==0)website='https://'+website;
+
+  var body={
+    business_name:name,
+    industry:industry||null,
+    location:location||null,
+    website:website||null,
+    phone:phone||null,
+    email:email||null,
+    source:source,
+    notes:notes||null,
+    has_website:hasWeb,
+    status:'New',
+    date_scraped:new Date().toISOString()
+  };
+
+  fetch(SB+'/leads',{method:'POST',headers:H,body:JSON.stringify(body)}).then(function(r){
+    if(r.ok){
+        showToast('Lead added: '+name,'green');
+        document.getElementById('addLeadForm').style.display='none';
+        ['al_name','al_industry','al_location','al_website','al_phone','al_email','al_notes'].forEach(function(id){document.getElementById(id).value=''});
+        document.getElementById('al_create_project').checked=false;
+
+        // Log to audit trail
+        fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'lead_added',description:'Manual lead: '+name+(source?' ('+source+')':''),target:'leads',result:'success',details:{business_name:name,source:source}})});
+
+        // Also create project if checked
+        if(alsoProject){
+          var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
+          var est=new Date();est.setDate(est.getDate()+7);
+          var projBody={
+            business_name:name,
+            package:'Growth',
+            status:'discovery',
+            onboard_token:token,
+            dns_status:'not_started',
+            ssl_status:'pending',
+            started_at:new Date().toISOString(),
+            estimated_launch:est.toISOString(),
+            notes:'Added via manual lead entry. Source: '+source+(notes?'. '+notes:''),
+            milestones:JSON.stringify([
+              {name:'Discovery Call',status:'active'},
+              {name:'Client Brief Submitted',status:'pending'},
+              {name:'Design Mockup',status:'pending'},
+              {name:'Development',status:'pending'},
+              {name:'Client Review',status:'pending'},
+              {name:'Revisions (Round 1)',status:'pending'},
+              {name:'Revisions (Round 2)',status:'pending'},
+              {name:'Launch',status:'pending'},
+              {name:'Maintenance',status:'pending'}
+            ])
+          };
+          if(website)projBody.old_website_url=website;
+          fetch(SB+'/projects',{method:'POST',headers:H,body:JSON.stringify(projBody)}).then(function(r2){
+            if(r2.ok){
+              showToast('Project also created for '+name+' — brief link ready!','green');
+              fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_created',description:'Auto-created project for manual lead: '+name,target:'projects',result:'success',details:{business_name:name}})});
+            }
+            loadData();
+          });
+        } else {
+          loadData();
+        }
+    } else {showToast('Failed to add lead','red')}
   }).catch(function(){showToast('Network error','red')});
 }
 
