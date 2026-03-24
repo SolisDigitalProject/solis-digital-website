@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Brief — Solis Digital</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+:root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--surface2:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--accentD:#c4872a;--green:#34d399;--red:#f87171;--white:#fff;--glow:rgba(232,162,58,0.12);--glowS:rgba(232,162,58,0.25);--radius:10px;--radius-lg:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* LOGO BAR */
+.logo-bar{text-align:center;padding:28px 0 12px;border-bottom:1px solid rgba(232,162,58,0.06);background:rgba(7,8,10,0.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100}
+.logo-bar h1{font-size:20px;font-weight:800;color:var(--white);display:inline-flex;align-items:center;gap:4px}
+.logo-bar h1 .logo-icon{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accentD));display:inline-flex;align-items:center;justify-content:center;margin-right:8px;position:relative;overflow:hidden}
+.logo-bar h1 .logo-icon::after{content:'';position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);top:3px;left:3px}
+.logo-bar h1 span{color:var(--accent)}
+.logo-bar p{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* LAYOUT */
+.wrap{max-width:740px;margin:0 auto;padding:32px 20px 100px}
+
+/* HERO */
+.hero-area{text-align:center;margin-bottom:32px}
+.hero-area h2{font-size:26px;font-weight:800;color:var(--white);margin-bottom:8px;line-height:1.25}
+.hero-area p{font-size:14px;color:var(--text2);max-width:540px;margin:0 auto;line-height:1.6}
+.biz-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border:1px solid rgba(232,162,58,0.2);border-radius:100px;font-size:12px;font-weight:700;color:var(--accent);background:rgba(232,162,58,0.04);margin-top:16px}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-bottom:32px}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-label{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px}
+.progress-count{font-size:12px;color:var(--text3)}
+.progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden;position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accentL));border-radius:4px;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);width:0}
+.step-dots{display:flex;justify-content:space-between;margin-top:12px}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:1}
+.step-dot .dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);transition:all 0.3s}
+.step-dot.active .dot{border-color:var(--accent);color:var(--accent);background:rgba(232,162,58,0.08)}
+.step-dot.completed .dot{border-color:var(--green);background:rgba(52,211,153,0.1);color:var(--green)}
+.step-dot .dot-label{font-size:10px;color:var(--text3);font-weight:600;text-align:center;line-height:1.2;max-width:80px}
+.step-dot.active .dot-label{color:var(--accent)}
+
+/* STEPS */
+.step{display:none}
+.step.active{display:block;animation:fadeIn 0.4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px}
+.section h3{font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.section .desc{font-size:12px;color:var(--text3);margin-bottom:22px;line-height:1.5}
+
+/* FIELDS */
+.field{margin-bottom:18px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.field label .req{color:var(--red);margin-left:2px}
+.field label .opt{color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px;font-size:10px}
+.field input[type="text"],.field input[type="email"],.field input[type="tel"],.field input[type="url"],.field input[type="number"],.field input[type="date"],.field textarea,.field select{width:100%;padding:11px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(232,162,58,0.08)}
+.field input::placeholder,.field textarea::placeholder{color:var(--text3)}
+.field input:read-only{opacity:0.5;cursor:not-allowed}
+.field textarea{resize:vertical;min-height:90px;line-height:1.5}
+.field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235c5d72' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.field .hint{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4}
+.field.error input,.field.error textarea,.field.error select{border-color:var(--red)}
+.field.error .hint{color:var(--red)}
+.field input[type="file"]{padding:10px;border:1px dashed var(--border2);border-radius:8px;background:var(--bg2);cursor:pointer;font-size:12px;color:var(--text2)}
+.field input[type="file"]::-webkit-file-upload-button{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;margin-right:10px;font-family:inherit}
+.field input[type="color"]{width:44px;height:36px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;padding:2px}
+
+/* ROWS */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* COLORS */
+.color-row{display:flex;gap:16px;flex-wrap:wrap}
+.color-pick{display:flex;align-items:center;gap:8px}
+.color-pick span{font-size:11px;color:var(--text2);font-weight:600}
+
+/* PAGE CHIPS */
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;user-select:none}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.chip.selected{background:rgba(232,162,58,0.1);color:var(--accent);border-color:rgba(232,162,58,0.3)}
+
+/* RADIO GROUP */
+.radio-group{display:flex;flex-wrap:wrap;gap:8px}
+.radio-opt{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.radio-opt:hover{border-color:var(--accent)}
+.radio-opt.selected{background:rgba(232,162,58,0.1);color:var(--accent);border-color:rgba(232,162,58,0.3)}
+
+/* DYNAMIC LISTS */
+.dynamic-list{display:flex;flex-direction:column;gap:12px}
+.dynamic-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative}
+.dynamic-item .item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dynamic-item .item-num{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.remove-btn{background:none;border:1px solid rgba(248,113,113,0.2);color:var(--red);font-size:11px;font-weight:600;cursor:pointer;padding:4px 10px;border-radius:6px;font-family:inherit;transition:all .2s}
+.remove-btn:hover{background:rgba(248,113,113,0.1);border-color:var(--red)}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:var(--radius);border:1px dashed var(--border2);background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;width:100%}
+.add-btn:hover{border-color:var(--accent);background:rgba(232,162,58,0.04)}
+
+/* HOURS GRID */
+.hours-grid{display:flex;flex-direction:column;gap:6px}
+.hours-row{display:grid;grid-template-columns:80px 1fr 40px 1fr 60px;gap:8px;align-items:center}
+.hours-row .day-name{font-size:12px;font-weight:600;color:var(--text2)}
+.hours-row input[type="time"]{padding:8px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:12px;font-family:inherit;outline:none}
+.hours-row input[type="time"]:focus{border-color:var(--accent)}
+.hours-row .dash{text-align:center;color:var(--text3);font-size:12px}
+.hours-row .closed-toggle{font-size:11px;color:var(--text3);cursor:pointer;text-align:center;padding:4px;border-radius:4px;transition:all .2s;user-select:none;font-weight:600;border:1px solid transparent}
+.hours-row .closed-toggle:hover{color:var(--red)}
+.hours-row .closed-toggle.is-closed{color:var(--red);background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.15)}
+.hours-row.row-closed input[type="time"]{opacity:0.3;pointer-events:none}
+
+/* CONDITIONAL FIELDS */
+.conditional{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.conditional.show{display:block;animation:fadeIn 0.3s ease}
+
+/* NAV BUTTONS */
+.nav-btns{display:flex;gap:12px;margin-top:28px}
+.btn-back{flex:1;padding:14px;border-radius:var(--radius);background:var(--surface);color:var(--text2);font-weight:700;font-size:14px;border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-back:hover{border-color:var(--accent);color:var(--text)}
+.btn-next{flex:2;padding:14px;border-radius:var(--radius);background:var(--accent);color:#0a0a0a;font-weight:800;font-size:14px;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-next:hover{background:var(--accentL);box-shadow:0 8px 32px var(--glowS)}
+.btn-next:disabled{opacity:0.5;cursor:not-allowed;box-shadow:none}
+.btn-submit{flex:1;padding:16px;border-radius:var(--radius);background:var(--green);color:#0a0a0a;font-weight:800;font-size:15px;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-submit:hover{filter:brightness(1.1);box-shadow:0 8px 32px rgba(52,211,153,0.2)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;box-shadow:none}
+
+/* SUCCESS */
+.success{text-align:center;padding:60px 24px}
+.success .check{width:64px;height:64px;border-radius:50%;background:rgba(52,211,153,0.1);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
+.success h2{font-size:26px;color:var(--green);margin-bottom:12px;font-weight:800}
+.success p{font-size:14px;color:var(--text2);line-height:1.6}
+.timeline{text-align:left;max-width:440px;margin:28px auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px}
+.timeline-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-item .tl-day{font-size:12px;font-weight:700;color:var(--accent);min-width:60px}
+.timeline-item .tl-desc{font-size:13px;color:var(--text2)}
+
+/* ERROR / ALREADY */
+.error-page,.already{text-align:center;padding:60px 24px}
+.error-page h2{font-size:22px;color:var(--red);margin-bottom:12px}
+.error-page p{font-size:13px;color:var(--text2);line-height:1.6}
+.already h2{font-size:22px;color:var(--accent);margin-bottom:12px}
+.already p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px}
+.edit-btn{padding:12px 28px;border-radius:8px;background:var(--accent);color:#0a0a0a;font-weight:700;font-size:13px;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.edit-btn:hover{background:var(--accentL)}
+
+/* AUTOSAVE */
+.autosave-indicator{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:8px;font-size:11px;font-weight:600;z-index:200;transition:all .4s;opacity:0;transform:translateY(10px);pointer-events:none}
+.autosave-indicator.show{opacity:1;transform:translateY(0)}
+.autosave-indicator.saving{background:rgba(232,162,58,0.15);color:var(--accent);border:1px solid rgba(232,162,58,0.2)}
+.autosave-indicator.saved{background:rgba(52,211,153,0.1);color:var(--green);border:1px solid rgba(52,211,153,0.2)}
+
+/* TOOLTIP */
+.info-tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--border);color:var(--text3);font-size:9px;font-weight:700;cursor:help;margin-left:4px;position:relative}
+.info-tip:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--surface2);color:var(--text);font-size:11px;font-weight:400;padding:8px 12px;border-radius:6px;border:1px solid var(--border);white-space:nowrap;max-width:260px;white-space:normal;z-index:10;text-transform:none;letter-spacing:0;line-height:1.4}
+
+@media(max-width:640px){
+  .wrap{padding:20px 14px 80px}
+  .row,.row3{grid-template-columns:1fr}
+  .section{padding:20px 16px}
+  .hero-area h2{font-size:22px}
+  .step-dot .dot-label{display:none}
+  .hours-row{grid-template-columns:60px 1fr 20px 1fr 50px;gap:4px}
+  .hours-row .day-name{font-size:11px}
+  .nav-btns{flex-direction:column}
+  .btn-back,.btn-next,.btn-submit{flex:auto}
+  .color-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="logo-bar">
+  <h1><span class="logo-icon"></span>Solis <span>Digital</span></h1>
+  <p>Website Brief</p>
+</div>
+
+<div class="wrap" id="mainContent">
+  <div id="loadingState" style="text-align:center;padding:60px;color:var(--text3)">
+    <div style="font-size:24px;margin-bottom:12px">Loading your project...</div>
+    <div style="font-size:13px">Please wait a moment</div>
+  </div>
+</div>
+
+<div class="autosave-indicator" id="autosaveIndicator"></div>
+
+<script>
+var SB='https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
+var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
+
+var token=new URLSearchParams(window.location.search).get('token');
+var project=null;
+var currentStep=0;
+var totalSteps=5;
+var selectedPages={};
+var services=[];
+var faqs=[];
+var teamMembers=[];
+var locations=[];
+
+/* ===== INIT ===== */
+function init(){
+  if(!token){showError('No project token provided.','Please use the link sent in your onboarding email. If you need a new link, contact info@solisdigital.co.uk');return}
+  fetch(SB+'/projects?onboard_token=eq.'+token+'&select=*',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data.length){showError('Invalid or expired link.','Please contact info@solisdigital.co.uk for a new onboarding link.');return}
+    project=data[0];
+    if(project.brief_data&&project.client_brief_submitted_at){
+      showAlreadySubmitted();
+    } else {
+      buildForm();
+    }
+  }).catch(function(){showError('Could not load project.','Please check your internet connection and try again.')});
+}
+
+function showError(title,msg){
+  document.getElementById('mainContent').innerHTML='<div class="error-page"><h2>'+title+'</h2><p>'+msg+'</p></div>';
+}
+
+function showAlreadySubmitted(){
+  var d=new Date(project.client_brief_submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('mainContent').innerHTML='<div class="already"><h2>Brief Already Submitted</h2><p>You submitted your project brief on <strong style="color:var(--accent)">'+d+'</strong>.</p><p>Our team is reviewing your brief and will begin building your website in Framer shortly.</p><p style="color:var(--text3);font-size:12px;margin-top:16px">Need to make changes? Contact us at info@solisdigital.co.uk</p></div>';
+}
+
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+/* ===== BUILD FORM ===== */
+function buildForm(){
+  // Initialize default service
+  if(!services.length) services.push({name:'',description:'',price:'',duration:''});
+  if(!locations.length) locations.push({name:'',address:'',phone:'',email:''});
+
+  var html='';
+  html+='<div class="hero-area">';
+  html+='<h2>Let\'s Build Your Perfect Website</h2>';
+  html+='<p>Fill in what you can — skip anything you\'re not sure about. We\'ll follow up on anything we need. Fields marked <span style="color:var(--red)">*</span> are the only ones required. Everything else is optional but helps us build faster.</p>';
+  html+='<p style="font-size:13px;color:var(--accent);margin-top:8px">Takes about 5-10 minutes. Your progress is not lost if you scroll between steps.</p>';
+  html+='<div class="biz-badge">'+esc(project.business_name)+'</div>';
+  html+='</div>';
+
+  // Progress
+  html+='<div class="progress-wrap">';
+  html+='<div class="progress-header"><span class="progress-label" id="progressLabel">Step 1 of 5</span><span class="progress-count" id="progressPercent">0%</span></div>';
+  html+='<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>';
+  html+='<div class="step-dots">';
+  var stepLabels=['Business','Services & Brand','Pages & Features','Content & SEO','Final Details'];
+  for(var i=0;i<totalSteps;i++){
+    html+='<div class="step-dot'+(i===0?' active':'')+'" data-step="'+i+'" onclick="goToStep('+i+')">';
+    html+='<div class="dot">'+(i+1)+'</div>';
+    html+='<div class="dot-label">'+stepLabels[i]+'</div>';
+    html+='</div>';
+  }
+  html+='</div>';
+  html+='</div>';
+
+  // =========================================================
+  // STEP 1: Business Fundamentals
+  // =========================================================
+  html+='<div class="step active" id="step0">';
+
+  // Business basics
+  html+='<div class="section"><h3>Business Fundamentals</h3><div class="desc">The basics about your business. Only the starred fields are required — fill in the rest if you have it, or leave blank and we\'ll work it out with you.</div>';
+  html+='<div class="field"><label>Business Name</label><input type="text" id="f_bizname" value="'+esc(project.business_name)+'" readonly></div>';
+  html+='<div class="field"><label>Tagline / Slogan <span class="opt">if you have one</span></label><input type="text" id="f_tagline" placeholder="e.g. Your smile, our passion"></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Industry / Niche <span class="req">*</span></label><select id="f_industry"><option value="">Select your industry...</option>';
+  var industries=['Accounting & Finance','Architecture','Automotive','Beauty & Aesthetics','Cleaning Services','Construction & Trades','Consulting','Dental & Orthodontics','Education & Tutoring','Estate Agents','Events & Weddings','Fitness & Gym','Food & Beverage','Healthcare & Medical','Home Services','Hospitality & Hotels','Insurance','Interior Design','IT & Technology','Law & Legal','Landscaping & Gardening','Marketing & Advertising','Moving & Storage','Opticians & Eyecare','Pets & Veterinary','Photography & Video','Physiotherapy & Chiropractic','Property Management','Recruitment','Retail & E-commerce','Salon & Barbershop','Security','Spa & Wellness','Sports & Recreation','Tattoo & Piercing','Therapy & Counselling','Travel & Tourism','Other'];
+  industries.forEach(function(ind){html+='<option value="'+ind+'">'+ind+'</option>'});
+  html+='</select></div>';
+  html+='<div class="field"><label>Year Established <span class="opt">optional</span></label><input type="number" id="f_yearEstablished" placeholder="e.g. 2018" min="1900" max="2026"></div>';
+  html+='</div>';
+  html+='<div class="field"><label>Brief Business Description <span class="req">*</span><span class="info-tip" data-tip="This will likely be used as your homepage hero text. 2-3 punchy sentences about what you do and who you serve.">?</span></label><textarea id="f_description" placeholder="We are a family-run dental practice in South London offering NHS and private treatments. We specialise in cosmetic dentistry and nervous patient care." style="min-height:80px"></textarea></div>';
+  html+='<div class="field"><label>Detailed About Us <span class="opt">your story</span><span class="info-tip" data-tip="The longer version for your About page. Your history, values, journey, why you do what you do.">?</span></label><textarea id="f_aboutDetailed" placeholder="Tell us your story. How did the business start? What drives you? What are you proud of?" style="min-height:100px"></textarea></div>';
+  html+='<div class="field"><label>What Makes You Unique? (USP) <span class="req">*</span><span class="info-tip" data-tip="Why should someone choose you over competitors? We will weave this throughout the site.">?</span></label><textarea id="f_usp" placeholder="e.g. We are the only practice in SE London offering same-day crowns with CEREC technology. 25+ years experience, 5-star Google rating, evening appointments available." style="min-height:70px"></textarea></div>';
+  html+='<div class="field"><label>Mission / Values Statement <span class="opt">optional</span></label><textarea id="f_mission" placeholder="e.g. Our mission is to make quality dental care accessible and anxiety-free for every patient." style="min-height:60px"></textarea></div>';
+  html+='</div>';
+
+  // Locations
+  html+='<div class="section"><h3>Locations & Contact</h3><div class="desc">Your main address, phone, and email. Only add multiple locations if you have more than one branch.</div>';
+  html+='<div class="dynamic-list" id="locationsList"></div>';
+  html+='<button type="button" class="add-btn" onclick="addLocation()" style="margin-top:12px">+ Add Another Location</button>';
+
+  html+='<div style="margin-top:20px"></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Main Email Address <span class="req">*</span></label><input type="email" id="f_emailMain" placeholder="info@yourbusiness.co.uk"></div>';
+  html+='<div class="field"><label>Booking / Support Email <span class="opt">if different</span></label><input type="email" id="f_emailBooking" placeholder="bookings@yourbusiness.co.uk"></div>';
+  html+='</div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Main Phone Number <span class="req">*</span></label><input type="tel" id="f_phoneMain" placeholder="+44 20 1234 5678"></div>';
+  html+='<div class="field"><label>Secondary Phone <span class="opt">optional</span></label><input type="tel" id="f_phoneAlt" placeholder="Mobile or WhatsApp number"></div>';
+  html+='</div>';
+  html+='</div>';
+
+  // Opening Hours
+  html+='<div class="section"><h3>Opening Hours</h3><div class="desc">Adjust if needed or leave the defaults (Mon-Sun 9-5). Click "Closed" for any days you\'re shut. We can always update these later.</div>';
+  html+='<div class="hours-grid" id="hoursGrid">';
+  var days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  days.forEach(function(day){
+    var abbr=day.substring(0,3);
+    html+='<div class="hours-row" id="hours_'+abbr+'">';
+    html+='<div class="day-name">'+abbr+'</div>';
+    html+='<input type="time" id="hours_'+abbr+'_open" value="09:00">';
+    html+='<div class="dash">to</div>';
+    html+='<input type="time" id="hours_'+abbr+'_close" value="17:00">';
+    html+='<div class="closed-toggle" onclick="toggleClosed(\''+abbr+'\')" id="closed_'+abbr+'">Closed</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="hint" style="margin-top:8px">Tip: Leave as defaults if you want us to confirm later.</div>';
+  html+='</div>';
+
+  html+='<div class="nav-btns"><button class="btn-next" onclick="nextStep()">Continue to Services & Brand</button></div>';
+  html+='</div>'; // end step0
+
+  // =========================================================
+  // STEP 2: Services & Brand
+  // =========================================================
+  html+='<div class="step" id="step1">';
+
+  // Services
+  html+='<div class="section"><h3>Services & Products</h3><div class="desc">List your main services. Don\'t worry about getting every detail perfect — even just the names help. You can always add more later.</div>';
+  html+='<div class="dynamic-list" id="servicesList"></div>';
+  html+='<button type="button" class="add-btn" onclick="addService()" style="margin-top:12px">+ Add Another Service</button>';
+  html+='<div style="margin-top:18px"></div>';
+  html+='<div class="field"><label>Do you sell products online?</label><select id="f_sellProducts" onchange="toggleConditional(\'productsDetail\',this.value!==\'no\')"><option value="no">No</option><option value="few">Yes, a few (under 20)</option><option value="many">Yes, many (20+)</option><option value="planning">Not yet, but planning to</option></select></div>';
+  html+='<div class="conditional" id="productsDetail"><div class="field"><label>Product Categories / Details</label><textarea id="f_productCategories" placeholder="e.g. Skincare products, teeth whitening kits, branded merchandise" style="min-height:60px"></textarea></div></div>';
+  html+='<div class="field"><label>Service Areas / Delivery Zones <span class="opt">where do you serve?</span></label><input type="text" id="f_serviceAreas" placeholder="e.g. South London, Surrey, Kent / UK-wide delivery"></div>';
+  html+='</div>';
+
+  // Brand & Design
+  html+='<div class="section"><h3>Brand & Design</h3><div class="desc">Don\'t have brand colours or a style preference? No problem — just skip these and we\'ll propose a design for you to approve.</div>';
+  html+='<div class="field"><label>Do you have a logo?</label><select id="f_logoStatus" onchange="toggleConditional(\'logoUpload\',this.value===\'yes\'||this.value===\'needs-update\')"><option value="yes">Yes, I will provide it</option><option value="needs-update">Yes, but it needs updating</option><option value="no">No, please create one for me</option></select></div>';
+  html+='<div class="conditional" id="logoUpload"><div class="field"><label>Upload Your Logo <span class="opt">PNG, SVG, or AI preferred</span></label><input type="file" id="f_logoFile" accept=".png,.jpg,.jpeg,.svg,.ai,.pdf,.eps"></div></div>';
+
+  html+='<div class="field"><label>Brand Colours <span class="info-tip" data-tip="Pick your brand colours. If you don\'t have set colours, leave the defaults and we will propose a palette.">?</span></label>';
+  html+='<div class="color-row" style="margin-top:6px">';
+  html+='<div class="color-pick"><input type="color" id="f_colorPrimary" value="#0d9488"><span>Primary</span></div>';
+  html+='<div class="color-pick"><input type="color" id="f_colorSecondary" value="#1e3a5f"><span>Secondary</span></div>';
+  html+='<div class="color-pick"><input type="color" id="f_colorAccent" value="#e8a23a"><span>Accent</span></div>';
+  html+='</div></div>';
+  html+='<div class="field"><label>Background Preference</label><div class="radio-group" id="bgPref" data-value="light">';
+  html+='<div class="radio-opt selected" onclick="pickRadio(\'bgPref\',\'light\',this)">Light Background</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'bgPref\',\'dark\',this)">Dark Background</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'bgPref\',\'decide\',this)">Let Us Decide</div>';
+  html+='</div></div>';
+
+  html+='<div class="field"><label>Font Preference</label><div class="radio-group" id="fontPref" data-value="modern">';
+  html+='<div class="radio-opt selected" onclick="pickRadio(\'fontPref\',\'modern\',this)">Modern Sans-Serif</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'fontPref\',\'serif\',this)">Classic Serif</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'fontPref\',\'handwritten\',this)">Handwritten / Script</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'fontPref\',\'decide\',this)">Let Us Choose</div>';
+  html+='</div></div>';
+
+  html+='<div class="field"><label>Design Style <span class="req">*</span></label><div class="radio-group" id="designStyle" data-value="">';
+  var styles=[['modern-minimal','Modern & Minimal'],['bold-vibrant','Bold & Vibrant'],['elegant-luxury','Elegant & Luxury'],['friendly-warm','Friendly & Warm'],['corporate','Corporate & Professional'],['decide','Let Us Choose']];
+  styles.forEach(function(s){
+    html+='<div class="radio-opt" onclick="pickRadio(\'designStyle\',\''+s[0]+'\',this)">'+s[1]+'</div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="field"><label>Inspiration Websites <span class="opt">sites you like the look of</span></label><textarea id="f_inspiration" placeholder="Paste URLs of websites you admire, one per line. Can be from any industry.\n\ne.g.\nhttps://example.com\nhttps://another-great-site.co.uk" style="min-height:80px"></textarea></div>';
+  html+='<div class="field"><label>Competitor Websites <span class="opt">we will make yours better</span></label><textarea id="f_competitors" placeholder="Your direct competitors\' websites, one per line. We will analyse these and ensure yours stands out." style="min-height:60px"></textarea></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Design Elements You Love</label><textarea id="f_designLove" placeholder="e.g. Animated icons, fullscreen hero images, clean layouts, before/after sliders..." style="min-height:60px"></textarea></div>';
+  html+='<div class="field"><label>Design Elements You Hate</label><textarea id="f_designHate" placeholder="e.g. Flashing banners, stock photos that look fake, cluttered sidebars, autoplay video..." style="min-height:60px"></textarea></div>';
+  html+='</div>';
+  html+='<div class="field"><label>Upload Brand Guidelines <span class="opt">PDF or images</span></label><input type="file" id="f_brandGuidelines" accept=".pdf,.png,.jpg,.jpeg,.svg,.doc,.docx" multiple></div>';
+  html+='<div class="field"><label>Existing Brand Assets You Will Provide</label><textarea id="f_brandAssets" placeholder="e.g. Professional photos of the clinic, team headshots, product photos, marketing brochures, social media templates..." style="min-height:60px"></textarea></div>';
+  html+='</div>';
+
+  html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-next" onclick="nextStep()">Continue to Pages & Features</button></div>';
+  html+='</div>'; // end step1
+
+  // =========================================================
+  // STEP 3: Pages & Functionality
+  // =========================================================
+  html+='<div class="step" id="step2">';
+
+  // Pages
+  html+='<div class="section"><h3>Website Pages & Structure</h3><div class="desc">Just tap the pages you want. We\'ve pre-selected the essentials. Not sure? Leave the defaults — you can always add more later.</div>';
+  html+='<div class="field"><label>Pages Needed <span class="req">*</span></label>';
+  html+='<div class="chip-grid" id="pageChips">';
+  var pageOptions=['Home','About','Services','Contact','Testimonials','Pricing','Gallery','Blog','FAQ','Booking','Team','Portfolio','Case Studies','Careers','Shop'];
+  pageOptions.forEach(function(p){
+    html+='<div class="chip" onclick="togglePage(this,\''+p+'\')">'+p+'</div>';
+  });
+  html+='</div></div>';
+  html+='<div class="field"><label>Custom Pages Not Listed Above <span class="opt">one per line</span></label><textarea id="f_customPages" placeholder="e.g.\nPatient Information\nBefore & After Results\nFinance Options" style="min-height:60px"></textarea></div>';
+  html+='<div id="pageContentFields"></div>';
+
+  html+='<div class="field"><label>Navigation Style</label><div class="radio-group" id="navStyle" data-value="simple">';
+  html+='<div class="radio-opt selected" onclick="pickRadio(\'navStyle\',\'simple\',this)">Simple / Clean</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'navStyle\',\'mega\',this)">Mega Menu (dropdowns)</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'navStyle\',\'decide\',this)">Let Us Decide</div>';
+  html+='</div></div>';
+  html+='<div class="field"><label>Header Style</label><div class="radio-group" id="headerStyle" data-value="sticky">';
+  html+='<div class="radio-opt selected" onclick="pickRadio(\'headerStyle\',\'sticky\',this)">Sticky (always visible)</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'headerStyle\',\'fixed\',this)">Fixed / Standard</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'headerStyle\',\'decide\',this)">Let Us Decide</div>';
+  html+='</div></div>';
+  html+='<div class="field"><label>Do you need a blog?</label><select id="f_blogNeeded" onchange="toggleConditional(\'blogDetail\',this.value!==\'no\')"><option value="no">No</option><option value="yes-regular">Yes, I will post regularly</option><option value="yes-occasional">Yes, occasionally</option><option value="yes-seo">Yes, mainly for SEO</option></select></div>';
+  html+='<div class="conditional" id="blogDetail"><div class="field"><label>How often will you post?</label><input type="text" id="f_blogFrequency" placeholder="e.g. Weekly, twice a month, monthly"></div></div>';
+  html+='</div>';
+
+  // Functionality
+  html+='<div class="section"><h3>Functionality & Integrations</h3><div class="desc">What should your website be able to do? Pick from the dropdowns below — leave anything as "None" if you don\'t need it.</div>';
+
+  html+='<div class="field"><label>Booking System</label><select id="f_booking" onchange="toggleConditional(\'bookingDetail\',this.value!==\'none\'&&this.value!==\'phone\')"><option value="none">No booking needed</option><option value="calendly">Calendly</option><option value="cal">Cal.com</option><option value="acuity">Acuity Scheduling</option><option value="square">Square Appointments</option><option value="form">Built-in booking form</option><option value="phone">Phone / email only</option><option value="other">Other (specify below)</option></select></div>';
+  html+='<div class="conditional" id="bookingDetail">';
+  html+='<div class="field"><label>Appointment Types & Durations</label><textarea id="f_appointmentTypes" placeholder="e.g.\n- Initial consultation - 30 min\n- Standard treatment - 60 min\n- Follow-up - 15 min" style="min-height:70px"></textarea></div>';
+  html+='<div class="field"><label>Booking System Account Link / Details</label><input type="text" id="f_bookingLink" placeholder="e.g. https://calendly.com/yourbusiness"></div>';
+  html+='</div>';
+
+  html+='<div class="field"><label>Contact Form Fields Needed</label><textarea id="f_contactFields" placeholder="Default: Name, Email, Phone, Message\n\nAdd any custom fields:\ne.g. Preferred date, Service interested in, How did you hear about us?" style="min-height:70px"></textarea></div>';
+
+  html+='<div class="field"><label>Payment Processing</label><select id="f_payments" onchange="toggleConditional(\'paymentDetail\',this.value!==\'none\')"><option value="none">Not needed</option><option value="stripe">Stripe</option><option value="paypal">PayPal</option><option value="square">Square</option><option value="multiple">Multiple providers</option><option value="other">Other</option></select></div>';
+  html+='<div class="conditional" id="paymentDetail"><div class="field"><label>Payment Details</label><input type="text" id="f_paymentDetails" placeholder="What will customers pay for? Account IDs if you have them."></div></div>';
+
+  html+='<div class="row">';
+  html+='<div class="field"><label>Live Chat</label><select id="f_liveChat"><option value="none">Not needed</option><option value="tawk">Tawk.to</option><option value="tidio">Tidio</option><option value="whatsapp">WhatsApp only</option><option value="intercom">Intercom</option><option value="other">Other</option></select></div>';
+  html+='<div class="field"><label>WhatsApp Button</label><select id="f_whatsapp" onchange="toggleConditional(\'whatsappNum\',this.value===\'yes\')"><option value="no">No</option><option value="yes">Yes, add a WhatsApp button</option></select></div>';
+  html+='</div>';
+  html+='<div class="conditional" id="whatsappNum"><div class="field"><label>WhatsApp Number</label><input type="tel" id="f_whatsappNumber" placeholder="+44 7xxx xxx xxx"></div></div>';
+
+  html+='<div class="row">';
+  html+='<div class="field"><label>Newsletter / Email Signup</label><select id="f_newsletter" onchange="toggleConditional(\'newsletterDetail\',this.value!==\'no\')"><option value="no">Not needed</option><option value="mailchimp">Mailchimp</option><option value="convertkit">ConvertKit</option><option value="klaviyo">Klaviyo</option><option value="hubspot">HubSpot</option><option value="other">Other provider</option></select></div>';
+  html+='<div class="field"><label>Google Maps Embed</label><select id="f_googleMaps"><option value="yes">Yes, show our location(s)</option><option value="no">No</option></select></div>';
+  html+='</div>';
+  html+='<div class="conditional" id="newsletterDetail"><div class="field"><label>Newsletter Provider Details</label><input type="text" id="f_newsletterDetails" placeholder="API key, list ID, or account email"></div></div>';
+
+  html+='<div class="field"><label>Social Media Feeds on Website</label><div class="chip-grid" id="socialFeedChips">';
+  var socialOpts=['Instagram','Facebook','Twitter/X','TikTok','LinkedIn','YouTube','None'];
+  socialOpts.forEach(function(s){
+    html+='<div class="chip" onclick="toggleChip(this)">'+s+'</div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="row">';
+  html+='<div class="field"><label>Customer Portal / Login Area</label><select id="f_portal"><option value="no">Not needed</option><option value="yes">Yes</option><option value="future">Maybe in the future</option></select></div>';
+  html+='<div class="field"><label>Multi-Language Support</label><select id="f_multiLang" onchange="toggleConditional(\'langDetail\',this.value!==\'no\')"><option value="no">English only</option><option value="yes">Yes, multiple languages</option></select></div>';
+  html+='</div>';
+  html+='<div class="conditional" id="langDetail"><div class="field"><label>Which Languages?</label><input type="text" id="f_languages" placeholder="e.g. English, Spanish, French"></div></div>';
+
+  html+='<div class="row">';
+  html+='<div class="field"><label>Accessibility (WCAG)</label><select id="f_accessibility"><option value="standard">Standard best practices</option><option value="aa">WCAG 2.1 AA Compliance</option><option value="aaa">WCAG 2.1 AAA Compliance</option></select></div>';
+  html+='<div class="field"><label>Analytics</label><select id="f_analytics"><option value="ga4">Google Analytics (GA4)</option><option value="gtm">Google Tag Manager</option><option value="plausible">Plausible</option><option value="none">None / decide later</option><option value="other">Other</option></select></div>';
+  html+='</div>';
+
+  html+='<div class="field"><label>CRM Integration</label><select id="f_crm" onchange="toggleConditional(\'crmDetail\',this.value!==\'none\')"><option value="none">Not needed</option><option value="hubspot">HubSpot</option><option value="salesforce">Salesforce</option><option value="pipedrive">Pipedrive</option><option value="zoho">Zoho CRM</option><option value="other">Other</option></select></div>';
+  html+='<div class="conditional" id="crmDetail"><div class="field"><label>CRM Details</label><input type="text" id="f_crmDetails" placeholder="Account details, what should integrate, etc."></div></div>';
+
+  html+='<div class="field"><label>Any Other Integrations or Tools?</label><textarea id="f_otherIntegrations" placeholder="e.g. Dentally (practice management), Xero (accounting), Zapier automations, custom API..." style="min-height:60px"></textarea></div>';
+  html+='</div>';
+
+  html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-next" onclick="nextStep()">Continue to Content & SEO</button></div>';
+  html+='</div>'; // end step2
+
+  // =========================================================
+  // STEP 4: Content & SEO
+  // =========================================================
+  html+='<div class="step" id="step3">';
+
+  // Content
+  html+='<div class="section"><h3>Website Content</h3><div class="desc">Don\'t have your content ready? That\'s fine — just tell us your preference below and we\'ll write everything for you.</div>';
+
+  html+='<div class="field"><label>Do you have existing content to reuse?</label><select id="f_existingContent"><option value="write-all">No, please write everything for me</option><option value="some">Some, I will send what I have</option><option value="all">Yes, I will provide all text and images</option></select></div>';
+
+  html+='<div class="field"><label>Do you need professional copywriting?</label><div class="radio-group" id="copywriting" data-value="yes-all">';
+  html+='<div class="radio-opt selected" onclick="pickRadio(\'copywriting\',\'yes-all\',this)">Yes, write everything</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'copywriting\',\'yes-some\',this)">Some sections</div>';
+  html+='<div class="radio-opt" onclick="pickRadio(\'copywriting\',\'no\',this)">No, I will provide all copy</div>';
+  html+='</div></div>';
+
+  html+='<div class="field"><label>Hero Headline Preference <span class="info-tip" data-tip="The main headline visitors see first. If you have a specific one in mind, write it. Otherwise we will craft one.">?</span></label><textarea id="f_heroHeadline" placeholder="e.g. \'Expert Dental Care in the Heart of London\'\n\nOr leave blank and we will write something compelling." style="min-height:60px"></textarea></div>';
+
+  html+='<div class="field"><label>Primary Call to Action <span class="req">*</span><span class="info-tip" data-tip="The main thing you want website visitors to do. This drives the button text and layout.">?</span></label><select id="f_cta"><option value="">Select...</option><option value="book">Book an Appointment</option><option value="call">Call Us</option><option value="quote">Get a Free Quote</option><option value="contact">Contact Us / Send Enquiry</option><option value="buy">Shop / Buy Now</option><option value="signup">Sign Up / Register</option><option value="learn">Learn More</option><option value="visit">Visit Our Location</option><option value="download">Download Something</option><option value="other">Other</option></select></div>';
+  html+='<div class="field"><label>Secondary Call to Action <span class="opt">optional</span></label><input type="text" id="f_ctaSecondary" placeholder="e.g. View Our Gallery, Read Reviews, See Pricing"></div>';
+
+  html+='<div class="field"><label>Tone of Voice <span class="req">*</span></label><div class="radio-group" id="toneOfVoice" data-value="">';
+  var tones=[['professional','Professional & Trustworthy'],['friendly','Friendly & Approachable'],['authoritative','Authoritative & Expert'],['casual','Casual & Relaxed'],['luxury','Luxury & Premium'],['decide','Let Us Decide']];
+  tones.forEach(function(t){
+    html+='<div class="radio-opt" onclick="pickRadio(\'toneOfVoice\',\''+t[0]+'\',this)">'+t[1]+'</div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="field"><label>Testimonials / Reviews <span class="info-tip" data-tip="Paste your best reviews here. Include the customer name and source (Google, Trustpilot, etc) if possible.">?</span></label><textarea id="f_testimonials" placeholder="Paste your best reviews here:\n\n&quot;Amazing service, highly recommend!&quot; - John S. (Google)\n&quot;Professional and friendly team.&quot; - Sarah M. (Trustpilot)" style="min-height:100px"></textarea></div>';
+
+  html+='<div class="field"><label>Certifications, Awards & Accreditations</label><textarea id="f_certifications" placeholder="e.g.\n- CQC Registered\n- GDC Registered\n- Invisalign Diamond Provider\n- ISO 9001 Certified\n- Winner: Best Local Business 2024" style="min-height:70px"></textarea></div>';
+
+  html+='<div class="field"><label>Key Phrases Your Customers Use <span class="info-tip" data-tip="How do your customers describe what they need? This helps with SEO and messaging.">?</span></label><textarea id="f_customerPhrases" placeholder="e.g.\n- emergency dentist near me\n- teeth whitening London\n- affordable dental implants\n- nervous patient dentist" style="min-height:70px"></textarea></div>';
+  html+='</div>';
+
+  // FAQs
+  html+='<div class="section"><h3>Frequently Asked Questions</h3><div class="desc">Optional — add a few common questions if you have them. If not, we\'ll create them based on your industry.</div>';
+  html+='<div class="dynamic-list" id="faqsList"></div>';
+  html+='<button type="button" class="add-btn" onclick="addFaq()" style="margin-top:12px">+ Add FAQ</button>';
+  html+='</div>';
+
+  // Team
+  html+='<div class="section"><h3>Team Members</h3><div class="desc">Optional — add team members if you want a Team page. Skip this if you\'d prefer not to feature individuals.</div>';
+  html+='<div class="dynamic-list" id="teamList"></div>';
+  html+='<button type="button" class="add-btn" onclick="addTeamMember()" style="margin-top:12px">+ Add Team Member</button>';
+  html+='</div>';
+
+  // SEO
+  html+='<div class="section"><h3>SEO & Marketing</h3><div class="desc">Don\'t know your keywords? Just tell us what you\'d like to rank for and we\'ll handle the rest. Social media links are optional.</div>';
+  html+='<div class="field"><label>Target Keywords <span class="info-tip" data-tip="What would someone type into Google to find your business?">?</span></label><textarea id="f_keywords" placeholder="e.g.\ndentist south london\ncosmetic dentistry SE15\nteeth whitening peckham\nemergency dental care" style="min-height:80px"></textarea></div>';
+  html+='<div class="field"><label>Target Locations (Local SEO)</label><input type="text" id="f_seoLocations" placeholder="e.g. Peckham, Camberwell, Dulwich, South London, SE15"></div>';
+  html+='<div class="field"><label>Do you have a Google Business Profile?</label><select id="f_googleBusiness"><option value="yes">Yes, fully set up</option><option value="partial">Yes, but needs updating</option><option value="no">No</option><option value="unsure">Not sure</option></select></div>';
+
+  html+='<div class="field"><label>Social Media Accounts <span class="opt">paste links</span></label></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label style="font-size:10px">Instagram</label><input type="url" id="f_socialInstagram" placeholder="https://instagram.com/..."></div>';
+  html+='<div class="field"><label style="font-size:10px">Facebook</label><input type="url" id="f_socialFacebook" placeholder="https://facebook.com/..."></div>';
+  html+='</div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label style="font-size:10px">Twitter / X</label><input type="url" id="f_socialTwitter" placeholder="https://x.com/..."></div>';
+  html+='<div class="field"><label style="font-size:10px">LinkedIn</label><input type="url" id="f_socialLinkedin" placeholder="https://linkedin.com/company/..."></div>';
+  html+='</div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label style="font-size:10px">TikTok</label><input type="url" id="f_socialTiktok" placeholder="https://tiktok.com/@..."></div>';
+  html+='<div class="field"><label style="font-size:10px">YouTube</label><input type="url" id="f_socialYoutube" placeholder="https://youtube.com/@..."></div>';
+  html+='</div>';
+
+  html+='<div class="field"><label>Current Marketing Channels</label><textarea id="f_marketingChannels" placeholder="e.g. Google Ads, Facebook Ads, Leaflet drops, Referrals, SEO, none currently..." style="min-height:60px"></textarea></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Monthly Marketing Budget</label><select id="f_marketingBudget"><option value="">Prefer not to say</option><option value="0">No budget currently</option><option value="under-500">Under 500/month</option><option value="500-1000">500-1,000/month</option><option value="1000-3000">1,000-3,000/month</option><option value="3000+">3,000+/month</option></select></div>';
+  html+='<div class="field"><label>Primary Website Goal <span class="req">*</span></label><select id="f_goal"><option value="">Select...</option><option value="bookings">Get more bookings / appointments</option><option value="leads">Generate enquiries / leads</option><option value="calls">Get more phone calls</option><option value="sales">Sell products online</option><option value="credibility">Build credibility & trust</option><option value="inform">Inform customers</option><option value="all">All of the above</option></select></div>';
+  html+='</div>';
+  html+='</div>';
+
+  html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-next" onclick="nextStep()">Continue to Final Details</button></div>';
+  html+='</div>'; // end step3
+
+  // =========================================================
+  // STEP 5: Media, Legal, Domain, Final
+  // =========================================================
+  html+='<div class="step" id="step4">';
+
+  // Media
+  html+='<div class="section"><h3>Media & Assets</h3><div class="desc">No photos? No problem — we\'ll source professional stock photography that fits your brand. Just let us know your preference.</div>';
+  html+='<div class="field"><label>Will you provide photos?</label><select id="f_photoSource"><option value="provide">Yes, I will provide all photos</option><option value="mix">Some, supplement with stock photography</option><option value="stock">No, please use stock photography</option></select></div>';
+  html+='<div class="field"><label>Upload Photos <span class="opt">you can also email these later</span></label><input type="file" id="f_photoUpload" accept="image/*" multiple><div class="hint">Upload your best photos: premises, team, products, before/after results. Max 20 files.</div></div>';
+  html+='<div class="field"><label>Do you have videos?</label><select id="f_hasVideos" onchange="toggleConditional(\'videoLinks\',this.value!==\'no\')"><option value="no">No</option><option value="yes-provide">Yes, I will provide them</option><option value="youtube">Yes, on YouTube/Vimeo</option><option value="want">No, but I would like some</option></select></div>';
+  html+='<div class="conditional" id="videoLinks"><div class="field"><label>Video Links</label><textarea id="f_videoUrls" placeholder="Paste YouTube or Vimeo links, one per line" style="min-height:60px"></textarea></div></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Before/After Gallery?</label><select id="f_beforeAfter"><option value="no">Not needed</option><option value="yes">Yes, I will provide images</option><option value="want">Yes, but need help</option></select></div>';
+  html+='<div class="field"><label>Stock Photography Style</label><select id="f_stockStyle"><option value="natural">Natural & authentic</option><option value="corporate">Corporate & polished</option><option value="lifestyle">Lifestyle & candid</option><option value="minimal">Clean & minimal</option><option value="decide">Let us choose</option></select></div>';
+  html+='</div>';
+  html+='</div>';
+
+  // Legal & Compliance
+  html+='<div class="section"><h3>Legal & Compliance</h3><div class="desc">We\'ll add a privacy policy and cookie consent by default. Only fill this if your industry has specific regulations (e.g. NHS, FCA).</div>';
+  html+='<div class="field"><label>Industry Regulations</label><select id="f_regulations"><option value="none">None specific</option><option value="nhs">NHS / Healthcare (CQC)</option><option value="fca">Financial (FCA)</option><option value="sra">Legal (SRA)</option><option value="ofsted">Education (Ofsted)</option><option value="gdpr-strict">Strict GDPR (handles sensitive data)</option><option value="other">Other (specify below)</option></select></div>';
+  html+='<div class="field"><label>Other Regulatory Details</label><input type="text" id="f_regulationDetails" placeholder="Specify any industry regulations or compliance requirements"></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Privacy Policy</label><select id="f_privacyPolicy"><option value="create">Create one for me</option><option value="have">I have one, will provide</option><option value="update">Have one, needs updating</option></select></div>';
+  html+='<div class="field"><label>Cookie Consent</label><select id="f_cookieConsent"><option value="standard">Standard cookie banner</option><option value="advanced">Advanced (granular opt-in)</option><option value="minimal">Minimal (essential only)</option></select></div>';
+  html+='</div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Terms of Service</label><select id="f_termsOfService"><option value="create">Create for me</option><option value="have">I have them</option><option value="na">Not applicable</option></select></div>';
+  html+='<div class="field"><label>GDPR Compliance Level</label><select id="f_gdpr"><option value="standard">Standard (most businesses)</option><option value="enhanced">Enhanced (handles sensitive data)</option><option value="full">Full (enterprise level)</option></select></div>';
+  html+='</div>';
+  html+='<div class="field"><label>Professional Registration Numbers <span class="opt">to display on the site</span></label><textarea id="f_regNumbers" placeholder="e.g.\nGDC No: 123456\nCQC Provider ID: 1-234567890\nCompanies House: 12345678" style="min-height:60px"></textarea></div>';
+  html+='</div>';
+
+  // Domain & Technical
+  html+='<div class="section"><h3>Domain & Technical</h3><div class="desc">We\'ll handle all the technical setup. Just let us know what you have and any deadlines.</div>';
+  var existingUrl=project.old_website_url||'';
+  html+='<div class="field"><label>Current Website URL</label><input type="url" id="f_currentSite" value="'+esc(existingUrl)+'" placeholder="https://www.yourbusiness.co.uk"></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Do you own a domain?</label><select id="f_ownDomain" onchange="toggleConditional(\'domainName\',this.value===\'yes\')"><option value="yes">Yes</option><option value="no">No, I need one</option><option value="unsure">Not sure</option></select></div>';
+  html+='<div class="field"><label>Domain Name</label><input type="text" id="f_domainName" placeholder="e.g. yourbusiness.co.uk"></div>';
+  html+='</div>';
+  html+='<div class="field"><label>Do you need a new domain?</label><select id="f_needDomain"><option value="no">No, use my existing domain</option><option value="yes">Yes, help me find one</option><option value="additional">Yes, an additional one</option></select></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Current Email Hosting</label><select id="f_emailHosting"><option value="google">Google Workspace / Gmail</option><option value="microsoft">Microsoft 365 / Outlook</option><option value="other">Other provider</option><option value="none">No business email yet</option><option value="unsure">Not sure</option></select></div>';
+  html+='<div class="field"><label>Need Email Migration?</label><select id="f_emailMigration"><option value="no">No, keep current setup</option><option value="yes">Yes, need help migrating</option><option value="setup">Need new email set up</option></select></div>';
+  html+='</div>';
+  html+='<div class="field"><label>Current Hosting Provider <span class="opt">if known</span></label><input type="text" id="f_currentHosting" placeholder="e.g. GoDaddy, 123 Reg, Wix, Squarespace, WordPress + SiteGround"></div>';
+  html+='<div class="row">';
+  html+='<div class="field"><label>Preferred Launch Date</label><input type="date" id="f_launchDate"></div>';
+  html+='<div class="field"><label>Project Budget Range</label><select id="f_budget"><option value="">Prefer not to say</option><option value="starter">Starter (under 500)</option><option value="standard">Standard (500-1,500)</option><option value="premium">Premium (1,500-3,000)</option><option value="enterprise">Enterprise (3,000+)</option><option value="discuss">Need to discuss</option></select></div>';
+  html+='</div>';
+  html+='</div>';
+
+  // Final notes
+  html+='<div class="section"><h3>Anything Else</h3><div class="desc">Anything we have not covered? Special requests, deadlines, things on your mind? This is your space.</div>';
+  html+='<div class="field"><label>Final Notes & Special Requests</label><textarea id="f_finalNotes" placeholder="Anything else we should know? Specific deadlines, competitor features you want, things you absolutely need, things that worry you about the process..." style="min-height:120px"></textarea></div>';
+  html+='</div>';
+
+  html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-submit" id="submitBtn" onclick="submitBrief()">Submit My Brief</button></div>';
+  html+='<p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5">Once submitted, our team will begin building your website in Framer. Need to make changes later? Email info@solisdigital.co.uk</p>';
+  html+='</div>'; // end step4
+
+  document.getElementById('mainContent').innerHTML=html;
+  renderLocations();
+  renderServices();
+  renderFaqs();
+  renderTeamMembers();
+  updateProgress();
+}
+
+/* ===== STEP NAVIGATION ===== */
+function nextStep(){
+  if(!validateStep(currentStep))return;
+  if(currentStep<totalSteps-1){
+    document.getElementById('step'+currentStep).classList.remove('active');
+    currentStep++;
+    document.getElementById('step'+currentStep).classList.add('active');
+    updateProgress();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+function prevStep(){
+  if(currentStep>0){
+    document.getElementById('step'+currentStep).classList.remove('active');
+    currentStep--;
+    document.getElementById('step'+currentStep).classList.add('active');
+    updateProgress();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+function goToStep(n){
+  // Only allow going to completed steps or current+1 if validated
+  if(n>currentStep+1)return;
+  if(n>currentStep&&!validateStep(currentStep))return;
+  document.getElementById('step'+currentStep).classList.remove('active');
+  currentStep=n;
+  document.getElementById('step'+currentStep).classList.add('active');
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function updateProgress(){
+  var pct=Math.round((currentStep/(totalSteps-1))*100);
+  if(currentStep===0)pct=0;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressLabel').textContent='Step '+(currentStep+1)+' of '+totalSteps;
+  document.getElementById('progressPercent').textContent=pct+'% complete';
+  var dots=document.querySelectorAll('.step-dot');
+  dots.forEach(function(d,i){
+    d.classList.remove('active','completed');
+    if(i===currentStep)d.classList.add('active');
+    else if(i<currentStep)d.classList.add('completed');
+  });
+}
+
+/* ===== VALIDATION ===== */
+function validateStep(step){
+  clearErrors();
+  var errors=[];
+  if(step===0){
+    if(!gv('f_industry'))errors.push(['f_industry','Please select your industry']);
+    if(!gv('f_description'))errors.push(['f_description','Please provide a brief business description']);
+    if(!gv('f_usp'))errors.push(['f_usp','Please describe what makes your business unique']);
+    if(!gv('f_emailMain'))errors.push(['f_emailMain','Please provide your main email address']);
+    if(!gv('f_phoneMain'))errors.push(['f_phoneMain','Please provide your main phone number']);
+  } else if(step===2){
+    var hasPages=Object.keys(selectedPages).length>0;
+    if(!hasPages){alert('Please select at least one page for your website.');return false}
+  } else if(step===3){
+    if(!getRadioVal('toneOfVoice')){alert('Please select a tone of voice for your website.');return false}
+    if(!gv('f_goal')){errors.push(['f_goal','Please select the primary goal of your website'])}
+    if(!gv('f_cta')){errors.push(['f_cta','Please select a primary call to action'])}
+  }
+  if(errors.length){
+    errors.forEach(function(e){
+      var el=document.getElementById(e[0]);
+      if(el)el.closest('.field').classList.add('error');
+    });
+    var firstErr=document.getElementById(errors[0][0]);
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  return true;
+}
+function clearErrors(){
+  document.querySelectorAll('.field.error').forEach(function(f){f.classList.remove('error')});
+}
+function gv(id){var el=document.getElementById(id);return el?el.value.trim():''}
+function getRadioVal(id){var el=document.getElementById(id);return el?el.getAttribute('data-value'):'';}
+
+/* ===== INTERACTIVE COMPONENTS ===== */
+
+// Page chips
+function togglePage(el,name){
+  el.classList.toggle('selected');
+  if(selectedPages[name]){delete selectedPages[name]}else{selectedPages[name]=''}
+  renderPageContentFields();
+}
+function renderPageContentFields(){
+  var c=document.getElementById('pageContentFields');
+  if(!c)return;
+  var html='';
+  var pages=Object.keys(selectedPages);
+  if(pages.length){
+    html+='<div style="margin-top:16px">';
+    html+='<label style="display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Content notes for each page <span style="color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">optional but helpful</span></label>';
+    pages.forEach(function(p){
+      var val=selectedPages[p]||'';
+      html+='<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:4px">'+p+' Page</div>';
+      html+='<textarea onchange="selectedPages[\''+p+'\']=this.value" style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:12px;font-family:inherit;min-height:50px;resize:vertical;outline:none" placeholder="What specific content or sections should this page have?">'+esc(val)+'</textarea></div>';
+    });
+    html+='</div>';
+  }
+  c.innerHTML=html;
+}
+
+// Radio groups
+function pickRadio(groupId,val,el){
+  var group=document.getElementById(groupId);
+  group.setAttribute('data-value',val);
+  group.querySelectorAll('.radio-opt').forEach(function(o){o.classList.remove('selected')});
+  el.classList.add('selected');
+}
+
+// Generic chip toggle
+function toggleChip(el){el.classList.toggle('selected')}
+function getSelectedChips(containerId){
+  var chips=[];
+  document.getElementById(containerId).querySelectorAll('.chip.selected').forEach(function(c){chips.push(c.textContent)});
+  return chips;
+}
+
+// Conditional fields
+function toggleConditional(id,show){
+  var el=document.getElementById(id);
+  if(el){if(show)el.classList.add('show');else el.classList.remove('show')}
+}
+
+// Opening hours
+function toggleClosed(day){
+  var row=document.getElementById('hours_'+day);
+  var btn=document.getElementById('closed_'+day);
+  row.classList.toggle('row-closed');
+  btn.classList.toggle('is-closed');
+  btn.textContent=btn.classList.contains('is-closed')?'Closed':'Closed';
+}
+
+/* ===== DYNAMIC LISTS ===== */
+
+// Locations
+function addLocation(){locations.push({name:'',address:'',phone:'',email:''});renderLocations()}
+function removeLocation(i){if(locations.length>1){locations.splice(i,1);renderLocations()}}
+function renderLocations(){
+  var c=document.getElementById('locationsList');if(!c)return;
+  var html='';
+  locations.forEach(function(loc,i){
+    html+='<div class="dynamic-item"><div class="item-header"><span class="item-num">Location '+(i+1)+'</span>';
+    if(locations.length>1)html+='<button type="button" class="remove-btn" onclick="removeLocation('+i+')">Remove</button>';
+    html+='</div>';
+    html+='<div class="row"><div class="field"><label>Location Name <span class="opt">e.g. Main Office</span></label><input type="text" value="'+esc(loc.name)+'" onchange="locations['+i+'].name=this.value" placeholder="e.g. Head Office, Branch, Clinic"></div>';
+    html+='<div class="field"><label>Phone <span class="opt">for this location</span></label><input type="tel" value="'+esc(loc.phone)+'" onchange="locations['+i+'].phone=this.value" placeholder="+44 ..."></div></div>';
+    html+='<div class="field"><label>Full Address <span class="req">*</span></label><input type="text" value="'+esc(loc.address)+'" onchange="locations['+i+'].address=this.value" placeholder="Street, City, Postcode"></div>';
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+// Services
+function addService(){services.push({name:'',description:'',price:'',duration:''});renderServices()}
+function removeService(i){if(services.length>1){services.splice(i,1);renderServices()}}
+function renderServices(){
+  var c=document.getElementById('servicesList');if(!c)return;
+  var html='';
+  services.forEach(function(svc,i){
+    html+='<div class="dynamic-item"><div class="item-header"><span class="item-num">Service '+(i+1)+'</span>';
+    if(services.length>1)html+='<button type="button" class="remove-btn" onclick="removeService('+i+')">Remove</button>';
+    html+='</div>';
+    html+='<div class="field"><label>Service Name <span class="req">*</span></label><input type="text" value="'+esc(svc.name)+'" onchange="services['+i+'].name=this.value" placeholder="e.g. General Dentistry, Teeth Whitening, Kitchen Installation"></div>';
+    html+='<div class="field"><label>Short Description</label><textarea onchange="services['+i+'].description=this.value" placeholder="What does this service include? Key details a customer needs to know." style="min-height:50px">'+esc(svc.description)+'</textarea></div>';
+    html+='<div class="row"><div class="field"><label>Price / Price Range <span class="opt">optional</span></label><input type="text" value="'+esc(svc.price)+'" onchange="services['+i+'].price=this.value" placeholder="e.g. From 50, 100-200, POA"></div>';
+    html+='<div class="field"><label>Duration <span class="opt">for appointments</span></label><input type="text" value="'+esc(svc.duration)+'" onchange="services['+i+'].duration=this.value" placeholder="e.g. 30 min, 1 hour, Half day"></div></div>';
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+// FAQs
+function addFaq(){faqs.push({question:'',answer:''});renderFaqs()}
+function removeFaq(i){faqs.splice(i,1);renderFaqs()}
+function renderFaqs(){
+  var c=document.getElementById('faqsList');if(!c)return;
+  var html='';
+  if(!faqs.length){
+    html+='<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">No FAQs added yet. Click the button below to add your first one.</div>';
+  }
+  faqs.forEach(function(faq,i){
+    html+='<div class="dynamic-item"><div class="item-header"><span class="item-num">FAQ '+(i+1)+'</span>';
+    html+='<button type="button" class="remove-btn" onclick="removeFaq('+i+')">Remove</button>';
+    html+='</div>';
+    html+='<div class="field"><label>Question</label><input type="text" value="'+esc(faq.question)+'" onchange="faqs['+i+'].question=this.value" placeholder="e.g. How much does teeth whitening cost?"></div>';
+    html+='<div class="field"><label>Answer</label><textarea onchange="faqs['+i+'].answer=this.value" placeholder="The answer customers need..." style="min-height:50px">'+esc(faq.answer)+'</textarea></div>';
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+// Team Members
+function addTeamMember(){teamMembers.push({name:'',role:'',bio:''});renderTeamMembers()}
+function removeTeamMember(i){teamMembers.splice(i,1);renderTeamMembers()}
+function renderTeamMembers(){
+  var c=document.getElementById('teamList');if(!c)return;
+  var html='';
+  if(!teamMembers.length){
+    html+='<div style="text-align:center;padding:16px;color:var(--text3);font-size:13px">No team members added yet. Click the button below to add someone.</div>';
+  }
+  teamMembers.forEach(function(tm,i){
+    html+='<div class="dynamic-item"><div class="item-header"><span class="item-num">Team Member '+(i+1)+'</span>';
+    html+='<button type="button" class="remove-btn" onclick="removeTeamMember('+i+')">Remove</button>';
+    html+='</div>';
+    html+='<div class="row"><div class="field"><label>Full Name</label><input type="text" value="'+esc(tm.name)+'" onchange="teamMembers['+i+'].name=this.value" placeholder="e.g. Dr. Sarah Smith"></div>';
+    html+='<div class="field"><label>Role / Title</label><input type="text" value="'+esc(tm.role)+'" onchange="teamMembers['+i+'].role=this.value" placeholder="e.g. Lead Dentist, Founder, Manager"></div></div>';
+    html+='<div class="field"><label>Short Bio</label><textarea onchange="teamMembers['+i+'].bio=this.value" placeholder="A few sentences about this person, their experience, qualifications..." style="min-height:50px">'+esc(tm.bio)+'</textarea></div>';
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+/* ===== COLLECT HOURS ===== */
+function collectHours(){
+  var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var hours={};
+  days.forEach(function(d){
+    var row=document.getElementById('hours_'+d);
+    if(row.classList.contains('row-closed')){
+      hours[d]={closed:true};
+    } else {
+      hours[d]={
+        open:document.getElementById('hours_'+d+'_open').value,
+        close:document.getElementById('hours_'+d+'_close').value,
+        closed:false
+      };
+    }
+  });
+  return hours;
+}
+
+/* ===== SUBMIT ===== */
+function submitBrief(){
+  if(!validateStep(currentStep))return;
+
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Submitting...';
+
+  // Collect all social feed selections
+  var socialFeeds=[];
+  document.querySelectorAll('#socialFeedChips .chip.selected').forEach(function(c){socialFeeds.push(c.textContent)});
+
+  // Build structured brief_data
+  var brief={
+    // Business Fundamentals
+    business_name:project.business_name,
+    tagline:gv('f_tagline'),
+    industry:gv('f_industry'),
+    year_established:gv('f_yearEstablished'),
+    description:gv('f_description'),
+    about_detailed:gv('f_aboutDetailed'),
+    usp:gv('f_usp'),
+    mission:gv('f_mission'),
+
+    // Locations & Contact
+    locations:locations.filter(function(l){return l.address}),
+    email_main:gv('f_emailMain'),
+    email_booking:gv('f_emailBooking'),
+    phone_main:gv('f_phoneMain'),
+    phone_alt:gv('f_phoneAlt'),
+    opening_hours:collectHours(),
+
+    // Services
+    services:services.filter(function(s){return s.name}),
+    sells_products:gv('f_sellProducts'),
+    product_categories:gv('f_productCategories'),
+    service_areas:gv('f_serviceAreas'),
+
+    // Brand & Design
+    logo_status:gv('f_logoStatus'),
+    colors:{
+      primary:gv('f_colorPrimary'),
+      secondary:gv('f_colorSecondary'),
+      accent:gv('f_colorAccent')
+    },
+    background_preference:getRadioVal('bgPref'),
+    font_preference:getRadioVal('fontPref'),
+    design_style:getRadioVal('designStyle'),
+    inspiration:gv('f_inspiration'),
+    competitors:gv('f_competitors'),
+    design_love:gv('f_designLove'),
+    design_hate:gv('f_designHate'),
+    brand_assets:gv('f_brandAssets'),
+
+    // Pages & Structure
+    pages:Object.keys(selectedPages),
+    page_content_notes:selectedPages,
+    custom_pages:gv('f_customPages'),
+    nav_style:getRadioVal('navStyle'),
+    header_style:getRadioVal('headerStyle'),
+    blog_needed:gv('f_blogNeeded'),
+    blog_frequency:gv('f_blogFrequency'),
+
+    // Functionality
+    booking_system:gv('f_booking'),
+    appointment_types:gv('f_appointmentTypes'),
+    booking_link:gv('f_bookingLink'),
+    contact_fields:gv('f_contactFields'),
+    payment_processing:gv('f_payments'),
+    payment_details:gv('f_paymentDetails'),
+    live_chat:gv('f_liveChat'),
+    whatsapp_button:gv('f_whatsapp'),
+    whatsapp_number:gv('f_whatsappNumber'),
+    newsletter:gv('f_newsletter'),
+    newsletter_details:gv('f_newsletterDetails'),
+    google_maps:gv('f_googleMaps'),
+    social_feeds:socialFeeds,
+    customer_portal:gv('f_portal'),
+    multi_language:gv('f_multiLang'),
+    languages:gv('f_languages'),
+    accessibility:gv('f_accessibility'),
+    analytics:gv('f_analytics'),
+    crm:gv('f_crm'),
+    crm_details:gv('f_crmDetails'),
+    other_integrations:gv('f_otherIntegrations'),
+
+    // Content
+    existing_content:gv('f_existingContent'),
+    copywriting:getRadioVal('copywriting'),
+    hero_headline:gv('f_heroHeadline'),
+    cta_primary:gv('f_cta'),
+    cta_secondary:gv('f_ctaSecondary'),
+    tone_of_voice:getRadioVal('toneOfVoice'),
+    testimonials:gv('f_testimonials'),
+    certifications:gv('f_certifications'),
+    customer_phrases:gv('f_customerPhrases'),
+    faqs:faqs.filter(function(f){return f.question}),
+    team_members:teamMembers.filter(function(t){return t.name}),
+
+    // SEO & Marketing
+    keywords:gv('f_keywords'),
+    seo_locations:gv('f_seoLocations'),
+    google_business:gv('f_googleBusiness'),
+    social_media:{
+      instagram:gv('f_socialInstagram'),
+      facebook:gv('f_socialFacebook'),
+      twitter:gv('f_socialTwitter'),
+      linkedin:gv('f_socialLinkedin'),
+      tiktok:gv('f_socialTiktok'),
+      youtube:gv('f_socialYoutube')
+    },
+    marketing_channels:gv('f_marketingChannels'),
+    marketing_budget:gv('f_marketingBudget'),
+    website_goal:gv('f_goal'),
+
+    // Media
+    photo_source:gv('f_photoSource'),
+    has_videos:gv('f_hasVideos'),
+    video_urls:gv('f_videoUrls'),
+    before_after:gv('f_beforeAfter'),
+    stock_style:gv('f_stockStyle'),
+
+    // Legal
+    regulations:gv('f_regulations'),
+    regulation_details:gv('f_regulationDetails'),
+    privacy_policy:gv('f_privacyPolicy'),
+    cookie_consent:gv('f_cookieConsent'),
+    terms_of_service:gv('f_termsOfService'),
+    gdpr:gv('f_gdpr'),
+    registration_numbers:gv('f_regNumbers'),
+
+    // Domain & Technical
+    current_website:gv('f_currentSite'),
+    owns_domain:gv('f_ownDomain'),
+    domain_name:gv('f_domainName'),
+    needs_new_domain:gv('f_needDomain'),
+    email_hosting:gv('f_emailHosting'),
+    email_migration:gv('f_emailMigration'),
+    current_hosting:gv('f_currentHosting'),
+    launch_date:gv('f_launchDate'),
+    budget:gv('f_budget'),
+
+    // Final
+    final_notes:gv('f_finalNotes'),
+
+    submitted_at:new Date().toISOString()
+  };
+
+  // Build readable text brief
+  var t='';
+  t+='=== WEBSITE BRIEF: '+brief.business_name+' ===\n';
+  t+='Submitted: '+new Date().toLocaleString('en-GB')+'\n\n';
+
+  t+='--- BUSINESS FUNDAMENTALS ---\n';
+  t+='Business Name: '+brief.business_name+'\n';
+  if(brief.tagline)t+='Tagline: '+brief.tagline+'\n';
+  t+='Industry: '+brief.industry+'\n';
+  if(brief.year_established)t+='Year Established: '+brief.year_established+'\n';
+  t+='Description: '+brief.description+'\n';
+  if(brief.about_detailed)t+='About Us: '+brief.about_detailed+'\n';
+  t+='USP: '+brief.usp+'\n';
+  if(brief.mission)t+='Mission: '+brief.mission+'\n';
+  t+='\n';
+
+  t+='--- CONTACT & LOCATIONS ---\n';
+  t+='Email: '+brief.email_main+'\n';
+  if(brief.email_booking)t+='Booking Email: '+brief.email_booking+'\n';
+  t+='Phone: '+brief.phone_main+'\n';
+  if(brief.phone_alt)t+='Alt Phone: '+brief.phone_alt+'\n';
+  brief.locations.forEach(function(loc,i){
+    t+='Location '+(i+1)+': '+(loc.name?loc.name+' - ':'')+loc.address+(loc.phone?' ('+loc.phone+')':'')+'\n';
+  });
+  t+='Opening Hours:\n';
+  var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  days.forEach(function(d){
+    var h=brief.opening_hours[d];
+    t+='  '+d+': '+(h.closed?'Closed':h.open+' - '+h.close)+'\n';
+  });
+  t+='\n';
+
+  t+='--- SERVICES ---\n';
+  brief.services.forEach(function(s,i){
+    t+=(i+1)+'. '+s.name;
+    if(s.price)t+=' ('+s.price+')';
+    if(s.duration)t+=' ['+s.duration+']';
+    t+='\n';
+    if(s.description)t+='   '+s.description+'\n';
+  });
+  if(brief.sells_products!=='no')t+='Products: '+brief.sells_products+'\n';
+  if(brief.product_categories)t+='Product Categories: '+brief.product_categories+'\n';
+  if(brief.service_areas)t+='Service Areas: '+brief.service_areas+'\n';
+  t+='\n';
+
+  t+='--- BRAND & DESIGN ---\n';
+  t+='Logo: '+brief.logo_status+'\n';
+  t+='Colours: Primary '+brief.colors.primary+', Secondary '+brief.colors.secondary+', Accent '+brief.colors.accent+'\n';
+  t+='Background: '+brief.background_preference+'\n';
+  t+='Font: '+brief.font_preference+'\n';
+  t+='Style: '+brief.design_style+'\n';
+  if(brief.inspiration)t+='Inspiration:\n'+brief.inspiration+'\n';
+  if(brief.competitors)t+='Competitors:\n'+brief.competitors+'\n';
+  if(brief.design_love)t+='Loves: '+brief.design_love+'\n';
+  if(brief.design_hate)t+='Hates: '+brief.design_hate+'\n';
+  if(brief.brand_assets)t+='Brand Assets: '+brief.brand_assets+'\n';
+  t+='\n';
+
+  t+='--- PAGES & STRUCTURE ---\n';
+  t+='Pages: '+brief.pages.join(', ')+'\n';
+  if(brief.custom_pages)t+='Custom Pages: '+brief.custom_pages+'\n';
+  Object.keys(brief.page_content_notes).forEach(function(p){
+    if(brief.page_content_notes[p])t+='  '+p+': '+brief.page_content_notes[p]+'\n';
+  });
+  t+='Navigation: '+brief.nav_style+'\n';
+  t+='Header: '+brief.header_style+'\n';
+  t+='Blog: '+brief.blog_needed+'\n';
+  if(brief.blog_frequency)t+='Blog Frequency: '+brief.blog_frequency+'\n';
+  t+='\n';
+
+  t+='--- FUNCTIONALITY ---\n';
+  t+='Booking: '+brief.booking_system+'\n';
+  if(brief.appointment_types)t+='Appointments: '+brief.appointment_types+'\n';
+  if(brief.booking_link)t+='Booking Link: '+brief.booking_link+'\n';
+  if(brief.contact_fields)t+='Contact Fields: '+brief.contact_fields+'\n';
+  t+='Payments: '+brief.payment_processing+'\n';
+  if(brief.payment_details)t+='Payment Details: '+brief.payment_details+'\n';
+  t+='Live Chat: '+brief.live_chat+'\n';
+  if(brief.whatsapp_button==='yes')t+='WhatsApp: '+brief.whatsapp_number+'\n';
+  t+='Newsletter: '+brief.newsletter+'\n';
+  t+='Google Maps: '+brief.google_maps+'\n';
+  if(brief.social_feeds.length)t+='Social Feeds: '+brief.social_feeds.join(', ')+'\n';
+  t+='Portal: '+brief.customer_portal+'\n';
+  if(brief.multi_language==='yes')t+='Languages: '+brief.languages+'\n';
+  t+='Accessibility: '+brief.accessibility+'\n';
+  t+='Analytics: '+brief.analytics+'\n';
+  if(brief.crm!=='none')t+='CRM: '+brief.crm+'\n';
+  if(brief.other_integrations)t+='Other Integrations: '+brief.other_integrations+'\n';
+  t+='\n';
+
+  t+='--- CONTENT ---\n';
+  t+='Existing Content: '+brief.existing_content+'\n';
+  t+='Copywriting: '+brief.copywriting+'\n';
+  if(brief.hero_headline)t+='Hero Headline: '+brief.hero_headline+'\n';
+  t+='Primary CTA: '+brief.cta_primary+'\n';
+  if(brief.cta_secondary)t+='Secondary CTA: '+brief.cta_secondary+'\n';
+  t+='Tone: '+brief.tone_of_voice+'\n';
+  if(brief.testimonials)t+='Testimonials:\n'+brief.testimonials+'\n';
+  if(brief.certifications)t+='Certifications:\n'+brief.certifications+'\n';
+  if(brief.customer_phrases)t+='Customer Phrases:\n'+brief.customer_phrases+'\n';
+  if(brief.faqs.length){
+    t+='FAQs:\n';
+    brief.faqs.forEach(function(f,i){t+='  Q'+(i+1)+': '+f.question+'\n  A: '+f.answer+'\n'});
+  }
+  if(brief.team_members.length){
+    t+='Team:\n';
+    brief.team_members.forEach(function(m){t+='  - '+m.name+' ('+m.role+')'+( m.bio?' - '+m.bio:'')+'\n'});
+  }
+  t+='\n';
+
+  t+='--- SEO & MARKETING ---\n';
+  if(brief.keywords)t+='Keywords:\n'+brief.keywords+'\n';
+  if(brief.seo_locations)t+='SEO Locations: '+brief.seo_locations+'\n';
+  t+='Google Business: '+brief.google_business+'\n';
+  var sm=brief.social_media;
+  if(sm.instagram)t+='Instagram: '+sm.instagram+'\n';
+  if(sm.facebook)t+='Facebook: '+sm.facebook+'\n';
+  if(sm.twitter)t+='Twitter: '+sm.twitter+'\n';
+  if(sm.linkedin)t+='LinkedIn: '+sm.linkedin+'\n';
+  if(sm.tiktok)t+='TikTok: '+sm.tiktok+'\n';
+  if(sm.youtube)t+='YouTube: '+sm.youtube+'\n';
+  if(brief.marketing_channels)t+='Marketing Channels: '+brief.marketing_channels+'\n';
+  if(brief.marketing_budget)t+='Marketing Budget: '+brief.marketing_budget+'\n';
+  t+='Website Goal: '+brief.website_goal+'\n';
+  t+='\n';
+
+  t+='--- MEDIA ---\n';
+  t+='Photos: '+brief.photo_source+'\n';
+  t+='Videos: '+brief.has_videos+'\n';
+  if(brief.video_urls)t+='Video URLs:\n'+brief.video_urls+'\n';
+  t+='Before/After: '+brief.before_after+'\n';
+  t+='Stock Style: '+brief.stock_style+'\n';
+  t+='\n';
+
+  t+='--- LEGAL & COMPLIANCE ---\n';
+  t+='Regulations: '+brief.regulations+'\n';
+  if(brief.regulation_details)t+='Details: '+brief.regulation_details+'\n';
+  t+='Privacy Policy: '+brief.privacy_policy+'\n';
+  t+='Cookie Consent: '+brief.cookie_consent+'\n';
+  t+='Terms: '+brief.terms_of_service+'\n';
+  t+='GDPR: '+brief.gdpr+'\n';
+  if(brief.registration_numbers)t+='Registration Numbers:\n'+brief.registration_numbers+'\n';
+  t+='\n';
+
+  t+='--- DOMAIN & TECHNICAL ---\n';
+  if(brief.current_website)t+='Current Site: '+brief.current_website+'\n';
+  t+='Owns Domain: '+brief.owns_domain+'\n';
+  if(brief.domain_name)t+='Domain: '+brief.domain_name+'\n';
+  t+='Needs New Domain: '+brief.needs_new_domain+'\n';
+  t+='Email Hosting: '+brief.email_hosting+'\n';
+  t+='Email Migration: '+brief.email_migration+'\n';
+  if(brief.current_hosting)t+='Current Hosting: '+brief.current_hosting+'\n';
+  if(brief.launch_date)t+='Launch Date: '+brief.launch_date+'\n';
+  if(brief.budget)t+='Budget: '+brief.budget+'\n';
+  t+='\n';
+
+  if(brief.final_notes){t+='--- FINAL NOTES ---\n'+brief.final_notes+'\n';}
+
+  // Submit to Supabase
+  fetch(SB+'/projects?id=eq.'+project.id,{
+    method:'PATCH',
+    headers:H,
+    body:JSON.stringify({
+      brief_data:brief,
+      client_brief:t,
+      client_brief_submitted_at:new Date().toISOString()
+    })
+  }).then(function(r){
+    if(r.ok){
+      showSuccess();
+    } else {
+      alert('Error submitting brief. Please try again or email info@solisdigital.co.uk');
+      btn.disabled=false;btn.textContent='Submit My Brief';
+    }
+  }).catch(function(){
+    alert('Network error. Please check your connection and try again.');
+    btn.disabled=false;btn.textContent='Submit My Brief';
+  });
+}
+
+function showSuccess(){
+  document.getElementById('mainContent').innerHTML=
+    '<div class="success">'+
+    '<div class="check">&#10003;</div>'+
+    '<h2>Brief Submitted Successfully</h2>'+
+    '<p style="font-size:15px;margin-bottom:8px">Thank you! We have everything we need to start building your website in Framer.</p>'+
+    '<p style="color:var(--text3);margin-bottom:24px">A confirmation email will be sent to you shortly.</p>'+
+    '<div class="timeline">'+
+    '<div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">What Happens Next</div>'+
+    '<div class="timeline-item"><div class="tl-day">Day 1-2</div><div class="tl-desc">We review your brief and create initial design concepts in Framer</div></div>'+
+    '<div class="timeline-item"><div class="tl-day">Day 3-5</div><div class="tl-desc">You receive a live preview link to review your new website</div></div>'+
+    '<div class="timeline-item"><div class="tl-day">Day 5-6</div><div class="tl-desc">We implement your revision feedback and polish details</div></div>'+
+    '<div class="timeline-item"><div class="tl-day">Day 7</div><div class="tl-desc">Final checks, domain connection, and we go live</div></div>'+
+    '</div>'+
+    '<p style="color:var(--text3);font-size:12px;margin-top:20px">Questions? Email info@solisdigital.co.uk</p>'+
+    '</div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===== INIT ===== */
+init();
+</script>
+</body>
+</html>

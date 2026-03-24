@@ -3,95 +3,431 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy — Solis Digital</title>
-<meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Privacy Policy — Solis Digital</title>
+<meta name="description" content="Privacy Policy for Solis Digital. Learn how we collect, use, and protect your personal data in compliance with UK GDPR.">
+<link rel="canonical" href="https://www.solisdigital.co.uk/privacy.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,700;9..144,900&display=swap" rel="stylesheet"></noscript>
 <style>
-:root{--bg:#07080a;--surface:#111216;--border:#1c1d24;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--white:#fff}
+:root{
+  --bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;
+  --border:#1c1d24;--border2:#2a2b35;
+  --text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;
+  --accent:#e8a23a;--accentL:#f0be6a;--accentD:#c4872a;
+  --glow:rgba(232,162,58,0.12);--glowS:rgba(232,162,58,0.25);
+  --green:#34d399;--red:#f87171;--white:#fff;
+  --font-body:'DM Sans',sans-serif;--font-display:'Fraunces',serif
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.8}
-.wrap{max-width:720px;margin:0 auto;padding:48px 24px 80px}
-nav{padding:20px 24px;border-bottom:1px solid var(--border);margin-bottom:40px}
-nav a{color:var(--accent);text-decoration:none;font-weight:700;font-size:14px}
-nav a:hover{text-decoration:underline}
-h1{font-size:32px;font-weight:800;color:var(--white);margin-bottom:8px}
-.updated{font-size:13px;color:var(--text3);margin-bottom:40px}
-h2{font-size:18px;font-weight:700;color:var(--white);margin:32px 0 12px;padding-top:16px;border-top:1px solid var(--border)}
-h2:first-of-type{border-top:none;margin-top:0}
-p,li{font-size:14px;color:var(--text2);margin-bottom:12px}
-ul{padding-left:24px;margin-bottom:16px}
-li{margin-bottom:6px}
-a{color:var(--accent)}
+html{scroll-behavior:smooth}
+a{color:inherit;text-decoration:none}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.ctn{max-width:1200px;margin:0 auto;padding:0 32px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,10,0.88);backdrop-filter:blur(24px);border-bottom:1px solid rgba(232,162,58,0.06)}
+.logo{font-size:21px;font-weight:800;display:flex;align-items:center;gap:3px;font-family:var(--font-body)}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accentD));display:flex;align-items:center;justify-content:center;margin-right:10px;position:relative;overflow:hidden}
+.logo-icon::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.2);top:3px;left:3px}
+.logo-d{color:var(--text3);font-weight:400}
+.nl{display:flex;align-items:center;gap:36px}
+.nl a{font-size:14px;font-weight:500;color:var(--text2);transition:color .3s;position:relative}
+.nl a:hover{color:var(--white)}
+.nl a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--accent);transition:width .3s}
+.nl a:hover::after{width:100%}
+.nc{padding:10px 24px;background:var(--accent);color:#0a0a0a;border-radius:8px;font-weight:700;font-size:13px;transition:all .3s;border:none;cursor:pointer;font-family:inherit;display:inline-block}
+.nc:hover{background:var(--accentL);box-shadow:0 8px 32px var(--glowS);transform:translateY(-1px)}
+
+/* MOBILE NAV */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1001}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:all .3s}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 0}
+.fi{display:flex;justify-content:space-between;align-items:center}
+.fc{font-size:13px;color:var(--text3)}
+.fl{display:flex;gap:28px}.fl a{font-size:13px;color:var(--text3);transition:color .3s}.fl a:hover{color:var(--accentL)}
+
+/* LEGAL PAGE */
+.legal-hero{padding:140px 32px 60px;text-align:center;position:relative}
+.legal-hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:900px;height:500px;background:radial-gradient(ellipse,rgba(232,162,58,.05) 0%,transparent 60%);pointer-events:none}
+.legal-hero h1{font-family:var(--font-display);font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px}
+.legal-hero h1 em{font-style:italic;color:var(--accentL)}
+.legal-meta{font-size:14px;color:var(--text3);margin-bottom:8px}
+.legal-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);font-weight:600;margin-top:20px;transition:color .3s}
+.legal-back:hover{color:var(--accentL)}
+
+.legal-content{max-width:800px;margin:0 auto;padding:0 32px 100px}
+.legal-content h2{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--white);margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--border);letter-spacing:-0.5px}
+.legal-content h2:first-child{border-top:none;margin-top:0}
+.legal-content h3{font-size:16px;font-weight:700;color:var(--white);margin:28px 0 10px}
+.legal-content p{font-size:15px;color:var(--text2);line-height:1.85;margin-bottom:16px}
+.legal-content ul,.legal-content ol{margin:12px 0 20px 24px}
+.legal-content li{font-size:14px;color:var(--text2);line-height:1.85;margin-bottom:8px}
+.legal-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.legal-content a:hover{color:var(--accentL)}
+.legal-content strong{color:var(--text);font-weight:600}
+.legal-content .clause-num{color:var(--accent);font-weight:700;margin-right:4px}
+
+.legal-content table{width:100%;border-collapse:collapse;margin:20px 0 28px}
+.legal-content table th,.legal-content table td{padding:12px 16px;text-align:left;font-size:14px;border-bottom:1px solid var(--border)}
+.legal-content table th{color:var(--white);font-weight:700;background:var(--surface);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.legal-content table td{color:var(--text2);line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .nl{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(7,8,10,0.96);backdrop-filter:blur(24px);flex-direction:column;padding:32px;gap:24px;border-bottom:1px solid var(--border)}
+  .nl.open{display:flex}
+  .hamburger{display:flex}
+  .legal-hero{padding:120px 20px 40px}
+  .legal-content{padding:0 20px 80px}
+  .ctn{padding:0 20px}
+  .fi{flex-direction:column;gap:16px;text-align:center}
+  .legal-content table{font-size:12px}
+  .legal-content table th,.legal-content table td{padding:8px 10px}
+}
 </style>
 </head>
 <body>
-<nav><a href="/">&larr; Back to Solis Digital</a></nav>
-<div class="wrap">
 
-<h1>Privacy Policy</h1>
-<p class="updated">Last updated: 24 March 2026</p>
+<nav>
+<a href="/" class="logo">
+  <div class="logo-icon"></div>
+  Solis <span class="logo-d">Digital</span>
+</a>
+<div class="nl" id="navLinks">
+  <a href="/#services" onclick="closeNav()">Services</a>
+  <a href="/#pricing" onclick="closeNav()">Pricing</a>
+  <a href="/#contact" onclick="closeNav()">Contact</a>
+</div>
+<div style="display:flex;align-items:center;gap:16px">
+  <a href="/#contact" class="nc">Free Audit</a>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+</nav>
 
-<h2>1. Who We Are</h2>
-<p>Solis Digital ("we", "us", "our") is a UK-based digital agency. Our website is www.solisdigital.co.uk. For any privacy-related questions, contact us at info@solisdigital.co.uk.</p>
+<main>
+<section class="legal-hero">
+  <h1>Privacy <em>Policy</em></h1>
+  <p class="legal-meta">Last updated: 24 March 2026</p>
+  <a href="/" class="legal-back">&larr; Back to Home</a>
+</section>
 
-<h2>2. Information We Collect</h2>
-<p>We collect information you provide directly to us:</p>
+<div class="legal-content">
+
+<h2>1. Introduction</h2>
+<p><span class="clause-num">1.1</span> This Privacy Policy explains how Solis Digital ("we", "us", "our") collects, uses, stores, and protects your personal data when you visit our website at <a href="https://www.solisdigital.co.uk">solisdigital.co.uk</a>, use our services, or otherwise interact with us.</p>
+<p><span class="clause-num">1.2</span> Solis Digital is a marketing agency based in London, United Kingdom. For the purposes of the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018, we are the <strong>data controller</strong> of the personal data we collect through our website and services.</p>
+<p><span class="clause-num">1.3</span> We are committed to protecting your privacy and handling your personal data in an open and transparent manner. We process personal data only in accordance with the UK GDPR, the Data Protection Act 2018, and the Privacy and Electronic Communications Regulations 2003 (PECR).</p>
+<p><span class="clause-num">1.4</span> If you have any questions about this policy or our data practices, please contact us at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>.</p>
+
+<h2>2. Data Controller Information</h2>
+<p><span class="clause-num">2.1</span> The data controller responsible for your personal data is:</p>
 <ul>
-  <li><strong>Contact form submissions:</strong> name, email address, business name, website URL, phone number (optional), and your message.</li>
-  <li><strong>Audit requests:</strong> website URL, email address, and business name.</li>
-  <li><strong>Client onboarding:</strong> business details, brand assets, and project requirements necessary to deliver our services.</li>
+  <li><strong>Company:</strong> Solis Digital</li>
+  <li><strong>Location:</strong> London, United Kingdom</li>
+  <li><strong>Email:</strong> <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a></li>
+  <li><strong>Website:</strong> <a href="https://www.solisdigital.co.uk">www.solisdigital.co.uk</a></li>
+  <li><strong>Founded by:</strong> Zain and Alex</li>
 </ul>
 
-<h2>3. How We Use Your Information</h2>
-<p>We use the information we collect to:</p>
+<h2>3. Personal Data We Collect</h2>
+<p><span class="clause-num">3.1</span> We collect and process the following categories of personal data:</p>
+
+<h3>3.1 Data You Provide Directly</h3>
 <ul>
-  <li>Respond to your enquiries and provide requested services</li>
-  <li>Generate website audits and performance reports</li>
-  <li>Deliver website design, SEO, and digital marketing services</li>
-  <li>Send project updates and relevant communications</li>
-  <li>Improve our website and services</li>
+  <li><strong>Contact form submissions:</strong> Your name, email address, phone number (if provided), business name, and the content of your message.</li>
+  <li><strong>Website audit tool:</strong> Your website URL, email address, and any business information you submit through our free audit tool.</li>
+  <li><strong>Email correspondence:</strong> Any information you provide when you email us directly.</li>
+  <li><strong>Client onboarding:</strong> Business name, contact details, brand assets, website login credentials (where necessary for service delivery), and any other information provided during the onboarding process.</li>
 </ul>
 
-<h2>4. Data Storage &amp; Security</h2>
-<p>Your data is stored securely using Supabase (hosted on AWS in the EU region) with row-level security enabled. We use HTTPS encryption for all data transmission. We do not sell, rent, or share your personal information with third parties except as necessary to provide our services.</p>
-
-<h2>5. Third-Party Services</h2>
-<p>We use the following third-party services that may process your data:</p>
+<h3>3.2 Data Collected Automatically</h3>
 <ul>
-  <li><strong>Google Analytics</strong> — website usage analytics (anonymised)</li>
-  <li><strong>Tawk.to</strong> — live chat widget</li>
-  <li><strong>Calendly</strong> — appointment scheduling</li>
-  <li><strong>Stripe</strong> — payment processing</li>
-  <li><strong>Google PageSpeed Insights</strong> — website performance auditing</li>
+  <li><strong>Device and browser information:</strong> IP address, browser type and version, operating system, screen resolution, and device type.</li>
+  <li><strong>Usage data:</strong> Pages visited, time spent on pages, click patterns, referring URL, and navigation paths through our website.</li>
+  <li><strong>Cookie data:</strong> Information collected through cookies and similar tracking technologies (see Section 9 below).</li>
+  <li><strong>Live chat data:</strong> Conversation transcripts and metadata from our live chat service (powered by Tawk.to), including your name and email if voluntarily provided during the chat.</li>
 </ul>
-<p>Each service has its own privacy policy governing how they handle data.</p>
 
-<h2>6. Cookies</h2>
-<p>We use essential cookies to ensure our website functions correctly and analytics cookies (Google Analytics) to understand how visitors use our site. You can disable cookies in your browser settings at any time.</p>
-
-<h2>7. Your Rights (GDPR)</h2>
-<p>Under UK GDPR, you have the right to:</p>
+<h3>3.3 Data from Third Parties</h3>
 <ul>
-  <li>Access the personal data we hold about you</li>
-  <li>Request correction of inaccurate data</li>
-  <li>Request deletion of your data</li>
-  <li>Object to processing of your data</li>
-  <li>Request data portability</li>
-  <li>Withdraw consent at any time</li>
+  <li><strong>Analytics data:</strong> Aggregated and pseudonymised usage data from Google Analytics.</li>
+  <li><strong>Publicly available data:</strong> Information from your existing website that we analyse as part of our audit and service delivery processes.</li>
 </ul>
-<p>To exercise any of these rights, email us at info@solisdigital.co.uk.</p>
 
-<h2>8. Data Retention</h2>
-<p>We retain your personal data only for as long as necessary to fulfil the purposes for which it was collected. Contact form submissions are retained for 12 months. Client data is retained for the duration of our business relationship plus 6 years for legal and accounting purposes.</p>
+<h2>4. Lawful Bases for Processing</h2>
+<p><span class="clause-num">4.1</span> Under the UK GDPR, we must have a lawful basis for processing your personal data. We rely on the following bases:</p>
 
-<h2>9. Changes to This Policy</h2>
-<p>We may update this privacy policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
+<table>
+  <tr>
+    <th>Purpose</th>
+    <th>Lawful Basis</th>
+  </tr>
+  <tr>
+    <td>Responding to your enquiries via contact forms or email</td>
+    <td><strong>Legitimate interest</strong> (Article 6(1)(f)) &mdash; it is in our legitimate interest to respond to prospective clients</td>
+  </tr>
+  <tr>
+    <td>Providing our website audit tool results</td>
+    <td><strong>Consent</strong> (Article 6(1)(a)) &mdash; you actively submit your details to receive an audit</td>
+  </tr>
+  <tr>
+    <td>Delivering our marketing and web design services</td>
+    <td><strong>Contract</strong> (Article 6(1)(b)) &mdash; processing is necessary to perform our contract with you</td>
+  </tr>
+  <tr>
+    <td>Sending follow-up communications about our services</td>
+    <td><strong>Legitimate interest</strong> (Article 6(1)(f)) &mdash; limited, relevant follow-ups to enquiries</td>
+  </tr>
+  <tr>
+    <td>Website analytics and performance monitoring</td>
+    <td><strong>Legitimate interest</strong> (Article 6(1)(f)) &mdash; to improve our website and services</td>
+  </tr>
+  <tr>
+    <td>Live chat support</td>
+    <td><strong>Legitimate interest</strong> (Article 6(1)(f)) &mdash; to provide real-time support to visitors</td>
+  </tr>
+  <tr>
+    <td>Complying with legal obligations</td>
+    <td><strong>Legal obligation</strong> (Article 6(1)(c))</td>
+  </tr>
+</table>
 
-<h2>10. Contact Us</h2>
-<p>If you have any questions about this privacy policy, please contact us at:<br>
-<strong>Email:</strong> <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a><br>
-<strong>Website:</strong> <a href="https://www.solisdigital.co.uk">www.solisdigital.co.uk</a></p>
+<p><span class="clause-num">4.2</span> Where we rely on legitimate interest, we have conducted a Legitimate Interest Assessment (LIA) to ensure that our interests do not override your fundamental rights and freedoms.</p>
+<p><span class="clause-num">4.3</span> Where we rely on consent, you have the right to withdraw that consent at any time by contacting us at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>. Withdrawal of consent does not affect the lawfulness of processing carried out before the withdrawal.</p>
+
+<h2>5. How We Use Your Data</h2>
+<p><span class="clause-num">5.1</span> We use your personal data for the following purposes:</p>
+<ul>
+  <li>To respond to your enquiries and provide you with information about our services.</li>
+  <li>To deliver website audit results and associated recommendations.</li>
+  <li>To perform our contractual obligations, including web design, SEO, digital marketing, and AI automation services.</li>
+  <li>To manage client accounts, projects, and communications.</li>
+  <li>To improve our website, services, and user experience through analytics.</li>
+  <li>To provide live chat support and respond to real-time enquiries.</li>
+  <li>To detect, prevent, and address technical issues or security threats.</li>
+  <li>To comply with applicable laws and regulations.</li>
+</ul>
+
+<h2>6. Use of Artificial Intelligence</h2>
+<p><span class="clause-num">6.1</span> As an AI-powered marketing agency, we use artificial intelligence tools in the delivery of our services. This includes but is not limited to:</p>
+<ul>
+  <li><strong>Content generation:</strong> AI tools may be used to draft website copy, marketing materials, and campaign content for clients.</li>
+  <li><strong>Website auditing:</strong> Our audit tool uses automated analysis to evaluate website performance, SEO, and other technical factors.</li>
+  <li><strong>Marketing automation:</strong> AI-driven tools may be used to optimise advertising campaigns, email sequences, and other marketing activities.</li>
+  <li><strong>Data analysis:</strong> AI may be used to analyse aggregated, anonymised usage patterns to improve our services.</li>
+</ul>
+<p><span class="clause-num">6.2</span> We do not use AI to make solely automated decisions that produce legal effects or similarly significant effects concerning you without human oversight, in accordance with Article 22 of the UK GDPR.</p>
+<p><span class="clause-num">6.3</span> Where AI tools are used as part of our service delivery, client data may be processed by the AI tool provider. We ensure that all such providers have appropriate data processing agreements in place and maintain adequate levels of data protection.</p>
+<p><span class="clause-num">6.4</span> We do not feed identifiable personal data of website visitors into AI training models. Any data used for AI-assisted analysis is aggregated or anonymised wherever possible.</p>
+
+<h2>7. Data Processors and Third-Party Services</h2>
+<p><span class="clause-num">7.1</span> We share your personal data with the following categories of third-party service providers (data processors), who process data on our behalf and in accordance with our instructions:</p>
+
+<table>
+  <tr>
+    <th>Service Provider</th>
+    <th>Purpose</th>
+    <th>Data Processed</th>
+    <th>Location</th>
+  </tr>
+  <tr>
+    <td><strong>Supabase</strong></td>
+    <td>Database hosting and backend infrastructure &mdash; stores contact form submissions, audit requests, and client data</td>
+    <td>Name, email, phone, business details, form submissions</td>
+    <td>EU/US (with appropriate safeguards)</td>
+  </tr>
+  <tr>
+    <td><strong>Google Analytics</strong></td>
+    <td>Website analytics and performance measurement</td>
+    <td>Pseudonymised browsing data, IP address (anonymised), device and usage data</td>
+    <td>US (EU-US Data Privacy Framework)</td>
+  </tr>
+  <tr>
+    <td><strong>Tawk.to</strong></td>
+    <td>Live chat functionality on our website</td>
+    <td>Chat transcripts, name and email (if voluntarily provided), IP address</td>
+    <td>US/Canada (with appropriate safeguards)</td>
+  </tr>
+  <tr>
+    <td><strong>Framer</strong></td>
+    <td>Website builder used for building client websites</td>
+    <td>Website content and assets provided by clients; visitor analytics on Framer-hosted sites</td>
+    <td>EU/US (with appropriate safeguards)</td>
+  </tr>
+  <tr>
+    <td><strong>Vercel</strong></td>
+    <td>Website hosting and deployment</td>
+    <td>Server logs, IP addresses</td>
+    <td>US (with appropriate safeguards)</td>
+  </tr>
+</table>
+
+<p><span class="clause-num">7.2</span> All third-party data processors are bound by data processing agreements (DPAs) that comply with Article 28 of the UK GDPR, requiring them to:</p>
+<ul>
+  <li>Process personal data only on our documented instructions.</li>
+  <li>Ensure that persons authorised to process personal data have committed themselves to confidentiality.</li>
+  <li>Implement appropriate technical and organisational security measures.</li>
+  <li>Assist us in fulfilling our obligations regarding data subject rights.</li>
+  <li>Delete or return all personal data to us at the end of the service relationship.</li>
+  <li>Make available all information necessary to demonstrate compliance.</li>
+</ul>
+
+<p><span class="clause-num">7.3</span> We do not sell, rent, or trade your personal data to any third party for their marketing purposes.</p>
+
+<h2>8. International Data Transfers</h2>
+<p><span class="clause-num">8.1</span> Some of our third-party service providers are located outside the United Kingdom. Where personal data is transferred to countries that are not covered by a UK adequacy decision, we ensure that appropriate safeguards are in place, including:</p>
+<ul>
+  <li><strong>UK International Data Transfer Agreement (IDTA)</strong> or <strong>UK Addendum to the EU Standard Contractual Clauses</strong> with the relevant data processor.</li>
+  <li>Reliance on the <strong>EU-US Data Privacy Framework</strong> (where the recipient is a certified participant) as recognised by the UK extension.</li>
+  <li>Binding corporate rules or other approved mechanisms where applicable.</li>
+</ul>
+<p><span class="clause-num">8.2</span> You may request a copy of the safeguards we have in place by contacting us at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>.</p>
+
+<h2>9. Cookies and Tracking Technologies</h2>
+<p><span class="clause-num">9.1</span> Our website uses cookies and similar tracking technologies. A cookie is a small text file placed on your device when you visit our website.</p>
+
+<h3>9.2 Types of Cookies We Use</h3>
+<table>
+  <tr>
+    <th>Cookie Type</th>
+    <th>Purpose</th>
+    <th>Duration</th>
+  </tr>
+  <tr>
+    <td><strong>Strictly Necessary</strong></td>
+    <td>Essential for the website to function correctly (e.g., security, load balancing). These cannot be disabled.</td>
+    <td>Session / up to 1 year</td>
+  </tr>
+  <tr>
+    <td><strong>Analytics</strong></td>
+    <td>Google Analytics cookies that help us understand how visitors interact with our website (e.g., _ga, _gid).</td>
+    <td>Up to 2 years</td>
+  </tr>
+  <tr>
+    <td><strong>Functional</strong></td>
+    <td>Tawk.to cookies that enable live chat functionality and remember your chat preferences.</td>
+    <td>Session / up to 6 months</td>
+  </tr>
+</table>
+
+<p><span class="clause-num">9.3</span> In accordance with PECR and UK GDPR, we obtain your consent before placing non-essential cookies on your device. You can manage your cookie preferences at any time through your browser settings.</p>
+<p><span class="clause-num">9.4</span> To opt out of Google Analytics tracking specifically, you can install the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a>.</p>
+<p><span class="clause-num">9.5</span> Most web browsers allow you to control cookies through their settings. Please note that disabling certain cookies may affect the functionality of our website.</p>
+
+<h2>10. Client Data Handling</h2>
+<p><span class="clause-num">10.1</span> When you engage us to provide marketing, web design, or other services, we may process additional personal data as part of our service delivery. This may include:</p>
+<ul>
+  <li>Website login credentials and hosting account details (shared securely and used solely for service delivery).</li>
+  <li>Business contact information for your team members involved in the project.</li>
+  <li>Brand assets, images, and content you provide for use on your website or marketing materials.</li>
+  <li>Analytics data from your existing website, advertising accounts, or social media profiles.</li>
+  <li>Customer data that may be present within your existing systems (where access is required for migration or integration).</li>
+</ul>
+<p><span class="clause-num">10.2</span> Where we process personal data on your behalf (for example, data collected through a website we build and host for you), we act as a <strong>data processor</strong> and will enter into a separate Data Processing Agreement with you as required by Article 28 of the UK GDPR.</p>
+<p><span class="clause-num">10.3</span> For client websites built using <strong>Framer</strong>, please note that Framer may collect its own analytics and usage data from visitors to your site. We recommend that clients include their own privacy policy on their Framer-hosted websites. We will assist you in implementing appropriate privacy notices and cookie consent mechanisms.</p>
+<p><span class="clause-num">10.4</span> We store client credentials securely using encrypted storage and access them only as needed for active service delivery. Credentials are deleted or returned upon completion of the engagement or upon your request.</p>
+
+<h2>11. Data Retention</h2>
+<p><span class="clause-num">11.1</span> We retain your personal data only for as long as is necessary for the purposes for which it was collected:</p>
+<ul>
+  <li><strong>Contact form and audit submissions:</strong> Retained for up to 24 months from the date of submission, unless you become a client (in which case client retention periods apply).</li>
+  <li><strong>Client project data:</strong> Retained for the duration of the client relationship and for up to 6 years thereafter (to comply with HMRC record-keeping requirements and for the establishment, exercise, or defence of legal claims).</li>
+  <li><strong>Analytics data:</strong> Google Analytics data retention is set to 14 months. Aggregated, non-identifiable analytics data may be retained indefinitely.</li>
+  <li><strong>Live chat transcripts:</strong> Retained for up to 12 months.</li>
+  <li><strong>Email correspondence:</strong> Retained for up to 24 months from the last communication, unless part of an ongoing client relationship.</li>
+</ul>
+<p><span class="clause-num">11.2</span> When personal data is no longer required, it is securely deleted or anonymised.</p>
+
+<h2>12. Your Rights Under UK GDPR</h2>
+<p><span class="clause-num">12.1</span> Under the UK GDPR, you have the following rights in relation to your personal data:</p>
+<ul>
+  <li><strong>Right of access (Article 15):</strong> You have the right to request a copy of the personal data we hold about you (a Subject Access Request).</li>
+  <li><strong>Right to rectification (Article 16):</strong> You have the right to request that we correct any inaccurate or incomplete personal data.</li>
+  <li><strong>Right to erasure (Article 17):</strong> You have the right to request that we delete your personal data where there is no compelling reason for its continued processing.</li>
+  <li><strong>Right to restriction of processing (Article 18):</strong> You have the right to request that we restrict the processing of your personal data in certain circumstances.</li>
+  <li><strong>Right to data portability (Article 20):</strong> You have the right to receive your personal data in a structured, commonly used, and machine-readable format.</li>
+  <li><strong>Right to object (Article 21):</strong> You have the right to object to processing based on legitimate interests or direct marketing at any time.</li>
+  <li><strong>Right to withdraw consent:</strong> Where processing is based on consent, you may withdraw it at any time without affecting the lawfulness of prior processing.</li>
+  <li><strong>Rights related to automated decision-making (Article 22):</strong> You have the right not to be subject to a decision based solely on automated processing that produces legal or similarly significant effects.</li>
+</ul>
+<p><span class="clause-num">12.2</span> To exercise any of these rights, please contact us at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>. We will respond to your request within one month. In complex cases, we may extend this by a further two months, and we will inform you if this is necessary.</p>
+<p><span class="clause-num">12.3</span> There is no fee for exercising your rights in most cases. However, we may charge a reasonable fee if your request is clearly unfounded, repetitive, or excessive. We may also refuse to comply with such requests.</p>
+<p><span class="clause-num">12.4</span> We may need to verify your identity before processing your request to ensure data security.</p>
+
+<h2>13. Data Security</h2>
+<p><span class="clause-num">13.1</span> We take the security of your personal data seriously and implement appropriate technical and organisational measures to protect it against unauthorised access, alteration, disclosure, or destruction. These measures include:</p>
+<ul>
+  <li>Encryption of data in transit using TLS/SSL.</li>
+  <li>Encryption of sensitive data at rest within our database (Supabase).</li>
+  <li>Access controls and authentication mechanisms to restrict data access to authorised personnel only.</li>
+  <li>Regular review and updating of our security practices.</li>
+  <li>Use of secure, reputable third-party service providers with their own robust security measures.</li>
+  <li>Secure handling and storage of client credentials.</li>
+</ul>
+<p><span class="clause-num">13.2</span> In the event of a personal data breach that is likely to result in a risk to your rights and freedoms, we will notify the Information Commissioner's Office (ICO) within 72 hours and, where required, notify you without undue delay.</p>
+
+<h2>14. Children's Data</h2>
+<p><span class="clause-num">14.1</span> Our website and services are not directed at individuals under the age of 18. We do not knowingly collect personal data from children. If you believe we have inadvertently collected data from a child, please contact us immediately at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a> and we will take steps to delete it.</p>
+
+<h2>15. Links to Third-Party Websites</h2>
+<p><span class="clause-num">15.1</span> Our website may contain links to third-party websites. We are not responsible for the privacy practices or content of those websites. We encourage you to read the privacy policies of any third-party sites you visit.</p>
+
+<h2>16. Complaints</h2>
+<p><span class="clause-num">16.1</span> If you are unhappy with how we have handled your personal data, we encourage you to contact us first at <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a> so that we can try to resolve the issue.</p>
+<p><span class="clause-num">16.2</span> You also have the right to lodge a complaint with the UK supervisory authority:</p>
+<ul>
+  <li><strong>Information Commissioner's Office (ICO)</strong></li>
+  <li>Website: <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a></li>
+  <li>Telephone: 0303 123 1113</li>
+  <li>Address: Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF</li>
+</ul>
+
+<h2>17. Changes to This Policy</h2>
+<p><span class="clause-num">17.1</span> We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or legal requirements. Any changes will be posted on this page with an updated "Last updated" date.</p>
+<p><span class="clause-num">17.2</span> Where changes are significant, we will make reasonable efforts to notify you (for example, by email if you are an existing client, or by a prominent notice on our website).</p>
+<p><span class="clause-num">17.3</span> We recommend that you review this policy periodically to stay informed about how we protect your data.</p>
+
+<h2>18. Contact Us</h2>
+<p>If you have any questions, concerns, or requests regarding this Privacy Policy or our handling of your personal data, please contact us:</p>
+<ul>
+  <li><strong>Email:</strong> <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a></li>
+  <li><strong>Website:</strong> <a href="https://www.solisdigital.co.uk">www.solisdigital.co.uk</a></li>
+</ul>
+
+<p style="margin-top:48px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--text3);text-align:center">This Privacy Policy was last updated on 24 March 2026.</p>
 
 </div>
+</main>
+
+<footer><div class="ctn"><div class="fi">
+<p class="fc">&copy; 2026 Solis Digital. All rights reserved. | info@solisdigital.co.uk</p>
+<div class="fl">
+  <a href="/privacy.html">Privacy Policy</a>
+  <a href="/terms.html">Terms</a>
+  <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>
+</div>
+</div></div></footer>
+
+<script>
+function toggleNav(){
+  document.getElementById('navLinks').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('active');
+}
+function closeNav(){
+  document.getElementById('navLinks').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('active');
+}
+</script>
 </body>
 </html>

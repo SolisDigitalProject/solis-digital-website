@@ -251,7 +251,29 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="panel">
     <div class="panel-h">
       <h3>Client Website Delivery Tracker</h3>
-      <span class="badge" id="projectCount">0 projects</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-p btn-sm" onclick="showNewProjectForm()">+ New Project</button>
+        <span class="badge" id="projectCount">0 projects</span>
+      </div>
+    </div>
+    <div id="newProjectForm" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Create New Client Project</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="np_name" placeholder="Business name *" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <select id="np_package" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);cursor:pointer">
+          <option value="Starter">Starter</option>
+          <option value="Growth" selected>Growth</option>
+          <option value="Premium">Premium</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="np_old_url" placeholder="Old website URL (optional)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="np_domain" placeholder="Client domain (e.g. example.co.uk)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-p btn-sm" onclick="createNewProject()">Create Project</button>
+        <button class="btn btn-s btn-sm" onclick="document.getElementById('newProjectForm').style.display='none'">Cancel</button>
+      </div>
     </div>
     <div id="projectsList"><div class="loading-s">Loading projects...</div></div>
   </div>
@@ -401,8 +423,16 @@ if(sessionStorage.getItem('solis_auth')==='1'){
         <span style="color:var(--text3);padding:4px 0">&rarr;</span>
         <span style="padding:4px 10px;border-radius:4px;background:rgba(52,211,153,.1);color:var(--green)">4. Complete &amp; Verified</span>
       </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <button onclick="document.getElementById('adminInput').value='Update pricing on website to ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Update pricing</button>
+        <button onclick="document.getElementById('adminInput').value='Add new testimonial: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Add testimonial</button>
+        <button onclick="document.getElementById('adminInput').value='Fix mobile layout on ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Fix mobile</button>
+        <button onclick="document.getElementById('adminInput').value='Update hero text to: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Change hero text</button>
+        <button onclick="document.getElementById('adminInput').value='Add new service: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Add service</button>
+        <button onclick="document.getElementById('adminInput').value='SEO improvement: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">SEO fix</button>
+      </div>
       <div style="display:flex;gap:10px;margin-bottom:16px">
-        <input type="text" id="adminInput" placeholder="What needs changing? (e.g. 'Update pricing to £1,297', 'Add testimonial section', 'Fix mobile nav')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <textarea id="adminInput" rows="2" placeholder="What needs changing? (e.g. 'Update pricing to £1,297', 'Add testimonial section to client site', 'Fix mobile nav on homepage')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none;resize:vertical;min-height:44px" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
         <select id="adminPriority" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer">
           <option value="low">Low</option>
           <option value="medium" selected>Medium</option>
@@ -991,7 +1021,11 @@ function renderProjects(projects){
     html+='<div><span class="proj-name">'+esc(p.business_name)+'</span></div>';
     html+='<div style="display:flex;gap:8px;align-items:center">';
     html+='<span class="proj-pkg">'+esc(p.package||'—')+'</span>';
-    html+='<span class="pill '+(p.status==='launched'?'pill-interested':'pill-callback')+'">'+esc(statusLabel[p.status]||p.status)+'</span>';
+    html+='<select onchange="updateProjectStatus('+p.id+',this.value)" style="padding:4px 8px;border-radius:6px;background:var(--bg);color:var(--text);border:1px solid var(--border);font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer">';
+    ['discovery','design','development','review','revisions','launched','maintenance'].forEach(function(s){
+      html+='<option value="'+s+'"'+(p.status===s?' selected':'')+'>'+esc(statusLabel[s]||s)+'</option>';
+    });
+    html+='</select>';
     html+='</div></div>';
 
     // Milestone pipeline
@@ -1004,37 +1038,79 @@ function renderProjects(projects){
     html+='</div>';
 
     // Website links row
-    html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">';
+    html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">';
     if(p.old_website_url)html+='<a href="'+esc(p.old_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(248,113,113,.08);color:var(--red);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(248,113,113,.15)">Old Site \u2192</a>';
     if(p.framer_url)html+='<a href="'+esc(p.framer_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(167,139,250,.08);color:var(--purple);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(167,139,250,.15)">Framer Draft \u2192</a>';
+    else html+='<button class="btn-call" onclick="setProjectField('+p.id+',\'framer_url\',\'Enter Framer preview URL:\')" style="font-size:10px;background:rgba(167,139,250,.08);color:var(--purple);border-color:rgba(167,139,250,.15)">+ Add Framer URL</button>';
     if(p.new_website_url)html+='<a href="'+esc(p.new_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.08);color:var(--green);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(52,211,153,.15)">Live Site \u2192</a>';
     html+='</div>';
 
     // DNS & Go-Live status
-    if(p.custom_domain||p.dns_status){
-      var dnsCol={'not_started':'var(--text3)','pending':'var(--accent)','configured':'var(--blue)','propagating':'var(--purple)','live':'var(--green)','failed':'var(--red)'};
-      var dnsLabel={'not_started':'Not Started','pending':'Awaiting DNS','configured':'DNS Configured','propagating':'Propagating','live':'Live','failed':'Failed'};
-      var sslCol={'pending':'var(--accent)','active':'var(--green)','failed':'var(--red)'};
-      html+='<div style="display:flex;gap:16px;margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;flex-wrap:wrap">';
-      if(p.custom_domain)html+='<span style="color:var(--text2)"><strong style="color:var(--text3)">Domain:</strong> '+esc(p.custom_domain)+'</span>';
-      html+='<span><strong style="color:var(--text3)">DNS:</strong> <span style="color:'+(dnsCol[p.dns_status]||'var(--text3)')+';font-weight:700">'+(dnsLabel[p.dns_status]||p.dns_status||'—')+'</span></span>';
-      html+='<span><strong style="color:var(--text3)">SSL:</strong> <span style="color:'+(sslCol[p.ssl_status]||'var(--text3)')+';font-weight:700">'+(p.ssl_status==='active'?'Active':p.ssl_status==='failed'?'Failed':'Pending')+'</span></span>';
-      if(p.dns_provider)html+='<span style="color:var(--text3)">Provider: '+esc(p.dns_provider)+'</span>';
-      html+='</div>';
-    }
+    var dnsCol={'not_started':'var(--text3)','pending':'var(--accent)','configured':'var(--blue)','propagating':'var(--purple)','live':'var(--green)','failed':'var(--red)'};
+    var dnsLabel={'not_started':'Not Started','pending':'Awaiting DNS','configured':'DNS Set','propagating':'Propagating','live':'Live','failed':'Failed'};
+    html+='<div style="display:flex;gap:12px;margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;flex-wrap:wrap;align-items:center">';
+    html+='<span style="color:var(--text2)"><strong style="color:var(--text3)">Domain:</strong> '+(p.custom_domain?esc(p.custom_domain):'<button class="btn-call" onclick="setProjectField('+p.id+',\'custom_domain\',\'Enter client domain (e.g. lindendentist.co.uk):\')" style="font-size:9px;padding:2px 8px">+ Set</button>')+'</span>';
+    html+='<span><strong style="color:var(--text3)">DNS:</strong> <select onchange="updateProjectDNS('+p.id+',this.value)" style="background:var(--bg);color:'+(dnsCol[p.dns_status]||'var(--text3)')+';border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:700;padding:2px 4px;font-family:var(--font);cursor:pointer">';
+    ['not_started','pending','configured','propagating','live','failed'].forEach(function(s){
+      html+='<option value="'+s+'"'+(p.dns_status===s?' selected':'')+' style="color:var(--text)">'+dnsLabel[s]+'</option>';
+    });
+    html+='</select></span>';
+    html+='<span><strong style="color:var(--text3)">SSL:</strong> <span style="color:'+(p.ssl_status==='active'?'var(--green)':'var(--accent)')+';font-weight:700">'+(p.ssl_status==='active'?'Active':'Pending')+'</span></span>';
+    if(p.onboard_token)html+='<button class="btn-call" onclick="copyOnboardLink(\''+esc(p.onboard_token)+'\')" style="font-size:9px;padding:2px 8px;margin-left:auto">\ud83d\udcce Copy Client Brief Link</button>';
+    html+='</div>';
+
+    // Framer Workflow Pipeline
+    var briefDone=!!p.client_brief_submitted_at;
+    var framerDone=!!p.framer_url;
+    var dnsLive=p.dns_status==='live';
+    var launched=p.status==='launched';
+    html+='<div style="display:flex;gap:2px;margin-bottom:10px;font-size:10px;font-weight:700">';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;border-radius:6px 0 0 6px;background:'+(briefDone?'rgba(52,211,153,.15)':'rgba(232,162,58,.1)')+';color:'+(briefDone?'var(--green)':'var(--accent)')+'">'+(briefDone?'\u2705':'\u23f3')+' Brief</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;background:'+(framerDone?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(framerDone?'var(--green)':'var(--text3)')+'">'+(framerDone?'\u2705':'\u23f3')+' Framer Build</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;background:'+(dnsLive?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(dnsLive?'var(--green)':'var(--text3)')+'">'+(dnsLive?'\u2705':'\u23f3')+' DNS Live</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;border-radius:0 6px 6px 0;background:'+(launched?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(launched?'var(--green)':'var(--text3)')+'">'+(launched?'\ud83d\ude80':'\u23f3')+' Launched</span>';
+    html+='</div>';
 
     // Meta info
     html+='<div class="proj-meta">';
     if(p.estimated_launch)html+='<span>\ud83d\udcc5 Est. Launch: '+new Date(p.estimated_launch).toLocaleDateString('en-GB')+'</span>';
     if(p.launched_at)html+='<span>\ud83d\ude80 Launched: '+new Date(p.launched_at).toLocaleDateString('en-GB')+'</span>';
     html+='<span>\ud83d\udcc6 Started: '+new Date(p.started_at||p.created_at).toLocaleDateString('en-GB')+'</span>';
+    if(p.client_brief_submitted_at)html+='<span style="color:var(--green)">\u2705 Brief received '+new Date(p.client_brief_submitted_at).toLocaleDateString('en-GB')+'</span>';
+    else html+='<span style="color:var(--accent)">\u23f3 Awaiting client brief</span>';
     html+='</div>';
 
     // Client brief (if exists)
-    if(p.client_brief){
+    if(p.brief_data){
+      var b=typeof p.brief_data==='string'?JSON.parse(p.brief_data):p.brief_data;
+      html+='<details style="margin-top:10px"><summary style="font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 0">View Client Brief (structured)</summary>';
+      html+='<div class="proj-brief" style="display:grid;grid-template-columns:120px 1fr;gap:6px 12px;white-space:normal">';
+      if(b.industry)html+='<strong>Industry:</strong><span>'+esc(b.industry)+'</span>';
+      if(b.description)html+='<strong>About:</strong><span>'+esc(b.description)+'</span>';
+      if(b.services)html+='<strong>Services:</strong><span>'+esc(b.services)+'</span>';
+      if(b.pages)html+='<strong>Pages:</strong><span>'+esc(b.pages.join(', '))+'</span>';
+      if(b.goal)html+='<strong>Goal:</strong><span>'+esc(b.goal)+'</span>';
+      if(b.audience)html+='<strong>Audience:</strong><span>'+esc(b.audience)+'</span>';
+      if(b.booking_system)html+='<strong>Booking:</strong><span>'+esc(b.booking_system)+'</span>';
+      if(b.style)html+='<strong>Style:</strong><span>'+esc(b.style)+'</span>';
+      if(b.colors)html+='<strong>Colours:</strong><span><span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:'+esc(b.colors.primary)+';vertical-align:middle"></span> '+esc(b.colors.primary)+' <span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:'+esc(b.colors.secondary)+';vertical-align:middle;margin-left:6px"></span> '+esc(b.colors.secondary)+'</span>';
+      if(b.has_logo)html+='<strong>Logo:</strong><span>'+esc(b.has_logo)+'</span>';
+      if(b.features)html+='<strong>Features:</strong><span>'+esc(b.features)+'</span>';
+      if(b.inspiration)html+='<strong>Inspo sites:</strong><span>'+esc(b.inspiration)+'</span>';
+      if(b.notes)html+='<strong>Notes:</strong><span>'+esc(b.notes)+'</span>';
+      html+='</div></details>';
+    } else if(p.client_brief){
       html+='<details style="margin-top:10px"><summary style="font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 0">View Client Brief</summary>';
       html+='<div class="proj-brief">'+esc(p.client_brief)+'</div>';
       html+='</details>';
+    }
+
+    // Framer Build Sheet button (only if brief exists)
+    if(p.brief_data||p.client_brief){
+      html+='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
+      html+='<button class="btn-call" onclick="generateFramerBrief('+p.id+')" style="font-size:11px;padding:8px 16px;background:rgba(167,139,250,.1);color:var(--purple);border-color:rgba(167,139,250,.2);font-weight:700">&#x1F680; Copy Framer AI Prompt</button>';
+      if(!p.framer_url)html+='<button class="btn-call" onclick="setProjectField('+p.id+',\'framer_url\',\'Paste the Framer preview URL after building:\')" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.08);color:var(--green);border-color:rgba(52,211,153,.15);font-weight:700">&#x2705; Add Framer Preview URL</button>';
+      html+='</div>';
     }
 
     // Notes
@@ -1045,6 +1121,126 @@ function renderProjects(projects){
     html+='</div>';
   });
   document.getElementById('projectsList').innerHTML=html;
+}
+
+// ── PROJECT MANAGEMENT HELPERS ──
+
+function showNewProjectForm(){
+  document.getElementById('newProjectForm').style.display='block';
+  document.getElementById('np_name').focus();
+}
+
+function createNewProject(){
+  var name=document.getElementById('np_name').value.trim();
+  if(!name){showToast('Business name is required','red');return}
+  var pkg=document.getElementById('np_package').value;
+  var oldUrl=document.getElementById('np_old_url').value.trim();
+  var domain=document.getElementById('np_domain').value.trim();
+  // Generate onboard token
+  var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
+  var launchDays=pkg==='Starter'?5:pkg==='Growth'?7:10;
+  var est=new Date();est.setDate(est.getDate()+launchDays);
+
+  var body={
+    business_name:name,
+    package:pkg,
+    status:'discovery',
+    onboard_token:token,
+    dns_status:'not_started',
+    ssl_status:'pending',
+    started_at:new Date().toISOString(),
+    estimated_launch:est.toISOString(),
+    milestones:JSON.stringify([
+      {name:'Discovery Call',status:'active'},
+      {name:'Client Brief Submitted',status:'pending'},
+      {name:'Design Mockup',status:'pending'},
+      {name:'Development',status:'pending'},
+      {name:'Client Review',status:'pending'},
+      {name:'Revisions (Round 1)',status:'pending'},
+      {name:'Revisions (Round 2)',status:'pending'},
+      {name:'Launch',status:'pending'},
+      {name:'Maintenance',status:'pending'}
+    ])
+  };
+  if(oldUrl)body.old_website_url=oldUrl;
+  if(domain)body.custom_domain=domain;
+
+  fetch(SB+'/projects',{method:'POST',headers:H,body:JSON.stringify(body)}).then(function(r){
+    if(r.ok){
+      showToast('Project created! Onboard link ready to send to client.','green');
+      document.getElementById('newProjectForm').style.display='none';
+      document.getElementById('np_name').value='';
+      document.getElementById('np_old_url').value='';
+      document.getElementById('np_domain').value='';
+      loadData();
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_created',description:'New project: '+name+' ('+pkg+')',target:'projects',result:'success',details:{business_name:name,package:pkg}})});
+    } else {showToast('Failed to create project','red')}
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function setProjectField(id,field,promptMsg){
+  var val=prompt(promptMsg);
+  if(val===null||!val.trim())return;
+  // Validate Framer URLs
+  if(field==='framer_url'){
+    var v=val.trim();
+    if(v.indexOf('.')===-1){showToast('Enter a valid URL (e.g. site-name.framer.website)','red');return}
+    if(v.indexOf('http')!==0)v='https://'+v;
+    val=v;
+  }
+  var patch={};patch[field]=val.trim();
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(patch)
+  }).then(function(r){
+    if(r.ok){
+      showToast('Updated '+field.replace(/_/g,' '),'green');
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_update',description:'Set '+field+' = '+val.trim()+' for project #'+id,target:'projects',result:'success',details:{project_id:id,field:field,value:val.trim()}})});
+      loadData();
+    } else {
+      showToast('Failed to update — try again','red');
+    }
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function updateProjectDNS(id,newStatus){
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({dns_status:newStatus})
+  }).then(function(r){
+    if(r.ok){
+      showToast('DNS status \u2192 '+newStatus.replace(/_/g,' '),'green');
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'dns_update',description:'DNS status changed to '+newStatus+' for project #'+id,target:'projects',result:'success',details:{project_id:id,dns_status:newStatus}})});
+      if(newStatus==='live'){
+        // When DNS goes live, update SSL to active too
+        fetch(SB+'/projects?id=eq.'+id,{method:'PATCH',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({ssl_status:'active'})});
+      }
+    } else {
+      showToast('Failed to update DNS status','red');
+    }
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function copyOnboardLink(token){
+  var url='https://www.solisdigital.co.uk/onboard.html?token='+encodeURIComponent(token);
+  navigator.clipboard.writeText(url).then(function(){
+    showToast('Client brief link copied to clipboard','green');
+  }).catch(function(){
+    prompt('Copy this link:',url);
+  });
+}
+
+function updateProjectStatus(id,newStatus){
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({status:newStatus})
+  }).then(function(r){
+    if(r.ok){showToast('Project status \u2192 '+newStatus,'green');loadData()}
+    else showToast('Failed to update','red');
+  }).catch(function(){showToast('Network error','red')});
 }
 
 // ── AI ADMIN REQUEST SYSTEM ──
@@ -1084,7 +1280,7 @@ function submitRequest(){
 }
 
 document.getElementById('adminInput').addEventListener('keydown',function(e){
-  if(e.key==='Enter'){e.preventDefault();submitRequest()}
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitRequest()}
 });
 
 function filterRequests(status,btn){
@@ -1100,37 +1296,243 @@ function updateRequest(id,newStatus,btn,notes){
   if(newStatus==='completed')patch.completed_at=new Date().toISOString();
   if(notes)patch.execution_notes=notes;
 
+  // Instantly update local state for snappy UI
+  var req=allRequests.find(function(x){return x.id===id});
+  var reqText=req?req.request_text.substring(0,60):'#'+id;
+  if(req){
+    req.status=newStatus;
+    req.reviewed_at=patch.reviewed_at;
+    if(patch.completed_at)req.completed_at=patch.completed_at;
+    if(notes)req.execution_notes=notes;
+    renderRequests(allRequests);
+  }
+
   fetch(SB+'/admin_requests?id=eq.'+id,{
     method:'PATCH',
     headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
     body:JSON.stringify(patch)
   }).then(function(r){
     if(r.ok){
-      var req=allRequests.find(function(x){return x.id===id});
-      var reqText=req?req.request_text.substring(0,60):'#'+id;
       var msgs={
-        'in_progress':'Approved \u2192 now In Progress. Go make the change, then come back and mark it Complete.',
-        'completed':'Marked complete. Change is done and verified.',
-        'rejected':'Rejected and archived.'
+        'in_progress':'\u2705 APPROVED & IN PROGRESS — Go make the change in Framer or code now. When done, click "Mark Done" on this request and describe what you changed.',
+        'completed':'\u2705 DONE — Logged in audit trail. Client-facing changes are live.',
+        'rejected':'\u274c Rejected — removed from active queue.'
       };
       fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'request_'+newStatus,description:'Request '+newStatus+': '+reqText,target:'admin_requests',result:'success',details:{request_id:id,notes:notes||''}})});
       showToast(msgs[newStatus]||'Updated',newStatus==='rejected'?'red':'green');
-      loadRequests();
     } else {
-      showToast('Failed to update — please try again','red');
-      if(btn){btn.disabled=false;}
+      showToast('Failed to save — reverting','red');
+      loadRequests();
     }
   }).catch(function(){
-    showToast('Network error — check connection','red');
-    if(btn){btn.disabled=false;}
+    showToast('Network error — reverting','red');
+    loadRequests();
   });
 }
 
 function completeRequest(id,btn){
-  var notes=prompt('What was done? (e.g. "Updated hero text in Framer and published", "Fixed mobile nav CSS")');
+  var notes=prompt('Describe what was done (e.g. "Updated hero text in Framer and published", "Fixed mobile nav CSS"):');
   if(notes===null)return;
-  if(!notes.trim()){showToast('Please describe what was changed so it\u2019s tracked','red');return;}
+  if(!notes.trim()){showToast('Please describe what was changed — this gets logged in the audit trail','red');return;}
   updateRequest(id,'completed',btn,notes.trim());
+}
+
+function approveRequest(id,btn){
+  // Visual pulse on button
+  if(btn){btn.textContent='Approving...';btn.style.background='rgba(52,211,153,.3)';}
+  updateRequest(id,'in_progress',btn);
+  // Flash the whole request card green briefly
+  setTimeout(function(){
+    var cards=document.querySelectorAll('#requestsList > div');
+    cards.forEach(function(c){
+      if(c.innerHTML.indexOf('id='+id+',')!==-1||c.innerHTML.indexOf('('+id+',')!==-1){
+        c.style.transition='background .3s';
+        c.style.background='rgba(52,211,153,.08)';
+        setTimeout(function(){c.style.background=''},1500);
+      }
+    });
+  },400);
+}
+
+function generateFramerBrief(projectId){
+  fetch(SB+'/projects?id=eq.'+projectId+'&select=*',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data.length){showToast('Project not found','red');return}
+    var proj=data[0];
+    var b=proj.brief_data;
+    if(!b&&!proj.client_brief){showToast('No client brief submitted yet — send client the brief link first','red');return}
+    if(!b){
+      // Fallback: use client_brief text directly as the prompt
+      var fallbackPrompt='Build a professional website for "'+proj.business_name+'".\n\nHere is the client brief:\n\n'+proj.client_brief+'\n\nREQUIREMENTS:\n- Mobile-first responsive design\n- Fast loading (optimised images, minimal scripts)\n- SEO-friendly (proper headings, meta tags, schema markup)\n- Accessible (WCAG 2.1 AA compliant)\n- Include a sticky header with logo and navigation\n- Footer with contact info, social links, and legal pages\n';
+      navigator.clipboard.writeText(fallbackPrompt).then(function(){
+        showToast('Framer AI prompt copied! (from text brief) Paste it into Framer to start building.','green');
+      }).catch(function(){showPromptOverlay(fallbackPrompt)});
+      return;
+    }
+    if(typeof b==='string')b=JSON.parse(b);
+
+    // Build a Framer AI prompt — this is what you paste into Framer's AI site builder
+    var p='Build a professional website for "'+proj.business_name+'"';
+    if(b.industry)p+=', a '+b.industry+' business';
+    if(b.location)p+=' based in '+b.location;
+    p+='.\n\n';
+
+    // Design direction
+    p+='DESIGN STYLE: ';
+    if(b.style&&b.style!=='let-us-decide')p+=b.style+'. ';
+    else p+='Modern, clean, and professional. ';
+    if(b.tone)p+='Tone should be '+b.tone+'. ';
+    if(b.font_preference&&b.font_preference!=='let-us-choose')p+='Use '+b.font_preference+' fonts. ';
+    p+='\n\n';
+
+    // Colours
+    if(b.colors){
+      p+='COLOURS: Primary '+b.colors.primary+', Secondary '+b.colors.secondary;
+      if(b.colors.accent)p+=', Accent '+b.colors.accent;
+      if(b.colors.background)p+='. '+b.colors.background+' background preference';
+      p+='.\n\n';
+    }
+
+    // Pages
+    p+='PAGES TO CREATE:\n';
+    if(b.pages&&b.pages.length)p+=b.pages.map(function(pg){return'- '+pg}).join('\n')+'\n';
+    if(b.other_pages)p+='- '+b.other_pages+'\n';
+    p+='\n';
+
+    // Hero & CTA
+    p+='HOMEPAGE:\n';
+    if(b.description)p+='Hero text: "'+b.description+'"\n';
+    if(b.tagline)p+='Tagline: "'+b.tagline+'"\n';
+    if(b.usp)p+='Unique selling point: "'+b.usp+'"\n';
+    if(b.hero_headline)p+='Hero headline: "'+b.hero_headline+'"\n';
+    if(b.cta)p+='Primary CTA: "'+b.cta+'"\n';
+    if(b.cta_secondary)p+='Secondary CTA: "'+b.cta_secondary+'"\n';
+    p+='\n';
+
+    // Services
+    if(b.services){
+      p+='SERVICES (create a section or page for each):\n';
+      if(typeof b.services==='string')p+=b.services+'\n';
+      else if(Array.isArray(b.services)){
+        b.services.forEach(function(s){
+          if(typeof s==='object')p+='- '+s.name+(s.description?' — '+s.description:'')+(s.price?' ('+s.price+')':'')+(s.duration?' ['+s.duration+']':'')+'\n';
+          else p+='- '+s+'\n';
+        });
+      }
+      p+='\n';
+    }
+
+    // Contact info for the site
+    p+='CONTACT DETAILS (for footer, contact page, and schema):\n';
+    if(b.phone||b.phoneMain)p+='Phone: '+(b.phone||b.phoneMain)+'\n';
+    if(b.email||b.emailMain)p+='Email: '+(b.email||b.emailMain)+'\n';
+    if(b.address||b.locations)p+='Address: '+(b.address||(b.locations&&b.locations[0]?b.locations[0].address:''))+'\n';
+    if(b.hours){
+      p+='Opening Hours: ';
+      if(typeof b.hours==='object'){
+        var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        days.forEach(function(d){
+          if(b.hours[d]){
+            if(b.hours[d].closed)p+=d+': Closed, ';
+            else p+=d+': '+b.hours[d].open+'-'+b.hours[d].close+', ';
+          }
+        });
+      } else p+=b.hours;
+      p+='\n';
+    }
+    p+='\n';
+
+    // Functionality
+    p+='FUNCTIONALITY:\n';
+    if(b.booking_system&&b.booking_system!=='none')p+='- Booking system: '+b.booking_system+(b.appointment_types?' ('+b.appointment_types+')':'')+'\n';
+    if(b.payment&&b.payment!=='none')p+='- Payment: '+b.payment+'\n';
+    if(b.live_chat&&b.live_chat!=='none')p+='- Live chat: '+b.live_chat+'\n';
+    if(b.whatsapp_number)p+='- WhatsApp button: '+b.whatsapp_number+'\n';
+    if(b.newsletter&&b.newsletter!=='none')p+='- Newsletter signup: '+b.newsletter+'\n';
+    if(b.google_maps&&b.google_maps!=='no')p+='- Google Maps embed on contact page\n';
+    if(b.features)p+='- Other: '+b.features+'\n';
+    if(b.social_media){
+      p+='- Social media links: ';
+      if(typeof b.social_media==='object'){
+        Object.keys(b.social_media).forEach(function(k){if(b.social_media[k])p+=k+': '+b.social_media[k]+', '});
+      } else p+=b.social_media;
+      p+='\n';
+    }
+    p+='\n';
+
+    // Content
+    if(b.testimonials)p+='TESTIMONIALS:\n'+b.testimonials+'\n\n';
+    if(b.faqs){
+      p+='FAQ:\n';
+      if(Array.isArray(b.faqs)){
+        b.faqs.forEach(function(f){
+          if(typeof f==='object')p+='Q: '+f.question+'\nA: '+f.answer+'\n';
+          else p+=f+'\n';
+        });
+      } else p+=b.faqs+'\n';
+      p+='\n';
+    }
+    if(b.team_members&&Array.isArray(b.team_members)&&b.team_members.length){
+      p+='TEAM:\n';
+      b.team_members.forEach(function(m){
+        p+='- '+(m.name||'')+(m.role?' ('+m.role+')':'')+(m.bio?' — '+m.bio:'')+'\n';
+      });
+      p+='\n';
+    }
+    if(b.certifications)p+='CREDENTIALS/AWARDS: '+b.certifications+'\n\n';
+
+    // SEO
+    if(b.target_keywords||b.target_locations){
+      p+='SEO: ';
+      if(b.target_keywords)p+='Target keywords: '+b.target_keywords+'. ';
+      if(b.target_locations)p+='Target locations: '+b.target_locations+'. ';
+      p+='\n\n';
+    }
+
+    // Inspiration
+    if(b.inspiration)p+='INSPIRATION SITES:\n'+b.inspiration+'\n\n';
+    if(b.competitors)p+='COMPETITOR SITES (make ours better):\n'+b.competitors+'\n\n';
+
+    // Final instructions
+    p+='REQUIREMENTS:\n';
+    p+='- Mobile-first responsive design\n';
+    p+='- Fast loading (optimised images, minimal scripts)\n';
+    p+='- SEO-friendly (proper headings, meta tags, schema markup)\n';
+    p+='- Accessible (WCAG 2.1 AA compliant)\n';
+    p+='- Include a sticky header with logo and navigation\n';
+    p+='- Footer with contact info, social links, and legal pages\n';
+    if(b.has_logo==='no')p+='- Create a simple logo/wordmark for the business\n';
+    if(b.notes)p+='\nADDITIONAL NOTES FROM CLIENT:\n'+b.notes+'\n';
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(p).then(function(){
+      showToast('Framer AI prompt copied! Paste it into Framer to start building.','green');
+    }).catch(function(){
+      // Fallback: show in overlay
+      showPromptOverlay(p);
+    });
+  }).catch(function(){showToast('Failed to load project data','red')});
+}
+
+function showPromptOverlay(text){
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:99998;display:flex;align-items:center;justify-content:center';
+  var box=document.createElement('div');
+  box.style.cssText='background:var(--surface);border:1px solid var(--accent);border-radius:16px;width:90%;max-width:700px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden';
+  var header=document.createElement('div');
+  header.style.cssText='padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center';
+  header.innerHTML='<span style="font-weight:700;color:var(--white)">Framer AI Prompt</span><button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">&times;</button>';
+  var ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='flex:1;padding:20px;background:var(--bg);color:var(--text);border:none;font-family:var(--mono);font-size:12px;line-height:1.6;resize:none;outline:none';
+  ta.readOnly=true;
+  var footer=document.createElement('div');
+  footer.style.cssText='padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end';
+  footer.innerHTML='<button class="btn btn-s" onclick="this.closest(\'div[style*=fixed]\').querySelector(\'textarea\').select();document.execCommand(\'copy\');showToast(\'Copied!\',\'green\')">Copy All</button><button class="btn btn-p" onclick="this.closest(\'div[style*=fixed]\').remove()">Done</button>';
+  box.appendChild(header);box.appendChild(ta);box.appendChild(footer);
+  overlay.appendChild(box);document.body.appendChild(overlay);
+  ta.select();
 }
 
 // Toast notification system
@@ -1204,13 +1606,27 @@ function renderRequests(requests){
 
     html+='</div>';
 
+    // Time tracking
+    if(r.status==='in_progress'&&r.reviewed_at){
+      var mins=Math.round((Date.now()-new Date(r.reviewed_at).getTime())/60000);
+      var timeText=mins<60?mins+'m ago':Math.round(mins/60)+'h '+mins%60+'m ago';
+      html+='<div style="margin-top:6px;font-size:10px;color:var(--blue)">\u23f1 Approved '+timeText+'</div>';
+    }
+    if(r.status==='completed'&&r.reviewed_at&&r.completed_at){
+      var durMins=Math.round((new Date(r.completed_at).getTime()-new Date(r.reviewed_at).getTime())/60000);
+      var durText=durMins<60?durMins+'m':Math.round(durMins/60)+'h '+durMins%60+'m';
+      html+='<div style="margin-top:6px;font-size:10px;color:var(--green)">\u2705 Completed in '+durText+'</div>';
+    }
+
+    html+='</div>';
+
     // Action buttons based on status
     html+='<div style="display:flex;gap:6px;flex-shrink:0;flex-direction:column;align-items:flex-end">';
     if(r.status==='pending'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'in_progress\',this)" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Approve</button>';
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
+      html+='<button class="btn-call" onclick="approveRequest('+r.id+',this)" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.25);font-weight:800">\u2705 Approve</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.08);color:var(--red);border-color:rgba(248,113,113,.15)">Reject</button>';
     } else if(r.status==='in_progress'){
-      html+='<button class="btn-call" onclick="completeRequest('+r.id+',this)" style="font-size:10px">Mark Done</button>';
+      html+='<button class="btn-call" onclick="completeRequest('+r.id+',this)" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.15);color:var(--green);border-color:rgba(52,211,153,.3);font-weight:800">\ud83c\udfc1 Mark Done</button>';
     }
     html+='</div>';
     html+='</div>';
