@@ -977,11 +977,18 @@ function renderProjects(projects){
     });
     html+='</div>';
 
+    // Before vs After website links
+    if(p.old_website_url||p.new_website_url){
+      html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">';
+      if(p.old_website_url)html+='<a href="'+esc(p.old_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(248,113,113,.08);color:var(--red);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(248,113,113,.15)">Old Site \u2192</a>';
+      if(p.new_website_url)html+='<a href="'+esc(p.new_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.08);color:var(--green);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(52,211,153,.15)">New Site \u2192</a>';
+      html+='</div>';
+    }
+
     // Meta info
     html+='<div class="proj-meta">';
     if(p.estimated_launch)html+='<span>\ud83d\udcc5 Est. Launch: '+new Date(p.estimated_launch).toLocaleDateString('en-GB')+'</span>';
     if(p.launched_at)html+='<span>\ud83d\ude80 Launched: '+new Date(p.launched_at).toLocaleDateString('en-GB')+'</span>';
-    if(p.new_website_url)html+='<span>\ud83c\udf10 <a href="'+esc(p.new_website_url)+'" target="_blank" style="color:var(--accent)">'+esc(p.new_website_url)+'</a></span>';
     html+='<span>\ud83d\udcc6 Started: '+new Date(p.started_at||p.created_at).toLocaleDateString('en-GB')+'</span>';
     html+='</div>';
 
