@@ -51,6 +51,8 @@ body.locked>*:not(#authGate){display:none!important}
 .filter-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .2s}
 .filter-chip:hover{border-color:var(--accent);color:var(--text)}
 .filter-chip.active{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+.chip-tag{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;user-select:none}
+.chip-tag.active{background:rgba(232,197,71,.15);color:var(--accent);border-color:var(--accent)}
 .filter-chip .chip-count{font-size:10px;opacity:.7;margin-left:4px}
 
 .panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:0 32px 24px}
@@ -215,6 +217,85 @@ if(sessionStorage.getItem('solis_auth')==='1'){
 <div class="quick-actions">
   <button class="btn btn-s btn-sm" onclick="exportCallListCSV()">&#128222; Export Call List CSV</button>
   <button class="btn btn-s btn-sm" onclick="exportCSV()">&#128231; Export Email List CSV</button>
+  <button class="btn btn-s btn-sm" onclick="document.getElementById('scraperConfig').style.display=document.getElementById('scraperConfig').style.display==='none'?'block':'none'">&#128270; Scraper Config</button>
+</div>
+
+<!-- Scraper Configuration Panel -->
+<div id="scraperConfig" style="display:none;padding:0 0 16px 0">
+  <div class="panel" style="border:1px solid var(--accent)">
+    <div class="panel-h">
+      <h3>&#127919; Lead Scraper — Target Configuration</h3>
+      <span class="badge" style="background:var(--accent);color:var(--bg)">Apify + Google Maps</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Target Cities</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px" id="scraperCities">
+            <span class="chip-tag active">London (All Boroughs)</span>
+            <span class="chip-tag active">Nottingham</span>
+            <span class="chip-tag active">Birmingham</span>
+            <span class="chip-tag active">Manchester</span>
+            <span class="chip-tag active">Leeds</span>
+            <span class="chip-tag active">Liverpool</span>
+            <span class="chip-tag active">Sheffield</span>
+            <span class="chip-tag active">Bristol</span>
+            <span class="chip-tag active">Leicester</span>
+            <span class="chip-tag active">Coventry</span>
+            <span class="chip-tag active">Derby</span>
+            <span class="chip-tag active">Cardiff</span>
+            <span class="chip-tag active">Newcastle</span>
+            <span class="chip-tag active">Brighton</span>
+            <span class="chip-tag active">Reading</span>
+            <span class="chip-tag active">Oxford</span>
+            <span class="chip-tag active">Cambridge</span>
+            <span class="chip-tag active">Southampton</span>
+            <span class="chip-tag active">Portsmouth</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Target Industries</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px" id="scraperIndustries">
+            <span class="chip-tag active">Dentists</span>
+            <span class="chip-tag active">Doctors / Clinics</span>
+            <span class="chip-tag active">Physio / Chiro</span>
+            <span class="chip-tag active">Vets</span>
+            <span class="chip-tag active">Estate Agents</span>
+            <span class="chip-tag active">Solicitors / Law</span>
+            <span class="chip-tag active">Accountants</span>
+            <span class="chip-tag active">Mortgage Brokers</span>
+            <span class="chip-tag active">Salons / Barbers</span>
+            <span class="chip-tag active">Beauty / Spas</span>
+            <span class="chip-tag active">Gyms / PTs</span>
+            <span class="chip-tag active">Plumbers</span>
+            <span class="chip-tag active">Electricians</span>
+            <span class="chip-tag active">Builders / Roofers</span>
+            <span class="chip-tag active">Cleaners</span>
+            <span class="chip-tag active">Restaurants</span>
+            <span class="chip-tag active">Cafés / Pubs</span>
+            <span class="chip-tag active">Takeaways / Catering</span>
+            <span class="chip-tag active">Florists</span>
+            <span class="chip-tag active">Nurseries / Tutors</span>
+            <span class="chip-tag active">Driving Schools</span>
+            <span class="chip-tag active">Photographers</span>
+            <span class="chip-tag active">Wedding Planners</span>
+            <span class="chip-tag active">Car Dealers</span>
+            <span class="chip-tag active">Travel Agents</span>
+            <span class="chip-tag active">Removals</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Google Maps Search Queries (copy into Apify)</div>
+        <textarea id="scraperQueries" readonly rows="6" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.6;resize:vertical;outline:none"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-p btn-sm" onclick="generateScraperQueries()">Generate Queries</button>
+          <button class="btn btn-s btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('scraperQueries').value);showToast('Queries copied to clipboard!','green')">Copy All</button>
+          <span style="font-size:11px;color:var(--text3);align-self:center;margin-left:auto">Paste these into Apify Google Maps Scraper &rarr; Search Terms</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Outreach Stats + Revenue Panels -->
@@ -1789,6 +1870,28 @@ function exportCallListCSV(){
 }
 
 function esc_csv(s){return(s||'').replace(/"/g,'""')}
+
+function generateScraperQueries(){
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  if(!cities.length||!industries.length){showToast('Select at least one city and one industry','red');return}
+  var queries=[];
+  industries.forEach(function(ind){
+    cities.forEach(function(city){
+      queries.push(ind+' in '+city);
+    });
+  });
+  document.getElementById('scraperQueries').value=queries.join('\n');
+  showToast(queries.length+' search queries generated! Copy and paste into Apify.','green');
+}
+
+// Toggle chip tags on click
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('chip-tag')){
+    e.target.classList.toggle('active');
+  }
+});
 
 function runBulkAudit(){
   if(!confirm('This will trigger the Make.com audit scenario for all New leads. Continue?'))return;
