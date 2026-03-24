@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Portal — Solis Digital</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+:root{--bg:#07080a;--bg2:#0c0d10;--surface:#111216;--card:#15161b;--border:#1c1d24;--border2:#2a2b35;--text:#eaeaef;--text2:#8e8fa3;--text3:#5c5d72;--accent:#e8a23a;--accentL:#f0be6a;--green:#34d399;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;--white:#fff;--font:'Segoe UI',system-ui,-apple-system,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;-webkit-font-smoothing:antialiased}
+.top-bar{text-align:center;padding:24px 0 16px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.top-bar h1{font-size:20px;font-weight:800;color:var(--white)}
+.top-bar h1 span{color:var(--accent)}
+.top-bar p{font-size:12px;color:var(--text3);margin-top:4px}
+
+/* Auth gate */
+.auth-gate{max-width:420px;margin:80px auto;padding:0 20px;text-align:center}
+.auth-gate h2{font-size:22px;font-weight:800;color:var(--white);margin-bottom:6px}
+.auth-gate p{font-size:13px;color:var(--text3);margin-bottom:24px}
+.auth-gate input{width:100%;padding:14px 18px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:15px;outline:none;text-align:center;letter-spacing:1px;margin-bottom:12px}
+.auth-gate input:focus{border-color:var(--accent)}
+.auth-gate button{width:100%;padding:14px;border-radius:10px;background:var(--accent);color:#0a0a0a;font-weight:700;font-size:14px;border:none;cursor:pointer;transition:all .2s}
+.auth-gate button:hover{background:var(--accentL)}
+.auth-gate .err{color:var(--red);font-size:12px;margin-top:10px;display:none}
+
+/* Portal content */
+.portal{display:none;max-width:800px;margin:0 auto;padding:24px 20px 80px}
+.welcome{margin-bottom:24px}
+.welcome h2{font-size:24px;font-weight:800;color:var(--white)}
+.welcome p{font-size:13px;color:var(--text2);margin-top:4px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.panel-h{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.panel-h h3{font-size:14px;font-weight:700;color:var(--white)}
+.panel-h .badge{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700}
+.panel-body{padding:16px 20px}
+
+/* Score cards */
+.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.score-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.score-card .label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+.score-card .val{font-size:32px;font-weight:900;margin-top:4px}
+.score-card .sub{font-size:11px;color:var(--text3);margin-top:2px}
+.green{color:var(--green)}.red{color:var(--red)}.accent{color:var(--accent)}.blue{color:var(--blue)}
+
+/* Milestones */
+.milestone{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.milestone:last-child{border:none}
+.milestone .dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.milestone .dot.done{background:rgba(52,211,153,.15);color:var(--green)}
+.milestone .dot.active{background:rgba(232,162,58,.15);color:var(--accent)}
+.milestone .dot.pending{background:var(--bg);color:var(--text3);border:1px solid var(--border)}
+.milestone .name{font-size:13px;font-weight:600;color:var(--white)}
+.milestone .name.dim{color:var(--text3)}
+
+/* Info rows */
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.info-row:last-child{border:none}
+.info-row .lbl{color:var(--text3)}
+.info-row .val{color:var(--white);font-weight:600}
+
+@media(max-width:600px){.scores{grid-template-columns:1fr 1fr 1fr}.scores .score-card .val{font-size:24px}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>Solis <span>Client Portal</span></h1>
+  <p>View your project status, website scores, and deliverables</p>
+</div>
+
+<!-- Auth -->
+<div class="auth-gate" id="authGate">
+  <h2>Welcome Back</h2>
+  <p>Enter your client access code to view your project</p>
+  <input type="text" id="tokenInput" placeholder="Access code" autofocus>
+  <button onclick="authenticate()">View My Project</button>
+  <div class="err" id="authErr">Invalid access code. Check the link in your email.</div>
+</div>
+
+<!-- Portal Content -->
+<div class="portal" id="portal">
+  <div class="welcome">
+    <h2 id="portalTitle">Loading...</h2>
+    <p id="portalSub"></p>
+  </div>
+
+  <!-- Website Scores -->
+  <div class="panel" id="scoresPanel" style="display:none">
+    <div class="panel-h">
+      <h3>Website Performance</h3>
+      <span class="badge" id="scoreBadge" style="background:rgba(232,162,58,.1);color:var(--accent)">Latest Audit</span>
+    </div>
+    <div class="panel-body">
+      <div class="scores">
+        <div class="score-card"><div class="label">Speed</div><div class="val" id="pSpeed">—</div><div class="sub">out of 100</div></div>
+        <div class="score-card"><div class="label">SEO</div><div class="val" id="pSeo">—</div><div class="sub">out of 100</div></div>
+        <div class="score-card"><div class="label">Mobile</div><div class="val" id="pMobile">—</div><div class="sub">out of 100</div></div>
+      </div>
+      <div id="auditSummary" style="font-size:12px;color:var(--text2);line-height:1.6;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);display:none"></div>
+    </div>
+  </div>
+
+  <!-- Project Milestones -->
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Project Milestones</h3>
+      <span class="badge" id="stageBadge" style="background:rgba(96,165,250,.1);color:var(--blue)">—</span>
+    </div>
+    <div class="panel-body" id="milestones">
+      <div style="text-align:center;padding:20px;color:var(--text3)">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Project Details -->
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Project Details</h3>
+    </div>
+    <div class="panel-body" id="projectDetails">
+      <div style="text-align:center;padding:20px;color:var(--text3)">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Preview Link -->
+  <div class="panel" id="previewPanel" style="display:none">
+    <div class="panel-h">
+      <h3>Website Preview</h3>
+      <span class="badge" style="background:rgba(52,211,153,.1);color:var(--green)">Live Preview</span>
+    </div>
+    <div class="panel-body">
+      <a id="previewLink" href="#" target="_blank" style="color:var(--accent);font-size:14px;font-weight:700;text-decoration:none">Open Preview &rarr;</a>
+      <p style="font-size:11px;color:var(--text3);margin-top:6px">This is your website preview. Review it and let us know any feedback.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:32px;font-size:11px;color:var(--text3)">
+    Powered by <a href="https://www.solisdigital.co.uk" style="color:var(--accent);text-decoration:none;font-weight:700">Solis Digital</a> &mdash; <a href="mailto:info@solisdigital.co.uk" style="color:var(--text3);text-decoration:none">info@solisdigital.co.uk</a>
+  </div>
+</div>
+
+<script>
+var SB='https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
+var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+
+// Check URL for token
+var params=new URLSearchParams(window.location.search);
+var urlToken=params.get('token');
+if(urlToken){
+  document.getElementById('tokenInput').value=urlToken;
+  authenticate();
+}
+
+function authenticate(){
+  var token=document.getElementById('tokenInput').value.trim();
+  if(!token){document.getElementById('authErr').style.display='block';return}
+
+  fetch(SB+'/projects?onboard_token=eq.'+token+'&select=*',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data||!data.length){
+      document.getElementById('authErr').style.display='block';
+      return;
+    }
+    document.getElementById('authGate').style.display='none';
+    document.getElementById('portal').style.display='block';
+    loadPortal(data[0]);
+  }).catch(function(){
+    document.getElementById('authErr').style.display='block';
+  });
+}
+
+function loadPortal(proj){
+  // Welcome
+  document.getElementById('portalTitle').textContent=proj.business_name;
+  document.getElementById('portalSub').textContent='Package: '+(proj.package_type||'Standard')+' | Started: '+new Date(proj.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+  // Stage badge
+  document.getElementById('stageBadge').textContent=proj.stage||'Discovery';
+
+  // Milestones
+  var milestones=proj.milestones||['Discovery Call','Client Brief Submitted','Design Mockup','Development','Client Review','Revisions (Round 1)','Revisions (Round 2)','Launch','Maintenance'];
+  var currentIdx=-1;
+  if(typeof milestones[0]==='object'){
+    // milestones are objects with name/status
+    var html='';
+    milestones.forEach(function(m,i){
+      var done=m.status==='done';
+      var active=m.status==='active';
+      var cls=done?'done':(active?'active':'pending');
+      var icon=done?'&#10003;':(active?'&#9679;':'');
+      var nameClass=done||active?'':'dim';
+      html+='<div class="milestone"><div class="dot '+cls+'">'+icon+'</div><div class="name '+nameClass+'">'+m.name+'</div></div>';
+    });
+    document.getElementById('milestones').innerHTML=html;
+  } else {
+    // milestones are string array — determine progress from stage
+    var stageMap={'Discovery':0,'Design':2,'In Development':3,'Client Review':4,'Revisions':5,'Launched':7,'Maintenance':8};
+    currentIdx=stageMap[proj.stage]||0;
+    var html='';
+    milestones.forEach(function(m,i){
+      var done=i<currentIdx;
+      var active=i===currentIdx;
+      var cls=done?'done':(active?'active':'pending');
+      var icon=done?'&#10003;':(active?'&#9679;':'');
+      var nameClass=done||active?'':'dim';
+      html+='<div class="milestone"><div class="dot '+cls+'">'+icon+'</div><div class="name '+nameClass+'">'+m+'</div></div>';
+    });
+    document.getElementById('milestones').innerHTML=html;
+  }
+
+  // Project details
+  var details='';
+  details+='<div class="info-row"><span class="lbl">Domain</span><span class="val">'+(proj.domain||'To be assigned')+'</span></div>';
+  details+='<div class="info-row"><span class="lbl">DNS Status</span><span class="val">'+(proj.dns_status||'Not Started')+'</span></div>';
+  details+='<div class="info-row"><span class="lbl">SSL</span><span class="val">'+(proj.ssl_status||'Pending')+'</span></div>';
+  if(proj.estimated_launch){
+    details+='<div class="info-row"><span class="lbl">Est. Launch</span><span class="val">'+new Date(proj.estimated_launch).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})+'</span></div>';
+  }
+  document.getElementById('projectDetails').innerHTML=details;
+
+  // Preview link
+  if(proj.framer_preview_url){
+    document.getElementById('previewPanel').style.display='block';
+    document.getElementById('previewLink').href=proj.framer_preview_url;
+    document.getElementById('previewLink').textContent=proj.framer_preview_url+' \u2192';
+  }
+
+  // Website scores — fetch from lead if linked
+  if(proj.business_name){
+    fetch(SB+'/leads?business_name=eq.'+encodeURIComponent(proj.business_name)+'&select=speed_score,seo_score,mobile_score,audit_summary&limit=1',{headers:H})
+    .then(function(r){return r.json()})
+    .then(function(leads){
+      if(!leads||!leads.length)return;
+      var l=leads[0];
+      if(l.speed_score||l.seo_score||l.mobile_score){
+        document.getElementById('scoresPanel').style.display='block';
+        var sp=l.speed_score||0;var se=l.seo_score||0;var mo=l.mobile_score||0;
+        document.getElementById('pSpeed').textContent=sp;
+        document.getElementById('pSpeed').className='val '+(sp>=70?'green':(sp>=40?'accent':'red'));
+        document.getElementById('pSeo').textContent=se;
+        document.getElementById('pSeo').className='val '+(se>=70?'green':(se>=40?'accent':'red'));
+        document.getElementById('pMobile').textContent=mo;
+        document.getElementById('pMobile').className='val '+(mo>=70?'green':(mo>=40?'accent':'red'));
+        if(l.audit_summary){
+          var el=document.getElementById('auditSummary');
+          el.style.display='block';
+          el.textContent=l.audit_summary;
+        }
+      }
+    });
+  }
+}
+</script>
+</body>
+</html>
