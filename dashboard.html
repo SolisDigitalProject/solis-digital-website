@@ -1948,7 +1948,8 @@ function generateScraperQueries(){
 }
 
 // ── Apify Integration ──
-var APIFY_ACTOR='compass/crawler-google-places';
+var APIFY_ACTOR='compass~crawler-google-places';
+var APIFY_PROXY='https://zqcpktpnfikmshqeqxlg.supabase.co/functions/v1/apify-proxy';
 var scraperRunId=null;
 var scraperPollTimer=null;
 
@@ -2063,7 +2064,7 @@ function startApifyBatch(token,batches,batchIdx,maxResults,scrapeContacts,allRes
     onePerQuery:false
   };
 
-  fetch('https://api.apify.com/v2/acts/'+APIFY_ACTOR+'/runs?token='+token,{
+  fetch(APIFY_PROXY+'?action=start',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify(input)
@@ -2094,7 +2095,7 @@ function startApifyBatch(token,batches,batchIdx,maxResults,scrapeContacts,allRes
 
 function pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeContacts,allResults){
   scraperPollTimer=setInterval(function(){
-    fetch('https://api.apify.com/v2/actor-runs/'+runId+'?token='+token)
+    fetch(APIFY_PROXY+'?action=status&runId='+runId)
     .then(function(r){return r.json()})
     .then(function(data){
       var status=data.data.status;
@@ -2105,7 +2106,7 @@ function pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeCo
         clearInterval(scraperPollTimer);
         scraperLog('Batch '+(batchIdx+1)+' complete! Items: '+(stats.itemCount||0));
         // Fetch results from dataset
-        fetch('https://api.apify.com/v2/datasets/'+datasetId+'/items?token='+token+'&limit=1000')
+        fetch(APIFY_PROXY+'?action=results&datasetId='+datasetId+'&limit=1000')
         .then(function(r){return r.json()})
         .then(function(items){
           scraperLog('Fetched '+items.length+' results from dataset');

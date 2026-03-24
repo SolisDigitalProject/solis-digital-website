@@ -6,8 +6,7 @@
  * Usage: node scripts/export-leads.mjs > leads-instantly.csv
  */
 
-const SB_URL = 'https://zqcpktpnfikmshqeqxlg.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
+import { SB_URL, SB_KEY, sbHeaders } from './config.mjs';
 
 function escapeCSV(val) {
   if (val == null) return '';

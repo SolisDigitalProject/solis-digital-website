@@ -18,9 +18,7 @@
  *   Low review count (<20):   +5
  */
 
-const SB_URL = 'https://zqcpktpnfikmshqeqxlg.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-const sbHeaders = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
+import { SB_URL, SB_KEY, sbHeaders } from './config.mjs';
 
 // High-value industries — businesses that benefit most from a quality website
 const HIGH_VALUE_INDUSTRIES = [

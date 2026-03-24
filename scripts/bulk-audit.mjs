@@ -11,17 +11,13 @@
  *   PAGESPEED_API_KEY  — Google PageSpeed API key (defaults to built-in)
  */
 
-const SB_URL = 'https://zqcpktpnfikmshqeqxlg.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-const PAGESPEED_KEY = process.env.PAGESPEED_API_KEY || 'AIzaSyCCd15XjzZE5aoAJ8zJjCLkkW9evdkuHj0';
+import { SB_URL, SB_KEY, PAGESPEED_KEY, sbHeaders } from './config.mjs';
 const CLAUDE_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!CLAUDE_KEY) {
   console.error('ERROR: Set ANTHROPIC_API_KEY env var.\nUsage: ANTHROPIC_API_KEY=sk-... node scripts/bulk-audit.mjs');
   process.exit(1);
 }
-
-const sbHeaders = { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' };
 
 async function fetchLeads() {
   const url = `${SB_URL}/rest/v1/leads?status=eq.New&website=not.is.null&has_website=eq.true&select=id,business_name,website,industry,location,google_rating,review_count`;
