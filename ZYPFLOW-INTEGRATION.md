@@ -11,11 +11,35 @@ Everything built into the Solis Digital platform, structured for Zypflow (Make.c
 | Supabase Project | `zqcpktpnfikmshqeqxlg` |
 | REST API | `https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1` |
 | Edge Functions | `https://zqcpktpnfikmshqeqxlg.supabase.co/functions/v1/` |
+| Instantly Campaign ID | `591dbb42-a2ba-4ade-933a-ef3466584f67` |
+| Instantly Campaign | "UK Website Speed Outreach" (3 steps, 8am-11am + 2pm-4pm) |
 | PageSpeed API Key | `AIzaSyCCd15XjzZE5aoAJ8zJjCLkkW9evdkuHj0` |
 | Google Analytics | `G-V7ZVJZKH2W` |
 | Tawk.to Widget | `69b9a21c7f0aa71c36e441e0/1jjui2gh9` |
 | Dashboard | `https://www.solisdigital.co.uk/dashboard.html` |
 | Client Portal | `https://www.solisdigital.co.uk/portal.html?token={token}` |
+
+---
+
+## Launch Checklist
+
+- [x] Supabase tables + RLS configured (13 tables)
+- [x] pg_cron auto-scraper running (hourly check)
+- [x] Edge functions deployed (apify-proxy, auto-scraper, scrape-callback)
+- [x] Instantly campaign created ("UK Website Speed Outreach")
+- [x] Instantly API v2 key created (scopes: leads, campaigns)
+- [x] Instantly open tracking enabled
+- [x] 6 email accounts warming (alex@/zain@ x 3 domains)
+- [x] instantly-sync.mjs built (auto-push leads with merge tags)
+- [x] instantly-webhook.mjs built (track opens/replies/bounces)
+- [x] All automation scripts ready (10 scripts)
+- [ ] Upgrade Apify to Starter ($49/mo) — scraper blocked at $5 limit
+- [ ] Email warmup complete (14 days, need 90%+ warmup score)
+- [ ] Create 6 Zypflow/Make.com scenarios (see Scenario Order table)
+- [ ] Add Steps 4+5 to Instantly campaign (nudge + breakup emails)
+- [ ] Set up Instantly webhook in Zypflow for event tracking
+- [ ] First test run: push 5 leads, verify emails render correctly
+- [ ] Activate Instantly campaign (only after warmup complete)
 
 ---
 
