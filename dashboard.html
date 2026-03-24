@@ -1033,6 +1033,7 @@ function submitRequest(){
   }).then(function(r){
     if(r.ok){
       input.value='';
+      showToast('Request submitted — awaiting review','green');
       loadRequests();
       // Log the action
       fetch(SB+'/admin_actions',{
@@ -1040,23 +1041,53 @@ function submitRequest(){
         headers:H,
         body:JSON.stringify({action_type:'admin_request',description:'New request: '+text.substring(0,80),target:'admin_requests',result:'success',details:{priority:priority}})
       });
+    } else {
+      showToast('Failed to submit request','red');
     }
-  });
+  }).catch(function(){showToast('Network error — check connection','red')});
 }
 
 document.getElementById('adminInput').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();submitRequest()}
 });
 
-function updateRequest(id,newStatus){
+function updateRequest(id,newStatus,btn){
+  if(btn){btn.disabled=true;btn.textContent='Saving...';}
   fetch(SB+'/admin_requests?id=eq.'+id,{
     method:'PATCH',
     headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
     body:JSON.stringify({status:newStatus,reviewed_at:new Date().toISOString()})
   }).then(function(r){
-    if(r.ok){loadRequests()}
+    if(r.ok){
+      // Log the action
+      var req=allRequests.find(function(x){return x.id===id});
+      var desc='Request '+(newStatus==='approved'?'approved':newStatus==='rejected'?'rejected':'marked complete')+': '+(req?req.request_text.substring(0,60):'#'+id);
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'request_'+newStatus,description:desc,target:'admin_requests',result:'success',details:{request_id:id}})});
+      showToast(newStatus==='approved'?'Request approved — ready for action':newStatus==='rejected'?'Request rejected':'Request marked as completed',newStatus==='rejected'?'red':'green');
+      loadRequests();
+    } else {
+      showToast('Failed to update — please try again','red');
+      if(btn){btn.disabled=false;btn.textContent=newStatus==='approved'?'Approve':newStatus==='rejected'?'Reject':'Mark Done';}
+    }
+  }).catch(function(){
+    showToast('Network error — check connection','red');
+    if(btn){btn.disabled=false;btn.textContent=newStatus==='approved'?'Approve':newStatus==='rejected'?'Reject':'Mark Done';}
   });
 }
+
+// Toast notification system
+function showToast(msg,color){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;padding:14px 24px;border-radius:10px;font-size:13px;font-weight:700;font-family:var(--font);z-index:99999;animation:toastIn .3s ease;box-shadow:0 8px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:8px;max-width:400px';
+  t.style.background=color==='red'?'rgba(248,113,113,.15)':'rgba(52,211,153,.15)';
+  t.style.color=color==='red'?'var(--red)':'var(--green)';
+  t.style.border='1px solid '+(color==='red'?'rgba(248,113,113,.25)':'rgba(52,211,153,.25)');
+  t.innerHTML=(color==='red'?'&#x274c;':'&#x2705;')+' '+msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.style.animation='toastOut .3s ease forwards';setTimeout(function(){t.remove()},300)},3000);
+}
+// Toast animations
+(function(){var s=document.createElement('style');s.textContent='@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(20px)}}';document.head.appendChild(s)})();
 
 function renderRequests(requests){
   var pending=requests.filter(function(r){return r.status==='pending'});
@@ -1088,10 +1119,10 @@ function renderRequests(requests){
     html+='</div>';
     html+='<div style="display:flex;gap:6px;flex-shrink:0">';
     if(r.status==='pending'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'approved\')" style="font-size:10px">Approve</button>';
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\')" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'approved\',this)" style="font-size:10px">Approve</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
     } else if(r.status==='approved'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'completed\')" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Mark Done</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'completed\',this)" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Mark Done</button>';
     }
     html+='</div>';
     html+='</div>';
