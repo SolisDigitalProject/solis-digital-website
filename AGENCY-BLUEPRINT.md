@@ -34,13 +34,13 @@
 | **Type** | AI-Powered Marketing Agency |
 | **Co-Founders** | Alex (Co-Founder & Strategy), Zain (Co-Founder & Operations) |
 | **Location** | London, UK (serves all of the UK remotely) |
-| **Target Markets** | London, Nottingham (expanding) |
+| **Target Markets** | London (all boroughs), Nottingham, Birmingham, Manchester, Leeds, Liverpool, Sheffield, Bristol, Leicester, Coventry, Derby, Cardiff, Newcastle, Brighton, Reading, Oxford, Cambridge, Southampton, Portsmouth |
 | **Website** | https://www.solisdigital.co.uk |
 | **Email** | info@solisdigital.co.uk |
 | **Calendly** | https://calendly.com/solisdigital-info/solis-digital-free-strategy-call |
 | **Core Services** | Web Design, SEO, Paid Ads, AI Automation & Chatbots, Content & Copywriting, Hosting & Maintenance |
 | **Value Proposition** | AI-powered delivery at a fraction of the cost and time of traditional agencies. Websites in 5-7 days, not 8-12 weeks. |
-| **Target Industries** | Dental practices, estate agents, trades (plumbers, electricians), gyms, restaurants, salons, solicitors, accountants |
+| **Target Industries** | Healthcare (dental, doctors, physio, vets), Professional services (estate agents, solicitors, accountants, mortgage brokers), Beauty & wellness (salons, barbers, spas, gyms, PTs), Trades (plumbers, electricians, builders, roofers, cleaners), Food & hospitality (restaurants, cafés, pubs, takeaways), Retail (florists, jewellers, boutiques), Education (nurseries, tutors, driving schools), Events (photographers, wedding planners, funeral directors) |
 
 ### Positioning Statement
 
@@ -286,8 +286,8 @@ This is the complete flow from finding a lead to closing a client.
 
 ### Stage 1: Lead Scraping (Apify)
 - Use Apify actors to scrape Google Maps and business directories
-- Target industries: dental clinics, trades, restaurants, gyms, estate agents, salons, solicitors
-- Target locations: London, Nottingham (expanding)
+- Target industries: dental clinics, doctors, physio, vets, estate agents, letting agents, solicitors, accountants, financial advisers, mortgage brokers, salons, barbers, beauty, spas, gyms, personal trainers, plumbers, electricians, builders, roofers, landscapers, cleaners, locksmiths, restaurants, cafés, pubs, takeaways, caterers, florists, jewellers, nurseries, tutors, driving schools, photographers, wedding planners, funeral directors, car dealers, travel agents, removal companies
+- Target locations: London (all boroughs inc. Croydon, Bromley, Peckham, Camberwell, Lewisham, Greenwich), Nottingham, Birmingham, Manchester, Leeds, Liverpool, Sheffield, Bristol, Leicester, Coventry, Derby, Cardiff, Newcastle, Brighton, Reading, Oxford, Cambridge, Southampton, Portsmouth
 - Data collected: business_name, website, phone, address, industry
 
 ### Stage 2: Email Finding (Hunter.io)

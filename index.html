@@ -220,7 +220,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;
 .badges{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:20px}
 .badge-item{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2)}
 .badge-item .badge-icon{font-size:16px}
-.badge-stars{color:var(--accent);letter-spacing:1px}
+
 
 /* INSTANT AUDIT */
 .audit-preview{display:none;margin-top:24px;padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-align:left}
@@ -728,7 +728,7 @@ function runInstantScan(url){
     animateBar('barSeo','valSeo',seo);
     animateBar('barMobile','valMobile',mobile);
   }).catch(function(err){
-    console.error('PageSpeed scan error:',err);
+    // Scan failed — show error state
     document.getElementById('scanLoading').style.display='none';
     document.getElementById('valSpeed').textContent='Error';
     document.getElementById('valSeo').textContent='Error';
@@ -776,9 +776,8 @@ function submitAudit(){
       throw new Error('Server error');
     }
   }).catch(function(){
-    msg.className='form-msg success';
-    msg.textContent='Thanks! Your audit request has been received. We\'ll be in touch within 24 hours.';
-    document.getElementById('auditEmail').value='';
+    msg.className='form-msg error';
+    msg.textContent='Something went wrong. Please try again or email us at hello@solisdigital.co.uk';
   }).finally(function(){
     btn.textContent='Send Me the Full Report \u2192';
     btn.disabled=false;

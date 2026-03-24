@@ -51,6 +51,8 @@ body.locked>*:not(#authGate){display:none!important}
 .filter-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .2s}
 .filter-chip:hover{border-color:var(--accent);color:var(--text)}
 .filter-chip.active{background:var(--accent);color:#0a0a0a;border-color:var(--accent)}
+.chip-tag{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;user-select:none}
+.chip-tag.active{background:rgba(232,197,71,.15);color:var(--accent);border-color:var(--accent)}
 .filter-chip .chip-count{font-size:10px;opacity:.7;margin-left:4px}
 
 .panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:0 32px 24px}
@@ -199,6 +201,7 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="top-r">
     <button class="btn btn-d" onclick="runBulkAudit()">Run Bulk Audit</button>
     <button class="btn btn-p" onclick="loadData()">Refresh</button>
+    <button class="btn btn-sm" id="btnGoLive" onclick="goLive()" style="background:linear-gradient(135deg,var(--green),#10b981);color:#0a0a0a;font-weight:800;padding:10px 24px;font-size:13px;letter-spacing:.5px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(52,211,153,.25)">&#9889; GO LIVE</button>
   </div>
 </div>
 
@@ -215,6 +218,145 @@ if(sessionStorage.getItem('solis_auth')==='1'){
 <div class="quick-actions">
   <button class="btn btn-s btn-sm" onclick="exportCallListCSV()">&#128222; Export Call List CSV</button>
   <button class="btn btn-s btn-sm" onclick="exportCSV()">&#128231; Export Email List CSV</button>
+  <button class="btn btn-s btn-sm" onclick="document.getElementById('scraperConfig').style.display=document.getElementById('scraperConfig').style.display==='none'?'block':'none'">&#128270; Scraper Config</button>
+</div>
+
+<!-- Scraper Configuration Panel -->
+<div id="scraperConfig" style="display:none;padding:0 0 16px 0">
+  <div class="panel" style="border:1px solid var(--accent)">
+    <div class="panel-h">
+      <h3>&#127919; Lead Scraper — Target Configuration</h3>
+      <span class="badge" style="background:var(--accent);color:var(--bg)">Apify + Google Maps</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Target Cities</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px" id="scraperCities">
+            <span class="chip-tag active">London (All Boroughs)</span>
+            <span class="chip-tag active">Nottingham</span>
+            <span class="chip-tag active">Birmingham</span>
+            <span class="chip-tag active">Manchester</span>
+            <span class="chip-tag active">Leeds</span>
+            <span class="chip-tag active">Liverpool</span>
+            <span class="chip-tag active">Sheffield</span>
+            <span class="chip-tag active">Bristol</span>
+            <span class="chip-tag active">Leicester</span>
+            <span class="chip-tag active">Coventry</span>
+            <span class="chip-tag active">Derby</span>
+            <span class="chip-tag active">Cardiff</span>
+            <span class="chip-tag active">Newcastle</span>
+            <span class="chip-tag active">Brighton</span>
+            <span class="chip-tag active">Reading</span>
+            <span class="chip-tag active">Oxford</span>
+            <span class="chip-tag active">Cambridge</span>
+            <span class="chip-tag active">Southampton</span>
+            <span class="chip-tag active">Portsmouth</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Target Industries</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px" id="scraperIndustries">
+            <span class="chip-tag active">Dentists</span>
+            <span class="chip-tag active">Doctors / Clinics</span>
+            <span class="chip-tag active">Physio / Chiro</span>
+            <span class="chip-tag active">Vets</span>
+            <span class="chip-tag active">Estate Agents</span>
+            <span class="chip-tag active">Solicitors / Law</span>
+            <span class="chip-tag active">Accountants</span>
+            <span class="chip-tag active">Mortgage Brokers</span>
+            <span class="chip-tag active">Salons / Barbers</span>
+            <span class="chip-tag active">Beauty / Spas</span>
+            <span class="chip-tag active">Gyms / PTs</span>
+            <span class="chip-tag active">Plumbers</span>
+            <span class="chip-tag active">Electricians</span>
+            <span class="chip-tag active">Builders / Roofers</span>
+            <span class="chip-tag active">Cleaners</span>
+            <span class="chip-tag active">Restaurants</span>
+            <span class="chip-tag active">Cafés / Pubs</span>
+            <span class="chip-tag active">Takeaways / Catering</span>
+            <span class="chip-tag active">Florists</span>
+            <span class="chip-tag active">Nurseries / Tutors</span>
+            <span class="chip-tag active">Driving Schools</span>
+            <span class="chip-tag active">Photographers</span>
+            <span class="chip-tag active">Wedding Planners</span>
+            <span class="chip-tag active">Car Dealers</span>
+            <span class="chip-tag active">Travel Agents</span>
+            <span class="chip-tag active">Removals</span>
+          </div>
+        </div>
+      </div>
+      <!-- Apify API Connection -->
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Apify API Connection</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+          <input type="password" id="apifyToken" placeholder="Enter Apify API token" style="flex:1;padding:8px 12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:6px;font-family:var(--mono);font-size:12px;outline:none" value="">
+          <button class="btn btn-s btn-sm" onclick="saveApifyToken()">Save Token</button>
+          <div id="apifyTokenStatus" style="font-size:11px;color:var(--text3)"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px">
+            Max results per query: <input type="number" id="apifyMaxResults" value="20" min="1" max="100" style="width:60px;padding:4px 8px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;font-size:12px;outline:none">
+          </label>
+          <label style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-left:12px">
+            <input type="checkbox" id="apifyScrapeContacts" checked> Extract emails
+          </label>
+        </div>
+      </div>
+
+      <!-- Generated Queries -->
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Google Maps Search Queries</div>
+        <textarea id="scraperQueries" readonly rows="4" style="width:100%;padding:12px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.6;resize:vertical;outline:none"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-p btn-sm" onclick="generateScraperQueries()">Generate Queries</button>
+          <button class="btn btn-s btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('scraperQueries').value);showToast('Queries copied to clipboard!','green')">Copy All</button>
+          <button class="btn btn-d btn-sm" id="btnRunScraper" onclick="runApifyScraper()" style="margin-left:auto">&#9654; Run Scraper Now</button>
+        </div>
+      </div>
+
+      <!-- Scraper Run Status -->
+      <div id="scraperStatus" style="display:none;margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-weight:700;color:var(--white)" id="scraperStatusTitle">Scraper Running...</span>
+          <span style="font-size:11px;color:var(--text3)" id="scraperStatusTime"></span>
+        </div>
+        <div style="width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:8px">
+          <div id="scraperProgressBar" style="width:0%;height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2)" id="scraperStatusMsg">Starting actor run...</div>
+        <div id="scraperRunLog" style="margin-top:8px;max-height:120px;overflow-y:auto;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8"></div>
+      </div>
+
+      <!-- 24/7 Auto-Scrape Toggle -->
+      <div style="margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--white)">24/7 Automated Scraping</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Runs automatically every 24 hours via Supabase Edge Function</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px" id="autoScrapeLastRun"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <select id="autoScrapeInterval" style="padding:4px 8px;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:4px;font-size:11px;outline:none">
+            <option value="6">Every 6 hours</option>
+            <option value="12">Every 12 hours</option>
+            <option value="24" selected>Every 24 hours</option>
+            <option value="48">Every 48 hours</option>
+            <option value="168">Weekly</option>
+          </select>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="autoScrapeEnabled" onchange="toggleAutoScrape()">
+            <span style="font-size:12px;font-weight:700;color:var(--accent)" id="autoScrapeLabel">OFF</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Recent Scraper Runs -->
+      <div style="margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:8px">Recent Scraper Runs</div>
+        <div id="scraperRunHistory" style="font-size:11px;color:var(--text3)">Loading...</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Outreach Stats + Revenue Panels -->
@@ -251,7 +393,29 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="panel">
     <div class="panel-h">
       <h3>Client Website Delivery Tracker</h3>
-      <span class="badge" id="projectCount">0 projects</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-p btn-sm" onclick="showNewProjectForm()">+ New Project</button>
+        <span class="badge" id="projectCount">0 projects</span>
+      </div>
+    </div>
+    <div id="newProjectForm" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Create New Client Project</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="np_name" placeholder="Business name *" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <select id="np_package" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);cursor:pointer">
+          <option value="Starter">Starter</option>
+          <option value="Growth" selected>Growth</option>
+          <option value="Premium">Premium</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="np_old_url" placeholder="Old website URL (optional)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="np_domain" placeholder="Client domain (e.g. example.co.uk)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-p btn-sm" onclick="createNewProject()">Create Project</button>
+        <button class="btn btn-s btn-sm" onclick="document.getElementById('newProjectForm').style.display='none'">Cancel</button>
+      </div>
     </div>
     <div id="projectsList"><div class="loading-s">Loading projects...</div></div>
   </div>
@@ -262,7 +426,42 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="panel">
     <div class="panel-h">
       <h3>Top Leads by Score</h3>
-      <span class="badge" id="leadCount">0 leads</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-p btn-sm" onclick="showAddLeadForm()">+ Add Lead</button>
+        <span class="badge" id="leadCount">0 leads</span>
+      </div>
+    </div>
+    <div id="addLeadForm" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px">Manually Add Lead</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_name" placeholder="Business name *" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="al_industry" placeholder="Industry (e.g. Salon, Restaurant)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_location" placeholder="Location / address" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="text" id="al_website" placeholder="Current website URL (optional)" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <input type="text" id="al_phone" placeholder="Phone number" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+        <input type="email" id="al_email" placeholder="Email address" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <select id="al_source" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);cursor:pointer">
+          <option value="direct_contact">Direct Contact</option>
+          <option value="referral">Referral</option>
+          <option value="walk_in">Walk-in / In Person</option>
+          <option value="social_media">Social Media</option>
+          <option value="cold_outreach">Cold Outreach</option>
+          <option value="website_inquiry">Website Inquiry</option>
+          <option value="other">Other</option>
+        </select>
+        <textarea id="al_notes" placeholder="Notes (e.g. how they found us, what they need)" rows="1" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none;resize:vertical"></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-p btn-sm" onclick="createManualLead()">Add Lead</button>
+        <button class="btn btn-s btn-sm" onclick="document.getElementById('addLeadForm').style.display='none'">Cancel</button>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3);margin-left:auto"><input type="checkbox" id="al_create_project"> Also create project &amp; send brief link</label>
+      </div>
     </div>
     <div class="filter-bar" id="filterBar">
       <button class="filter-chip active" data-filter="All" onclick="filterLeads('All',this)">All</button>
@@ -401,8 +600,16 @@ if(sessionStorage.getItem('solis_auth')==='1'){
         <span style="color:var(--text3);padding:4px 0">&rarr;</span>
         <span style="padding:4px 10px;border-radius:4px;background:rgba(52,211,153,.1);color:var(--green)">4. Complete &amp; Verified</span>
       </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <button onclick="document.getElementById('adminInput').value='Update pricing on website to ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Update pricing</button>
+        <button onclick="document.getElementById('adminInput').value='Add new testimonial: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Add testimonial</button>
+        <button onclick="document.getElementById('adminInput').value='Fix mobile layout on ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Fix mobile</button>
+        <button onclick="document.getElementById('adminInput').value='Update hero text to: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Change hero text</button>
+        <button onclick="document.getElementById('adminInput').value='Add new service: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">Add service</button>
+        <button onclick="document.getElementById('adminInput').value='SEO improvement: ';document.getElementById('adminInput').focus()" style="padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--font)">SEO fix</button>
+      </div>
       <div style="display:flex;gap:10px;margin-bottom:16px">
-        <input type="text" id="adminInput" placeholder="What needs changing? (e.g. 'Update pricing to £1,297', 'Add testimonial section', 'Fix mobile nav')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <textarea id="adminInput" rows="2" placeholder="What needs changing? (e.g. 'Update pricing to £1,297', 'Add testimonial section to client site', 'Fix mobile nav on homepage')" style="flex:1;padding:12px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--white);font-size:13px;font-family:var(--font);outline:none;resize:vertical;min-height:44px" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
         <select id="adminPriority" style="padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;font-family:var(--font);cursor:pointer">
           <option value="low">Low</option>
           <option value="medium" selected>Medium</option>
@@ -991,7 +1198,11 @@ function renderProjects(projects){
     html+='<div><span class="proj-name">'+esc(p.business_name)+'</span></div>';
     html+='<div style="display:flex;gap:8px;align-items:center">';
     html+='<span class="proj-pkg">'+esc(p.package||'—')+'</span>';
-    html+='<span class="pill '+(p.status==='launched'?'pill-interested':'pill-callback')+'">'+esc(statusLabel[p.status]||p.status)+'</span>';
+    html+='<select onchange="updateProjectStatus('+p.id+',this.value)" style="padding:4px 8px;border-radius:6px;background:var(--bg);color:var(--text);border:1px solid var(--border);font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer">';
+    ['discovery','design','development','review','revisions','launched','maintenance'].forEach(function(s){
+      html+='<option value="'+s+'"'+(p.status===s?' selected':'')+'>'+esc(statusLabel[s]||s)+'</option>';
+    });
+    html+='</select>';
     html+='</div></div>';
 
     // Milestone pipeline
@@ -1004,37 +1215,79 @@ function renderProjects(projects){
     html+='</div>';
 
     // Website links row
-    html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">';
+    html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center">';
     if(p.old_website_url)html+='<a href="'+esc(p.old_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(248,113,113,.08);color:var(--red);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(248,113,113,.15)">Old Site \u2192</a>';
     if(p.framer_url)html+='<a href="'+esc(p.framer_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(167,139,250,.08);color:var(--purple);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(167,139,250,.15)">Framer Draft \u2192</a>';
+    else html+='<button class="btn-call" onclick="setProjectField('+p.id+',\'framer_url\',\'Enter Framer preview URL:\')" style="font-size:10px;background:rgba(167,139,250,.08);color:var(--purple);border-color:rgba(167,139,250,.15)">+ Add Framer URL</button>';
     if(p.new_website_url)html+='<a href="'+esc(p.new_website_url)+'" target="_blank" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:rgba(52,211,153,.08);color:var(--green);font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(52,211,153,.15)">Live Site \u2192</a>';
     html+='</div>';
 
     // DNS & Go-Live status
-    if(p.custom_domain||p.dns_status){
-      var dnsCol={'not_started':'var(--text3)','pending':'var(--accent)','configured':'var(--blue)','propagating':'var(--purple)','live':'var(--green)','failed':'var(--red)'};
-      var dnsLabel={'not_started':'Not Started','pending':'Awaiting DNS','configured':'DNS Configured','propagating':'Propagating','live':'Live','failed':'Failed'};
-      var sslCol={'pending':'var(--accent)','active':'var(--green)','failed':'var(--red)'};
-      html+='<div style="display:flex;gap:16px;margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;flex-wrap:wrap">';
-      if(p.custom_domain)html+='<span style="color:var(--text2)"><strong style="color:var(--text3)">Domain:</strong> '+esc(p.custom_domain)+'</span>';
-      html+='<span><strong style="color:var(--text3)">DNS:</strong> <span style="color:'+(dnsCol[p.dns_status]||'var(--text3)')+';font-weight:700">'+(dnsLabel[p.dns_status]||p.dns_status||'—')+'</span></span>';
-      html+='<span><strong style="color:var(--text3)">SSL:</strong> <span style="color:'+(sslCol[p.ssl_status]||'var(--text3)')+';font-weight:700">'+(p.ssl_status==='active'?'Active':p.ssl_status==='failed'?'Failed':'Pending')+'</span></span>';
-      if(p.dns_provider)html+='<span style="color:var(--text3)">Provider: '+esc(p.dns_provider)+'</span>';
-      html+='</div>';
-    }
+    var dnsCol={'not_started':'var(--text3)','pending':'var(--accent)','configured':'var(--blue)','propagating':'var(--purple)','live':'var(--green)','failed':'var(--red)'};
+    var dnsLabel={'not_started':'Not Started','pending':'Awaiting DNS','configured':'DNS Set','propagating':'Propagating','live':'Live','failed':'Failed'};
+    html+='<div style="display:flex;gap:12px;margin-bottom:10px;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;flex-wrap:wrap;align-items:center">';
+    html+='<span style="color:var(--text2)"><strong style="color:var(--text3)">Domain:</strong> '+(p.custom_domain?esc(p.custom_domain):'<button class="btn-call" onclick="setProjectField('+p.id+',\'custom_domain\',\'Enter client domain (e.g. lindendentist.co.uk):\')" style="font-size:9px;padding:2px 8px">+ Set</button>')+'</span>';
+    html+='<span><strong style="color:var(--text3)">DNS:</strong> <select onchange="updateProjectDNS('+p.id+',this.value)" style="background:var(--bg);color:'+(dnsCol[p.dns_status]||'var(--text3)')+';border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:700;padding:2px 4px;font-family:var(--font);cursor:pointer">';
+    ['not_started','pending','configured','propagating','live','failed'].forEach(function(s){
+      html+='<option value="'+s+'"'+(p.dns_status===s?' selected':'')+' style="color:var(--text)">'+dnsLabel[s]+'</option>';
+    });
+    html+='</select></span>';
+    html+='<span><strong style="color:var(--text3)">SSL:</strong> <span style="color:'+(p.ssl_status==='active'?'var(--green)':'var(--accent)')+';font-weight:700">'+(p.ssl_status==='active'?'Active':'Pending')+'</span></span>';
+    if(p.onboard_token)html+='<button class="btn-call" onclick="copyOnboardLink(\''+esc(p.onboard_token)+'\')" style="font-size:9px;padding:2px 8px;margin-left:auto">\ud83d\udcce Copy Client Brief Link</button>';
+    html+='</div>';
+
+    // Framer Workflow Pipeline
+    var briefDone=!!p.client_brief_submitted_at;
+    var framerDone=!!p.framer_url;
+    var dnsLive=p.dns_status==='live';
+    var launched=p.status==='launched';
+    html+='<div style="display:flex;gap:2px;margin-bottom:10px;font-size:10px;font-weight:700">';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;border-radius:6px 0 0 6px;background:'+(briefDone?'rgba(52,211,153,.15)':'rgba(232,162,58,.1)')+';color:'+(briefDone?'var(--green)':'var(--accent)')+'">'+(briefDone?'\u2705':'\u23f3')+' Brief</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;background:'+(framerDone?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(framerDone?'var(--green)':'var(--text3)')+'">'+(framerDone?'\u2705':'\u23f3')+' Framer Build</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;background:'+(dnsLive?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(dnsLive?'var(--green)':'var(--text3)')+'">'+(dnsLive?'\u2705':'\u23f3')+' DNS Live</span>';
+    html+='<span style="flex:1;padding:6px 0;text-align:center;border-radius:0 6px 6px 0;background:'+(launched?'rgba(52,211,153,.15)':'rgba(142,143,163,.06)')+';color:'+(launched?'var(--green)':'var(--text3)')+'">'+(launched?'\ud83d\ude80':'\u23f3')+' Launched</span>';
+    html+='</div>';
 
     // Meta info
     html+='<div class="proj-meta">';
     if(p.estimated_launch)html+='<span>\ud83d\udcc5 Est. Launch: '+new Date(p.estimated_launch).toLocaleDateString('en-GB')+'</span>';
     if(p.launched_at)html+='<span>\ud83d\ude80 Launched: '+new Date(p.launched_at).toLocaleDateString('en-GB')+'</span>';
     html+='<span>\ud83d\udcc6 Started: '+new Date(p.started_at||p.created_at).toLocaleDateString('en-GB')+'</span>';
+    if(p.client_brief_submitted_at)html+='<span style="color:var(--green)">\u2705 Brief received '+new Date(p.client_brief_submitted_at).toLocaleDateString('en-GB')+'</span>';
+    else html+='<span style="color:var(--accent)">\u23f3 Awaiting client brief</span>';
     html+='</div>';
 
     // Client brief (if exists)
-    if(p.client_brief){
+    if(p.brief_data){
+      var b=typeof p.brief_data==='string'?JSON.parse(p.brief_data):p.brief_data;
+      html+='<details style="margin-top:10px"><summary style="font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 0">View Client Brief (structured)</summary>';
+      html+='<div class="proj-brief" style="display:grid;grid-template-columns:120px 1fr;gap:6px 12px;white-space:normal">';
+      if(b.industry)html+='<strong>Industry:</strong><span>'+esc(b.industry)+'</span>';
+      if(b.description)html+='<strong>About:</strong><span>'+esc(b.description)+'</span>';
+      if(b.services)html+='<strong>Services:</strong><span>'+esc(b.services)+'</span>';
+      if(b.pages)html+='<strong>Pages:</strong><span>'+esc(b.pages.join(', '))+'</span>';
+      if(b.goal)html+='<strong>Goal:</strong><span>'+esc(b.goal)+'</span>';
+      if(b.audience)html+='<strong>Audience:</strong><span>'+esc(b.audience)+'</span>';
+      if(b.booking_system)html+='<strong>Booking:</strong><span>'+esc(b.booking_system)+'</span>';
+      if(b.style)html+='<strong>Style:</strong><span>'+esc(b.style)+'</span>';
+      if(b.colors)html+='<strong>Colours:</strong><span><span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:'+esc(b.colors.primary)+';vertical-align:middle"></span> '+esc(b.colors.primary)+' <span style="display:inline-block;width:16px;height:16px;border-radius:3px;background:'+esc(b.colors.secondary)+';vertical-align:middle;margin-left:6px"></span> '+esc(b.colors.secondary)+'</span>';
+      if(b.has_logo)html+='<strong>Logo:</strong><span>'+esc(b.has_logo)+'</span>';
+      if(b.features)html+='<strong>Features:</strong><span>'+esc(b.features)+'</span>';
+      if(b.inspiration)html+='<strong>Inspo sites:</strong><span>'+esc(b.inspiration)+'</span>';
+      if(b.notes)html+='<strong>Notes:</strong><span>'+esc(b.notes)+'</span>';
+      html+='</div></details>';
+    } else if(p.client_brief){
       html+='<details style="margin-top:10px"><summary style="font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:4px 0">View Client Brief</summary>';
       html+='<div class="proj-brief">'+esc(p.client_brief)+'</div>';
       html+='</details>';
+    }
+
+    // Framer Build Sheet button (only if brief exists)
+    if(p.brief_data||p.client_brief){
+      html+='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
+      html+='<button class="btn-call" onclick="generateFramerBrief('+p.id+')" style="font-size:11px;padding:8px 16px;background:rgba(167,139,250,.1);color:var(--purple);border-color:rgba(167,139,250,.2);font-weight:700">&#x1F680; Copy Framer AI Prompt</button>';
+      if(!p.framer_url)html+='<button class="btn-call" onclick="setProjectField('+p.id+',\'framer_url\',\'Paste the Framer preview URL after building:\')" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.08);color:var(--green);border-color:rgba(52,211,153,.15);font-weight:700">&#x2705; Add Framer Preview URL</button>';
+      html+='</div>';
     }
 
     // Notes
@@ -1045,6 +1298,211 @@ function renderProjects(projects){
     html+='</div>';
   });
   document.getElementById('projectsList').innerHTML=html;
+}
+
+// ── PROJECT MANAGEMENT HELPERS ──
+
+function showNewProjectForm(){
+  document.getElementById('newProjectForm').style.display='block';
+  document.getElementById('np_name').focus();
+}
+
+function createNewProject(){
+  var name=document.getElementById('np_name').value.trim();
+  if(!name){showToast('Business name is required','red');return}
+  var pkg=document.getElementById('np_package').value;
+  var oldUrl=document.getElementById('np_old_url').value.trim();
+  var domain=document.getElementById('np_domain').value.trim();
+  // Generate onboard token
+  var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
+  var launchDays=pkg==='Starter'?5:pkg==='Growth'?7:10;
+  var est=new Date();est.setDate(est.getDate()+launchDays);
+
+  var body={
+    business_name:name,
+    package:pkg,
+    status:'discovery',
+    onboard_token:token,
+    dns_status:'not_started',
+    ssl_status:'pending',
+    started_at:new Date().toISOString(),
+    estimated_launch:est.toISOString(),
+    milestones:JSON.stringify([
+      {name:'Discovery Call',status:'active'},
+      {name:'Client Brief Submitted',status:'pending'},
+      {name:'Design Mockup',status:'pending'},
+      {name:'Development',status:'pending'},
+      {name:'Client Review',status:'pending'},
+      {name:'Revisions (Round 1)',status:'pending'},
+      {name:'Revisions (Round 2)',status:'pending'},
+      {name:'Launch',status:'pending'},
+      {name:'Maintenance',status:'pending'}
+    ])
+  };
+  if(oldUrl)body.old_website_url=oldUrl;
+  if(domain)body.custom_domain=domain;
+
+  fetch(SB+'/projects',{method:'POST',headers:H,body:JSON.stringify(body)}).then(function(r){
+    if(r.ok){
+      showToast('Project created! Onboard link ready to send to client.','green');
+      document.getElementById('newProjectForm').style.display='none';
+      document.getElementById('np_name').value='';
+      document.getElementById('np_old_url').value='';
+      document.getElementById('np_domain').value='';
+      loadData();
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_created',description:'New project: '+name+' ('+pkg+')',target:'projects',result:'success',details:{business_name:name,package:pkg}})});
+    } else {showToast('Failed to create project','red')}
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function showAddLeadForm(){
+  document.getElementById('addLeadForm').style.display='block';
+  document.getElementById('al_name').focus();
+}
+
+function createManualLead(){
+  var name=document.getElementById('al_name').value.trim();
+  if(!name){showToast('Business name is required','red');return}
+  var industry=document.getElementById('al_industry').value.trim();
+  var location=document.getElementById('al_location').value.trim();
+  var website=document.getElementById('al_website').value.trim();
+  var phone=document.getElementById('al_phone').value.trim();
+  var email=document.getElementById('al_email').value.trim();
+  var source=document.getElementById('al_source').value;
+  var notes=document.getElementById('al_notes').value.trim();
+  var alsoProject=document.getElementById('al_create_project').checked;
+
+  var hasWeb=!!website;
+  if(website&&website.indexOf('http')!==0)website='https://'+website;
+
+  var body={
+    business_name:name,
+    industry:industry||null,
+    location:location||null,
+    website:website||null,
+    phone:phone||null,
+    email:email||null,
+    source:source,
+    notes:notes||null,
+    has_website:hasWeb,
+    status:'New',
+    date_scraped:new Date().toISOString()
+  };
+
+  fetch(SB+'/leads',{method:'POST',headers:H,body:JSON.stringify(body)}).then(function(r){
+    if(r.ok){
+        showToast('Lead added: '+name,'green');
+        document.getElementById('addLeadForm').style.display='none';
+        ['al_name','al_industry','al_location','al_website','al_phone','al_email','al_notes'].forEach(function(id){document.getElementById(id).value=''});
+        document.getElementById('al_create_project').checked=false;
+
+        // Log to audit trail
+        fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'lead_added',description:'Manual lead: '+name+(source?' ('+source+')':''),target:'leads',result:'success',details:{business_name:name,source:source}})});
+
+        // Also create project if checked
+        if(alsoProject){
+          var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
+          var est=new Date();est.setDate(est.getDate()+7);
+          var projBody={
+            business_name:name,
+            package:'Growth',
+            status:'discovery',
+            onboard_token:token,
+            dns_status:'not_started',
+            ssl_status:'pending',
+            started_at:new Date().toISOString(),
+            estimated_launch:est.toISOString(),
+            notes:'Added via manual lead entry. Source: '+source+(notes?'. '+notes:''),
+            milestones:JSON.stringify([
+              {name:'Discovery Call',status:'active'},
+              {name:'Client Brief Submitted',status:'pending'},
+              {name:'Design Mockup',status:'pending'},
+              {name:'Development',status:'pending'},
+              {name:'Client Review',status:'pending'},
+              {name:'Revisions (Round 1)',status:'pending'},
+              {name:'Revisions (Round 2)',status:'pending'},
+              {name:'Launch',status:'pending'},
+              {name:'Maintenance',status:'pending'}
+            ])
+          };
+          if(website)projBody.old_website_url=website;
+          fetch(SB+'/projects',{method:'POST',headers:H,body:JSON.stringify(projBody)}).then(function(r2){
+            if(r2.ok){
+              showToast('Project also created for '+name+' — brief link ready!','green');
+              fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_created',description:'Auto-created project for manual lead: '+name,target:'projects',result:'success',details:{business_name:name}})});
+            }
+            loadData();
+          });
+        } else {
+          loadData();
+        }
+    } else {showToast('Failed to add lead','red')}
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function setProjectField(id,field,promptMsg){
+  var val=prompt(promptMsg);
+  if(val===null||!val.trim())return;
+  // Validate Framer URLs
+  if(field==='framer_url'){
+    var v=val.trim();
+    if(v.indexOf('.')===-1){showToast('Enter a valid URL (e.g. site-name.framer.website)','red');return}
+    if(v.indexOf('http')!==0)v='https://'+v;
+    val=v;
+  }
+  var patch={};patch[field]=val.trim();
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(patch)
+  }).then(function(r){
+    if(r.ok){
+      showToast('Updated '+field.replace(/_/g,' '),'green');
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'project_update',description:'Set '+field+' = '+val.trim()+' for project #'+id,target:'projects',result:'success',details:{project_id:id,field:field,value:val.trim()}})});
+      loadData();
+    } else {
+      showToast('Failed to update — try again','red');
+    }
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function updateProjectDNS(id,newStatus){
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({dns_status:newStatus})
+  }).then(function(r){
+    if(r.ok){
+      showToast('DNS status \u2192 '+newStatus.replace(/_/g,' '),'green');
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'dns_update',description:'DNS status changed to '+newStatus+' for project #'+id,target:'projects',result:'success',details:{project_id:id,dns_status:newStatus}})});
+      if(newStatus==='live'){
+        // When DNS goes live, update SSL to active too
+        fetch(SB+'/projects?id=eq.'+id,{method:'PATCH',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({ssl_status:'active'})});
+      }
+    } else {
+      showToast('Failed to update DNS status','red');
+    }
+  }).catch(function(){showToast('Network error','red')});
+}
+
+function copyOnboardLink(token){
+  var url='https://www.solisdigital.co.uk/onboard.html?token='+encodeURIComponent(token);
+  navigator.clipboard.writeText(url).then(function(){
+    showToast('Client brief link copied to clipboard','green');
+  }).catch(function(){
+    prompt('Copy this link:',url);
+  });
+}
+
+function updateProjectStatus(id,newStatus){
+  fetch(SB+'/projects?id=eq.'+id,{
+    method:'PATCH',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({status:newStatus})
+  }).then(function(r){
+    if(r.ok){showToast('Project status \u2192 '+newStatus,'green');loadData()}
+    else showToast('Failed to update','red');
+  }).catch(function(){showToast('Network error','red')});
 }
 
 // ── AI ADMIN REQUEST SYSTEM ──
@@ -1084,7 +1542,7 @@ function submitRequest(){
 }
 
 document.getElementById('adminInput').addEventListener('keydown',function(e){
-  if(e.key==='Enter'){e.preventDefault();submitRequest()}
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitRequest()}
 });
 
 function filterRequests(status,btn){
@@ -1100,37 +1558,243 @@ function updateRequest(id,newStatus,btn,notes){
   if(newStatus==='completed')patch.completed_at=new Date().toISOString();
   if(notes)patch.execution_notes=notes;
 
+  // Instantly update local state for snappy UI
+  var req=allRequests.find(function(x){return x.id===id});
+  var reqText=req?req.request_text.substring(0,60):'#'+id;
+  if(req){
+    req.status=newStatus;
+    req.reviewed_at=patch.reviewed_at;
+    if(patch.completed_at)req.completed_at=patch.completed_at;
+    if(notes)req.execution_notes=notes;
+    renderRequests(allRequests);
+  }
+
   fetch(SB+'/admin_requests?id=eq.'+id,{
     method:'PATCH',
     headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
     body:JSON.stringify(patch)
   }).then(function(r){
     if(r.ok){
-      var req=allRequests.find(function(x){return x.id===id});
-      var reqText=req?req.request_text.substring(0,60):'#'+id;
       var msgs={
-        'in_progress':'Approved \u2192 now In Progress. Go make the change, then come back and mark it Complete.',
-        'completed':'Marked complete. Change is done and verified.',
-        'rejected':'Rejected and archived.'
+        'in_progress':'\u2705 APPROVED & IN PROGRESS — Go make the change in Framer or code now. When done, click "Mark Done" on this request and describe what you changed.',
+        'completed':'\u2705 DONE — Logged in audit trail. Client-facing changes are live.',
+        'rejected':'\u274c Rejected — removed from active queue.'
       };
       fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'request_'+newStatus,description:'Request '+newStatus+': '+reqText,target:'admin_requests',result:'success',details:{request_id:id,notes:notes||''}})});
       showToast(msgs[newStatus]||'Updated',newStatus==='rejected'?'red':'green');
-      loadRequests();
     } else {
-      showToast('Failed to update — please try again','red');
-      if(btn){btn.disabled=false;}
+      showToast('Failed to save — reverting','red');
+      loadRequests();
     }
   }).catch(function(){
-    showToast('Network error — check connection','red');
-    if(btn){btn.disabled=false;}
+    showToast('Network error — reverting','red');
+    loadRequests();
   });
 }
 
 function completeRequest(id,btn){
-  var notes=prompt('What was done? (e.g. "Updated hero text in Framer and published", "Fixed mobile nav CSS")');
+  var notes=prompt('Describe what was done (e.g. "Updated hero text in Framer and published", "Fixed mobile nav CSS"):');
   if(notes===null)return;
-  if(!notes.trim()){showToast('Please describe what was changed so it\u2019s tracked','red');return;}
+  if(!notes.trim()){showToast('Please describe what was changed — this gets logged in the audit trail','red');return;}
   updateRequest(id,'completed',btn,notes.trim());
+}
+
+function approveRequest(id,btn){
+  // Visual pulse on button
+  if(btn){btn.textContent='Approving...';btn.style.background='rgba(52,211,153,.3)';}
+  updateRequest(id,'in_progress',btn);
+  // Flash the whole request card green briefly
+  setTimeout(function(){
+    var cards=document.querySelectorAll('#requestsList > div');
+    cards.forEach(function(c){
+      if(c.innerHTML.indexOf('id='+id+',')!==-1||c.innerHTML.indexOf('('+id+',')!==-1){
+        c.style.transition='background .3s';
+        c.style.background='rgba(52,211,153,.08)';
+        setTimeout(function(){c.style.background=''},1500);
+      }
+    });
+  },400);
+}
+
+function generateFramerBrief(projectId){
+  fetch(SB+'/projects?id=eq.'+projectId+'&select=*',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data.length){showToast('Project not found','red');return}
+    var proj=data[0];
+    var b=proj.brief_data;
+    if(!b&&!proj.client_brief){showToast('No client brief submitted yet — send client the brief link first','red');return}
+    if(!b){
+      // Fallback: use client_brief text directly as the prompt
+      var fallbackPrompt='Build a professional website for "'+proj.business_name+'".\n\nHere is the client brief:\n\n'+proj.client_brief+'\n\nREQUIREMENTS:\n- Mobile-first responsive design\n- Fast loading (optimised images, minimal scripts)\n- SEO-friendly (proper headings, meta tags, schema markup)\n- Accessible (WCAG 2.1 AA compliant)\n- Include a sticky header with logo and navigation\n- Footer with contact info, social links, and legal pages\n';
+      navigator.clipboard.writeText(fallbackPrompt).then(function(){
+        showToast('Framer AI prompt copied! (from text brief) Paste it into Framer to start building.','green');
+      }).catch(function(){showPromptOverlay(fallbackPrompt)});
+      return;
+    }
+    if(typeof b==='string')b=JSON.parse(b);
+
+    // Build a Framer AI prompt — this is what you paste into Framer's AI site builder
+    var p='Build a professional website for "'+proj.business_name+'"';
+    if(b.industry)p+=', a '+b.industry+' business';
+    if(b.location)p+=' based in '+b.location;
+    p+='.\n\n';
+
+    // Design direction
+    p+='DESIGN STYLE: ';
+    if(b.style&&b.style!=='let-us-decide')p+=b.style+'. ';
+    else p+='Modern, clean, and professional. ';
+    if(b.tone)p+='Tone should be '+b.tone+'. ';
+    if(b.font_preference&&b.font_preference!=='let-us-choose')p+='Use '+b.font_preference+' fonts. ';
+    p+='\n\n';
+
+    // Colours
+    if(b.colors){
+      p+='COLOURS: Primary '+b.colors.primary+', Secondary '+b.colors.secondary;
+      if(b.colors.accent)p+=', Accent '+b.colors.accent;
+      if(b.colors.background)p+='. '+b.colors.background+' background preference';
+      p+='.\n\n';
+    }
+
+    // Pages
+    p+='PAGES TO CREATE:\n';
+    if(b.pages&&b.pages.length)p+=b.pages.map(function(pg){return'- '+pg}).join('\n')+'\n';
+    if(b.other_pages)p+='- '+b.other_pages+'\n';
+    p+='\n';
+
+    // Hero & CTA
+    p+='HOMEPAGE:\n';
+    if(b.description)p+='Hero text: "'+b.description+'"\n';
+    if(b.tagline)p+='Tagline: "'+b.tagline+'"\n';
+    if(b.usp)p+='Unique selling point: "'+b.usp+'"\n';
+    if(b.hero_headline)p+='Hero headline: "'+b.hero_headline+'"\n';
+    if(b.cta)p+='Primary CTA: "'+b.cta+'"\n';
+    if(b.cta_secondary)p+='Secondary CTA: "'+b.cta_secondary+'"\n';
+    p+='\n';
+
+    // Services
+    if(b.services){
+      p+='SERVICES (create a section or page for each):\n';
+      if(typeof b.services==='string')p+=b.services+'\n';
+      else if(Array.isArray(b.services)){
+        b.services.forEach(function(s){
+          if(typeof s==='object')p+='- '+s.name+(s.description?' — '+s.description:'')+(s.price?' ('+s.price+')':'')+(s.duration?' ['+s.duration+']':'')+'\n';
+          else p+='- '+s+'\n';
+        });
+      }
+      p+='\n';
+    }
+
+    // Contact info for the site
+    p+='CONTACT DETAILS (for footer, contact page, and schema):\n';
+    if(b.phone||b.phoneMain)p+='Phone: '+(b.phone||b.phoneMain)+'\n';
+    if(b.email||b.emailMain)p+='Email: '+(b.email||b.emailMain)+'\n';
+    if(b.address||b.locations)p+='Address: '+(b.address||(b.locations&&b.locations[0]?b.locations[0].address:''))+'\n';
+    if(b.hours){
+      p+='Opening Hours: ';
+      if(typeof b.hours==='object'){
+        var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        days.forEach(function(d){
+          if(b.hours[d]){
+            if(b.hours[d].closed)p+=d+': Closed, ';
+            else p+=d+': '+b.hours[d].open+'-'+b.hours[d].close+', ';
+          }
+        });
+      } else p+=b.hours;
+      p+='\n';
+    }
+    p+='\n';
+
+    // Functionality
+    p+='FUNCTIONALITY:\n';
+    if(b.booking_system&&b.booking_system!=='none')p+='- Booking system: '+b.booking_system+(b.appointment_types?' ('+b.appointment_types+')':'')+'\n';
+    if(b.payment&&b.payment!=='none')p+='- Payment: '+b.payment+'\n';
+    if(b.live_chat&&b.live_chat!=='none')p+='- Live chat: '+b.live_chat+'\n';
+    if(b.whatsapp_number)p+='- WhatsApp button: '+b.whatsapp_number+'\n';
+    if(b.newsletter&&b.newsletter!=='none')p+='- Newsletter signup: '+b.newsletter+'\n';
+    if(b.google_maps&&b.google_maps!=='no')p+='- Google Maps embed on contact page\n';
+    if(b.features)p+='- Other: '+b.features+'\n';
+    if(b.social_media){
+      p+='- Social media links: ';
+      if(typeof b.social_media==='object'){
+        Object.keys(b.social_media).forEach(function(k){if(b.social_media[k])p+=k+': '+b.social_media[k]+', '});
+      } else p+=b.social_media;
+      p+='\n';
+    }
+    p+='\n';
+
+    // Content
+    if(b.testimonials)p+='TESTIMONIALS:\n'+b.testimonials+'\n\n';
+    if(b.faqs){
+      p+='FAQ:\n';
+      if(Array.isArray(b.faqs)){
+        b.faqs.forEach(function(f){
+          if(typeof f==='object')p+='Q: '+f.question+'\nA: '+f.answer+'\n';
+          else p+=f+'\n';
+        });
+      } else p+=b.faqs+'\n';
+      p+='\n';
+    }
+    if(b.team_members&&Array.isArray(b.team_members)&&b.team_members.length){
+      p+='TEAM:\n';
+      b.team_members.forEach(function(m){
+        p+='- '+(m.name||'')+(m.role?' ('+m.role+')':'')+(m.bio?' — '+m.bio:'')+'\n';
+      });
+      p+='\n';
+    }
+    if(b.certifications)p+='CREDENTIALS/AWARDS: '+b.certifications+'\n\n';
+
+    // SEO
+    if(b.target_keywords||b.target_locations){
+      p+='SEO: ';
+      if(b.target_keywords)p+='Target keywords: '+b.target_keywords+'. ';
+      if(b.target_locations)p+='Target locations: '+b.target_locations+'. ';
+      p+='\n\n';
+    }
+
+    // Inspiration
+    if(b.inspiration)p+='INSPIRATION SITES:\n'+b.inspiration+'\n\n';
+    if(b.competitors)p+='COMPETITOR SITES (make ours better):\n'+b.competitors+'\n\n';
+
+    // Final instructions
+    p+='REQUIREMENTS:\n';
+    p+='- Mobile-first responsive design\n';
+    p+='- Fast loading (optimised images, minimal scripts)\n';
+    p+='- SEO-friendly (proper headings, meta tags, schema markup)\n';
+    p+='- Accessible (WCAG 2.1 AA compliant)\n';
+    p+='- Include a sticky header with logo and navigation\n';
+    p+='- Footer with contact info, social links, and legal pages\n';
+    if(b.has_logo==='no')p+='- Create a simple logo/wordmark for the business\n';
+    if(b.notes)p+='\nADDITIONAL NOTES FROM CLIENT:\n'+b.notes+'\n';
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(p).then(function(){
+      showToast('Framer AI prompt copied! Paste it into Framer to start building.','green');
+    }).catch(function(){
+      // Fallback: show in overlay
+      showPromptOverlay(p);
+    });
+  }).catch(function(){showToast('Failed to load project data','red')});
+}
+
+function showPromptOverlay(text){
+  var overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:99998;display:flex;align-items:center;justify-content:center';
+  var box=document.createElement('div');
+  box.style.cssText='background:var(--surface);border:1px solid var(--accent);border-radius:16px;width:90%;max-width:700px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden';
+  var header=document.createElement('div');
+  header.style.cssText='padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center';
+  header.innerHTML='<span style="font-weight:700;color:var(--white)">Framer AI Prompt</span><button onclick="this.closest(\'div[style*=fixed]\').remove()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer">&times;</button>';
+  var ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='flex:1;padding:20px;background:var(--bg);color:var(--text);border:none;font-family:var(--mono);font-size:12px;line-height:1.6;resize:none;outline:none';
+  ta.readOnly=true;
+  var footer=document.createElement('div');
+  footer.style.cssText='padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end';
+  footer.innerHTML='<button class="btn btn-s" onclick="this.closest(\'div[style*=fixed]\').querySelector(\'textarea\').select();document.execCommand(\'copy\');showToast(\'Copied!\',\'green\')">Copy All</button><button class="btn btn-p" onclick="this.closest(\'div[style*=fixed]\').remove()">Done</button>';
+  box.appendChild(header);box.appendChild(ta);box.appendChild(footer);
+  overlay.appendChild(box);document.body.appendChild(overlay);
+  ta.select();
 }
 
 // Toast notification system
@@ -1204,13 +1868,27 @@ function renderRequests(requests){
 
     html+='</div>';
 
+    // Time tracking
+    if(r.status==='in_progress'&&r.reviewed_at){
+      var mins=Math.round((Date.now()-new Date(r.reviewed_at).getTime())/60000);
+      var timeText=mins<60?mins+'m ago':Math.round(mins/60)+'h '+mins%60+'m ago';
+      html+='<div style="margin-top:6px;font-size:10px;color:var(--blue)">\u23f1 Approved '+timeText+'</div>';
+    }
+    if(r.status==='completed'&&r.reviewed_at&&r.completed_at){
+      var durMins=Math.round((new Date(r.completed_at).getTime()-new Date(r.reviewed_at).getTime())/60000);
+      var durText=durMins<60?durMins+'m':Math.round(durMins/60)+'h '+durMins%60+'m';
+      html+='<div style="margin-top:6px;font-size:10px;color:var(--green)">\u2705 Completed in '+durText+'</div>';
+    }
+
+    html+='</div>';
+
     // Action buttons based on status
     html+='<div style="display:flex;gap:6px;flex-shrink:0;flex-direction:column;align-items:flex-end">';
     if(r.status==='pending'){
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'in_progress\',this)" style="font-size:10px;background:rgba(96,165,250,.1);color:var(--blue);border-color:rgba(96,165,250,.2)">Approve</button>';
-      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.1);color:var(--red);border-color:rgba(248,113,113,.2)">Reject</button>';
+      html+='<button class="btn-call" onclick="approveRequest('+r.id+',this)" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.25);font-weight:800">\u2705 Approve</button>';
+      html+='<button class="btn-call" onclick="updateRequest('+r.id+',\'rejected\',this)" style="font-size:10px;background:rgba(248,113,113,.08);color:var(--red);border-color:rgba(248,113,113,.15)">Reject</button>';
     } else if(r.status==='in_progress'){
-      html+='<button class="btn-call" onclick="completeRequest('+r.id+',this)" style="font-size:10px">Mark Done</button>';
+      html+='<button class="btn-call" onclick="completeRequest('+r.id+',this)" style="font-size:11px;padding:8px 16px;background:rgba(52,211,153,.15);color:var(--green);border-color:rgba(52,211,153,.3);font-weight:800">\ud83c\udfc1 Mark Done</button>';
     }
     html+='</div>';
     html+='</div>';
@@ -1254,6 +1932,322 @@ function exportCallListCSV(){
 
 function esc_csv(s){return(s||'').replace(/"/g,'""')}
 
+function generateScraperQueries(){
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  if(!cities.length||!industries.length){showToast('Select at least one city and one industry','red');return}
+  var queries=[];
+  industries.forEach(function(ind){
+    cities.forEach(function(city){
+      queries.push(ind+' in '+city);
+    });
+  });
+  document.getElementById('scraperQueries').value=queries.join('\n');
+  showToast(queries.length+' search queries generated!','green');
+}
+
+// ── Apify Integration ──
+var APIFY_ACTOR='compass/crawler-google-places';
+var scraperRunId=null;
+var scraperPollTimer=null;
+
+function saveApifyToken(){
+  var token=document.getElementById('apifyToken').value.trim();
+  if(!token){showToast('Enter your Apify API token','red');return}
+  localStorage.setItem('solis_apify_token',token);
+  // Also save to Supabase scraper_config so edge functions can use it
+  fetch(SB+'/scraper_config?id=eq.1',{
+    method:'PATCH',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify({apify_token:token,updated_at:new Date().toISOString()})
+  }).then(function(r){
+    if(r.ok){
+      document.getElementById('apifyTokenStatus').textContent='Saved (local + server)';
+      document.getElementById('apifyTokenStatus').style.color='var(--green)';
+      showToast('Apify token saved to browser and server (enables 24/7 auto-scraping)','green');
+    } else {
+      document.getElementById('apifyTokenStatus').textContent='Saved (local only)';
+      document.getElementById('apifyTokenStatus').style.color='var(--accent)';
+      showToast('Token saved locally. Server save failed — auto-scraping may not work.','red');
+    }
+  });
+}
+
+function getApifyToken(){
+  return localStorage.getItem('solis_apify_token')||document.getElementById('apifyToken').value.trim();
+}
+
+// Load saved token on page load
+(function(){
+  var saved=localStorage.getItem('solis_apify_token');
+  if(saved){
+    document.getElementById('apifyToken').value=saved;
+    document.getElementById('apifyTokenStatus').textContent='Saved';
+    document.getElementById('apifyTokenStatus').style.color='var(--green)';
+  }
+})();
+
+function scraperLog(msg){
+  var log=document.getElementById('scraperRunLog');
+  var t=new Date().toLocaleTimeString();
+  log.innerHTML+='<div>['+t+'] '+msg+'</div>';
+  log.scrollTop=log.scrollHeight;
+}
+
+function runApifyScraper(){
+  var token=getApifyToken();
+  if(!token){showToast('Set your Apify API token first','red');return}
+
+  // Generate queries from selected chips
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  if(!cities.length||!industries.length){showToast('Select at least one city and one industry','red');return}
+
+  var queries=[];
+  industries.forEach(function(ind){cities.forEach(function(city){queries.push(ind+' in '+city)})});
+
+  var maxResults=parseInt(document.getElementById('apifyMaxResults').value)||20;
+  var scrapeContacts=document.getElementById('apifyScrapeContacts').checked;
+
+  // Show status panel
+  document.getElementById('scraperStatus').style.display='block';
+  document.getElementById('scraperStatusTitle').textContent='Starting Scraper...';
+  document.getElementById('scraperStatusMsg').textContent='Sending '+queries.length+' queries to Apify...';
+  document.getElementById('scraperProgressBar').style.width='5%';
+  document.getElementById('scraperRunLog').innerHTML='';
+  document.getElementById('btnRunScraper').disabled=true;
+  document.getElementById('btnRunScraper').textContent='Running...';
+
+  scraperLog('Starting Apify actor: '+APIFY_ACTOR);
+  scraperLog('Queries: '+queries.length+' | Max per query: '+maxResults+' | Contacts: '+(scrapeContacts?'Yes':'No'));
+
+  // Call Apify REST API to start actor run
+  // We batch queries — Apify actor accepts searchStringsArray
+  // For large query sets, we run in batches of 50 to avoid timeouts
+  var batchSize=50;
+  var batches=[];
+  for(var i=0;i<queries.length;i+=batchSize){
+    batches.push(queries.slice(i,i+batchSize));
+  }
+
+  scraperLog('Split into '+batches.length+' batch(es) of up to '+batchSize+' queries each');
+
+  // Start first batch (chain remaining batches after completion)
+  startApifyBatch(token,batches,0,maxResults,scrapeContacts,[]);
+}
+
+function startApifyBatch(token,batches,batchIdx,maxResults,scrapeContacts,allResults){
+  if(batchIdx>=batches.length){
+    // All batches done — process results
+    scraperLog('All batches complete! Total results: '+allResults.length);
+    processScraperResults(allResults);
+    return;
+  }
+
+  var batch=batches[batchIdx];
+  var pct=Math.round(((batchIdx)/batches.length)*80)+5;
+  document.getElementById('scraperProgressBar').style.width=pct+'%';
+  document.getElementById('scraperStatusTitle').textContent='Scraper Running — Batch '+(batchIdx+1)+'/'+batches.length;
+  document.getElementById('scraperStatusMsg').textContent='Running batch '+(batchIdx+1)+' ('+batch.length+' queries)...';
+  scraperLog('Starting batch '+(batchIdx+1)+'/'+batches.length+': '+batch.length+' queries');
+
+  var input={
+    searchStringsArray:batch,
+    countryCode:'gb',
+    maxCrawledPlacesPerSearch:maxResults,
+    scrapeContacts:scrapeContacts,
+    language:'en',
+    deeperCityScrape:false,
+    onePerQuery:false
+  };
+
+  fetch('https://api.apify.com/v2/acts/'+APIFY_ACTOR+'/runs?token='+token,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(input)
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(t){throw new Error('Apify API error ('+r.status+'): '+t)});
+    return r.json();
+  }).then(function(data){
+    var runId=data.data.id;
+    var datasetId=data.data.defaultDatasetId;
+    scraperLog('Actor run started: '+runId);
+    scraperLog('Dataset: '+datasetId);
+    // Record run in DB
+    fetch(SB+'/scraper_runs',{method:'POST',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({apify_run_id:runId,dataset_id:datasetId,status:'RUNNING',queries_count:batch.length})});
+    // Poll for completion
+    pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeContacts,allResults);
+  }).catch(function(err){
+    scraperLog('ERROR: '+err.message);
+    document.getElementById('scraperStatusTitle').textContent='Scraper Error';
+    document.getElementById('scraperStatusTitle').style.color='var(--red)';
+    document.getElementById('scraperStatusMsg').textContent=err.message;
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperProgressBar').style.background='var(--red)';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    showToast('Scraper failed: '+err.message,'red');
+  });
+}
+
+function pollApifyRun(token,runId,datasetId,batches,batchIdx,maxResults,scrapeContacts,allResults){
+  scraperPollTimer=setInterval(function(){
+    fetch('https://api.apify.com/v2/actor-runs/'+runId+'?token='+token)
+    .then(function(r){return r.json()})
+    .then(function(data){
+      var status=data.data.status;
+      var stats=data.data.stats||{};
+      document.getElementById('scraperStatusMsg').textContent='Status: '+status+' | Items scraped: '+(stats.itemCount||0);
+
+      if(status==='SUCCEEDED'){
+        clearInterval(scraperPollTimer);
+        scraperLog('Batch '+(batchIdx+1)+' complete! Items: '+(stats.itemCount||0));
+        // Fetch results from dataset
+        fetch('https://api.apify.com/v2/datasets/'+datasetId+'/items?token='+token+'&limit=1000')
+        .then(function(r){return r.json()})
+        .then(function(items){
+          scraperLog('Fetched '+items.length+' results from dataset');
+          allResults=allResults.concat(items);
+          // Start next batch
+          startApifyBatch(token,batches,batchIdx+1,maxResults,scrapeContacts,allResults);
+        });
+      } else if(status==='FAILED'||status==='ABORTED'||status==='TIMED-OUT'){
+        clearInterval(scraperPollTimer);
+        scraperLog('ERROR: Run '+status);
+        document.getElementById('scraperStatusTitle').textContent='Batch '+(batchIdx+1)+' '+status;
+        document.getElementById('scraperStatusTitle').style.color='var(--red)';
+        // Continue with next batch despite failure
+        startApifyBatch(token,batches,batchIdx+1,maxResults,scrapeContacts,allResults);
+      }
+    }).catch(function(err){
+      scraperLog('Poll error: '+err.message);
+    });
+  },10000); // Poll every 10 seconds
+}
+
+function processScraperResults(items){
+  document.getElementById('scraperProgressBar').style.width='90%';
+  document.getElementById('scraperStatusTitle').textContent='Processing '+items.length+' Results...';
+  document.getElementById('scraperStatusMsg').textContent='Deduplicating and inserting into leads database...';
+  scraperLog('Processing '+items.length+' raw results...');
+
+  // Map Apify output to our leads schema
+  var leads=[];
+  var seen={};
+  items.forEach(function(item){
+    // Deduplicate by business name + location
+    var key=(item.title||'').toLowerCase()+'|'+(item.city||item.address||'').toLowerCase();
+    if(seen[key])return;
+    seen[key]=true;
+
+    var lead={
+      business_name:item.title||item.name||'Unknown',
+      industry:item.categoryName||item.categories&&item.categories[0]||'',
+      location:item.city||item.address||'',
+      website:item.website||item.url||null,
+      has_website:!!(item.website||item.url),
+      phone:item.phone||item.phoneUnformatted||null,
+      email:item.email||item.emails&&item.emails[0]||null,
+      google_rating:item.totalScore||item.rating||null,
+      review_count:item.reviewsCount||item.reviews||0,
+      status:'New',
+      source:'apify_scraper',
+      place_id:item.placeId||null
+    };
+
+    // Skip entries without a business name
+    if(lead.business_name==='Unknown')return;
+    leads.push(lead);
+  });
+
+  scraperLog('Deduplicated: '+leads.length+' unique leads (removed '+(items.length-leads.length)+' duplicates)');
+
+  if(!leads.length){
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperStatusTitle').textContent='No New Leads Found';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    showToast('Scraper finished but found no new leads','red');
+    return;
+  }
+
+  // Check existing leads to avoid duplicates
+  fetch(SB+'/leads?select=business_name,location',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(existing){
+    var existingKeys={};
+    existing.forEach(function(e){existingKeys[(e.business_name||'').toLowerCase()+'|'+(e.location||'').toLowerCase()]=true});
+
+    var newLeads=leads.filter(function(l){
+      return!existingKeys[(l.business_name||'').toLowerCase()+'|'+(l.location||'').toLowerCase()];
+    });
+
+    scraperLog('Existing leads in DB: '+existing.length+' | Truly new: '+newLeads.length);
+
+    if(!newLeads.length){
+      document.getElementById('scraperProgressBar').style.width='100%';
+      document.getElementById('scraperStatusTitle').textContent='All Leads Already Exist';
+      document.getElementById('scraperStatusMsg').textContent='All '+leads.length+' scraped leads are already in the database.';
+      document.getElementById('btnRunScraper').disabled=false;
+      document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+      showToast('All scraped leads already exist in database','blue');
+      return;
+    }
+
+    // Insert in batches of 50
+    insertLeadBatch(newLeads,0,50,0);
+  });
+}
+
+function insertLeadBatch(leads,offset,batchSize,inserted){
+  if(offset>=leads.length){
+    // All done
+    document.getElementById('scraperProgressBar').style.width='100%';
+    document.getElementById('scraperProgressBar').style.background='var(--green)';
+    document.getElementById('scraperStatusTitle').textContent='Scraper Complete!';
+    document.getElementById('scraperStatusTitle').style.color='var(--green)';
+    document.getElementById('scraperStatusMsg').textContent='Inserted '+inserted+' new leads into the database.';
+    document.getElementById('btnRunScraper').disabled=false;
+    document.getElementById('btnRunScraper').textContent='\u25B6 Run Scraper Now';
+    scraperLog('DONE! Inserted '+inserted+' new leads.');
+    showToast(inserted+' new leads scraped and added to database!','green');
+    loadData();
+    loadScraperHistory();
+    return;
+  }
+
+  var batch=leads.slice(offset,offset+batchSize);
+  var pct=90+Math.round((offset/leads.length)*10);
+  document.getElementById('scraperProgressBar').style.width=pct+'%';
+  document.getElementById('scraperStatusMsg').textContent='Inserting leads... ('+offset+'/'+leads.length+')';
+
+  fetch(SB+'/leads',{
+    method:'POST',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify(batch)
+  }).then(function(r){
+    if(r.ok){
+      inserted+=batch.length;
+      scraperLog('Inserted batch: '+batch.length+' leads (total: '+inserted+')');
+    } else {
+      scraperLog('Insert error (batch at offset '+offset+'): HTTP '+r.status);
+    }
+    insertLeadBatch(leads,offset+batchSize,batchSize,inserted);
+  }).catch(function(err){
+    scraperLog('Insert error: '+err.message);
+    insertLeadBatch(leads,offset+batchSize,batchSize,inserted);
+  });
+}
+
+// Toggle chip tags on click
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('chip-tag')){
+    e.target.classList.toggle('active');
+  }
+});
+
 function runBulkAudit(){
   if(!confirm('This will trigger the Make.com audit scenario for all New leads. Continue?'))return;
   var newLeads=allLeads.filter(function(l){return l.status==='New'&&l.website});
@@ -1261,10 +2255,228 @@ function runBulkAudit(){
   alert('Found '+newLeads.length+' new leads. The Make.com "New Lead \u2192 AI Audit" scenario runs every 15 minutes and will pick these up automatically.');
 }
 
+// ── Auto-Scrape Config & History ──
+function toggleAutoScrape(){
+  var enabled=document.getElementById('autoScrapeEnabled').checked;
+  var interval=parseInt(document.getElementById('autoScrapeInterval').value)||24;
+  document.getElementById('autoScrapeLabel').textContent=enabled?'ON':'OFF';
+  document.getElementById('autoScrapeLabel').style.color=enabled?'var(--green)':'var(--accent)';
+
+  // Save config to Supabase
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+
+  fetch(SB+'/scraper_config?id=eq.1',{
+    method:'PATCH',
+    headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+    body:JSON.stringify({
+      auto_run_enabled:enabled,
+      auto_run_interval_hours:interval,
+      cities:cities,
+      industries:industries,
+      max_results_per_query:parseInt(document.getElementById('apifyMaxResults').value)||20,
+      scrape_contacts:document.getElementById('apifyScrapeContacts').checked,
+      updated_at:new Date().toISOString()
+    })
+  }).then(function(r){
+    if(r.ok) showToast(enabled?'Auto-scraping enabled! Runs every '+interval+' hours.':'Auto-scraping disabled.',enabled?'green':'blue');
+  });
+}
+
+function loadScraperConfig(){
+  fetch(SB+'/scraper_config?id=eq.1&select=*',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data||!data.length)return;
+    var cfg=data[0];
+    if(cfg.auto_run_enabled){
+      document.getElementById('autoScrapeEnabled').checked=true;
+      document.getElementById('autoScrapeLabel').textContent='ON';
+      document.getElementById('autoScrapeLabel').style.color='var(--green)';
+    }
+    if(cfg.auto_run_interval_hours){
+      document.getElementById('autoScrapeInterval').value=cfg.auto_run_interval_hours;
+    }
+    if(cfg.last_auto_run){
+      document.getElementById('autoScrapeLastRun').textContent='Last auto-run: '+new Date(cfg.last_auto_run).toLocaleString();
+    }
+    if(cfg.apify_token){
+      localStorage.setItem('solis_apify_token',cfg.apify_token);
+      document.getElementById('apifyToken').value=cfg.apify_token;
+      document.getElementById('apifyTokenStatus').textContent='Saved (server)';
+      document.getElementById('apifyTokenStatus').style.color='var(--green)';
+    }
+  }).catch(function(){});
+}
+
+function loadScraperHistory(){
+  fetch(SB+'/scraper_runs?select=*&order=started_at.desc&limit=10',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(runs){
+    var el=document.getElementById('scraperRunHistory');
+    if(!runs||!runs.length){el.innerHTML='<div style="color:var(--text3);padding:8px 0">No scraper runs yet. Click "Run Scraper Now" to start.</div>';return}
+    var html='<table style="width:100%"><tr><th>Time</th><th>Status</th><th>Queries</th><th>Results</th><th>New Leads</th></tr>';
+    runs.forEach(function(r){
+      var statusColor=r.status==='SUCCEEDED'?'var(--green)':r.status==='RUNNING'?'var(--accent)':'var(--red)';
+      html+='<tr>';
+      html+='<td style="font-size:11px">'+new Date(r.started_at).toLocaleString()+'</td>';
+      html+='<td><span style="color:'+statusColor+';font-weight:700;font-size:11px">'+r.status+'</span></td>';
+      html+='<td style="font-size:11px;text-align:center">'+(r.queries_count||0)+'</td>';
+      html+='<td style="font-size:11px;text-align:center">'+(r.results_count||0)+'</td>';
+      html+='<td style="font-size:11px;text-align:center;color:var(--green);font-weight:700">'+(r.new_leads_count||0)+'</td>';
+      html+='</tr>';
+    });
+    html+='</table>';
+    el.innerHTML=html;
+  }).catch(function(){});
+}
+
+// ── GO LIVE — Master Launch Switch ──
+function goLive(){
+  // Check Apify token first
+  var token=getApifyToken();
+  if(!token){
+    showToast('Set your Apify API token first before going live!','red');
+    document.getElementById('scraperConfig').style.display='block';
+    document.getElementById('apifyToken').scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('apifyToken').focus();
+    return;
+  }
+
+  if(!confirm('Launch Solis Digital?\n\nThis will activate:\n\u2714 24/7 automated lead scraping (every 24h)\n\u2714 Bulk audit for all new leads\n\u2714 Lead scoring pipeline\n\u2714 Scraper config saved to server\n\nReady to go live?'))return;
+
+  var btn=document.getElementById('btnGoLive');
+  btn.disabled=true;
+  btn.innerHTML='Launching...';
+  var steps=[];
+
+  // 1. Save Apify token to server
+  steps.push(
+    fetch(SB+'/scraper_config?id=eq.1',{
+      method:'PATCH',
+      headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({apify_token:token,updated_at:new Date().toISOString()})
+    }).then(function(r){return r.ok?'Token saved':'Token save failed'})
+  );
+
+  // 2. Enable 24/7 auto-scraping
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  steps.push(
+    fetch(SB+'/scraper_config?id=eq.1',{
+      method:'PATCH',
+      headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({
+        auto_run_enabled:true,
+        auto_run_interval_hours:24,
+        cities:cities,
+        industries:industries,
+        max_results_per_query:parseInt(document.getElementById('apifyMaxResults').value)||20,
+        scrape_contacts:document.getElementById('apifyScrapeContacts').checked,
+        updated_at:new Date().toISOString()
+      })
+    }).then(function(r){return r.ok?'Auto-scraping ON':'Auto-scrape config failed'})
+  );
+
+  // 3. Run lead scoring on all leads
+  steps.push(
+    fetch(SB+'/leads?select=id,business_name,website,has_website,speed_score,seo_score,ssl_secure,google_rating,industry,location,email,phone,review_count',{headers:H})
+    .then(function(r){return r.json()})
+    .then(function(leads){
+      // Score all leads client-side and batch update
+      var HIGH_INDUSTRIES=['dentist','dental','doctor','clinic','physio','chiropractor','vet','estate agent','solicitor','law','accountant','salon','barber','beauty','spa','gym','plumber','electrician','builder','restaurant','cafe','photographer','wedding'];
+      var TARGET_CITIES=['london','nottingham','birmingham','manchester','leeds','liverpool','sheffield','bristol','leicester','coventry','derby','cardiff','newcastle','brighton','reading','oxford','cambridge','southampton','portsmouth'];
+      var scored=0;
+      var updates=leads.map(function(l){
+        var s=0;
+        if(!l.has_website||!l.website)s+=30;
+        if(l.speed_score!=null&&l.speed_score<50)s+=20;
+        if(l.ssl_secure===false)s+=15;
+        if(l.google_rating!=null&&l.google_rating<4.0)s+=15;
+        if(l.email)s+=10;
+        if(l.phone)s+=5;
+        var ind=(l.industry||'').toLowerCase();
+        if(HIGH_INDUSTRIES.some(function(i){return ind.includes(i)}))s+=10;
+        var loc=(l.location||'').toLowerCase();
+        if(TARGET_CITIES.some(function(c){return loc.includes(c)}))s+=10;
+        if(l.review_count!=null&&l.review_count<20)s+=5;
+        return fetch(SB+'/leads?id=eq.'+l.id,{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({lead_score:s})}).then(function(r){if(r.ok)scored++;});
+      });
+      return Promise.all(updates).then(function(){return 'Scored '+scored+' leads'});
+    })
+  );
+
+  // 4. Log the launch event
+  steps.push(
+    fetch(SB+'/admin_actions',{
+      method:'POST',
+      headers:H,
+      body:JSON.stringify({action_type:'system_launch',description:'Solis Digital launched — all systems activated',target:'system',result:'success',details:{auto_scrape:true,lead_scoring:true,timestamp:new Date().toISOString()}})
+    }).then(function(r){return r.ok?'Launch logged':'Log failed'})
+  );
+
+  Promise.all(steps).then(function(results){
+    // Update UI
+    document.getElementById('autoScrapeEnabled').checked=true;
+    document.getElementById('autoScrapeLabel').textContent='ON';
+    document.getElementById('autoScrapeLabel').style.color='var(--green)';
+
+    btn.innerHTML='\u2714 LIVE';
+    btn.style.background='var(--green)';
+    btn.style.boxShadow='0 0 30px rgba(52,211,153,.4)';
+    btn.disabled=true;
+
+    showToast('Solis Digital is LIVE! All systems activated.','green');
+
+    // Refresh everything
+    loadData();
+    loadScraperConfig();
+    loadScraperHistory();
+  }).catch(function(err){
+    btn.disabled=false;
+    btn.innerHTML='\u26A1 GO LIVE';
+    showToast('Launch error: '+err.message,'red');
+  });
+}
+
+// Check if already live on load
+function checkLiveStatus(){
+  fetch(SB+'/scraper_config?id=eq.1&select=auto_run_enabled,apify_token',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(data&&data.length&&data[0].auto_run_enabled&&data[0].apify_token){
+      var btn=document.getElementById('btnGoLive');
+      btn.innerHTML='\u2714 LIVE';
+      btn.style.background='var(--green)';
+      btn.style.boxShadow='0 0 30px rgba(52,211,153,.4)';
+      btn.onclick=function(){
+        if(!confirm('Solis is currently LIVE. Do you want to take it offline?\n\nThis will disable 24/7 auto-scraping.'))return;
+        fetch(SB+'/scraper_config?id=eq.1',{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({auto_run_enabled:false})})
+        .then(function(){
+          btn.innerHTML='\u26A1 GO LIVE';
+          btn.style.background='linear-gradient(135deg,var(--green),#10b981)';
+          btn.style.boxShadow='0 0 20px rgba(52,211,153,.25)';
+          btn.onclick=goLive;
+          document.getElementById('autoScrapeEnabled').checked=false;
+          document.getElementById('autoScrapeLabel').textContent='OFF';
+          document.getElementById('autoScrapeLabel').style.color='var(--accent)';
+          showToast('Solis taken offline. Auto-scraping disabled.','blue');
+          fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'system_offline',description:'Solis Digital taken offline',target:'system',result:'success'})});
+        });
+      };
+    }
+  }).catch(function(){});
+}
+
 loadData();
 loadRequests();
+loadScraperConfig();
+loadScraperHistory();
+checkLiveStatus();
 // Auto-refresh every 60 seconds
-setInterval(function(){loadData();loadRequests()},60000);
+setInterval(function(){loadData();loadRequests();loadScraperHistory()},60000);
 </script>
 </body>
 </html>
