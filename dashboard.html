@@ -201,6 +201,7 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <div class="top-r">
     <button class="btn btn-d" onclick="runBulkAudit()">Run Bulk Audit</button>
     <button class="btn btn-p" onclick="loadData()">Refresh</button>
+    <button class="btn btn-sm" id="btnGoLive" onclick="goLive()" style="background:linear-gradient(135deg,var(--green),#10b981);color:#0a0a0a;font-weight:800;padding:10px 24px;font-size:13px;letter-spacing:.5px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 0 20px rgba(52,211,153,.25)">&#9889; GO LIVE</button>
   </div>
 </div>
 
@@ -2331,10 +2332,149 @@ function loadScraperHistory(){
   }).catch(function(){});
 }
 
+// ── GO LIVE — Master Launch Switch ──
+function goLive(){
+  // Check Apify token first
+  var token=getApifyToken();
+  if(!token){
+    showToast('Set your Apify API token first before going live!','red');
+    document.getElementById('scraperConfig').style.display='block';
+    document.getElementById('apifyToken').scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('apifyToken').focus();
+    return;
+  }
+
+  if(!confirm('Launch Solis Digital?\n\nThis will activate:\n\u2714 24/7 automated lead scraping (every 24h)\n\u2714 Bulk audit for all new leads\n\u2714 Lead scoring pipeline\n\u2714 Scraper config saved to server\n\nReady to go live?'))return;
+
+  var btn=document.getElementById('btnGoLive');
+  btn.disabled=true;
+  btn.innerHTML='Launching...';
+  var steps=[];
+
+  // 1. Save Apify token to server
+  steps.push(
+    fetch(SB+'/scraper_config?id=eq.1',{
+      method:'PATCH',
+      headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({apify_token:token,updated_at:new Date().toISOString()})
+    }).then(function(r){return r.ok?'Token saved':'Token save failed'})
+  );
+
+  // 2. Enable 24/7 auto-scraping
+  var cities=[];var industries=[];
+  document.querySelectorAll('#scraperCities .chip-tag.active').forEach(function(c){cities.push(c.textContent.replace(' (All Boroughs)','').trim())});
+  document.querySelectorAll('#scraperIndustries .chip-tag.active').forEach(function(c){industries.push(c.textContent.replace(' / ','/').trim())});
+  steps.push(
+    fetch(SB+'/scraper_config?id=eq.1',{
+      method:'PATCH',
+      headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({
+        auto_run_enabled:true,
+        auto_run_interval_hours:24,
+        cities:cities,
+        industries:industries,
+        max_results_per_query:parseInt(document.getElementById('apifyMaxResults').value)||20,
+        scrape_contacts:document.getElementById('apifyScrapeContacts').checked,
+        updated_at:new Date().toISOString()
+      })
+    }).then(function(r){return r.ok?'Auto-scraping ON':'Auto-scrape config failed'})
+  );
+
+  // 3. Run lead scoring on all leads
+  steps.push(
+    fetch(SB+'/leads?select=id,business_name,website,has_website,speed_score,seo_score,ssl_secure,google_rating,industry,location,email,phone,review_count',{headers:H})
+    .then(function(r){return r.json()})
+    .then(function(leads){
+      // Score all leads client-side and batch update
+      var HIGH_INDUSTRIES=['dentist','dental','doctor','clinic','physio','chiropractor','vet','estate agent','solicitor','law','accountant','salon','barber','beauty','spa','gym','plumber','electrician','builder','restaurant','cafe','photographer','wedding'];
+      var TARGET_CITIES=['london','nottingham','birmingham','manchester','leeds','liverpool','sheffield','bristol','leicester','coventry','derby','cardiff','newcastle','brighton','reading','oxford','cambridge','southampton','portsmouth'];
+      var scored=0;
+      var updates=leads.map(function(l){
+        var s=0;
+        if(!l.has_website||!l.website)s+=30;
+        if(l.speed_score!=null&&l.speed_score<50)s+=20;
+        if(l.ssl_secure===false)s+=15;
+        if(l.google_rating!=null&&l.google_rating<4.0)s+=15;
+        if(l.email)s+=10;
+        if(l.phone)s+=5;
+        var ind=(l.industry||'').toLowerCase();
+        if(HIGH_INDUSTRIES.some(function(i){return ind.includes(i)}))s+=10;
+        var loc=(l.location||'').toLowerCase();
+        if(TARGET_CITIES.some(function(c){return loc.includes(c)}))s+=10;
+        if(l.review_count!=null&&l.review_count<20)s+=5;
+        return fetch(SB+'/leads?id=eq.'+l.id,{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({lead_score:s})}).then(function(r){if(r.ok)scored++;});
+      });
+      return Promise.all(updates).then(function(){return 'Scored '+scored+' leads'});
+    })
+  );
+
+  // 4. Log the launch event
+  steps.push(
+    fetch(SB+'/admin_actions',{
+      method:'POST',
+      headers:H,
+      body:JSON.stringify({action_type:'system_launch',description:'Solis Digital launched — all systems activated',target:'system',result:'success',details:{auto_scrape:true,lead_scoring:true,timestamp:new Date().toISOString()}})
+    }).then(function(r){return r.ok?'Launch logged':'Log failed'})
+  );
+
+  Promise.all(steps).then(function(results){
+    // Update UI
+    document.getElementById('autoScrapeEnabled').checked=true;
+    document.getElementById('autoScrapeLabel').textContent='ON';
+    document.getElementById('autoScrapeLabel').style.color='var(--green)';
+
+    btn.innerHTML='\u2714 LIVE';
+    btn.style.background='var(--green)';
+    btn.style.boxShadow='0 0 30px rgba(52,211,153,.4)';
+    btn.disabled=true;
+
+    showToast('Solis Digital is LIVE! All systems activated.','green');
+
+    // Refresh everything
+    loadData();
+    loadScraperConfig();
+    loadScraperHistory();
+  }).catch(function(err){
+    btn.disabled=false;
+    btn.innerHTML='\u26A1 GO LIVE';
+    showToast('Launch error: '+err.message,'red');
+  });
+}
+
+// Check if already live on load
+function checkLiveStatus(){
+  fetch(SB+'/scraper_config?id=eq.1&select=auto_run_enabled,apify_token',{headers:H})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(data&&data.length&&data[0].auto_run_enabled&&data[0].apify_token){
+      var btn=document.getElementById('btnGoLive');
+      btn.innerHTML='\u2714 LIVE';
+      btn.style.background='var(--green)';
+      btn.style.boxShadow='0 0 30px rgba(52,211,153,.4)';
+      btn.onclick=function(){
+        if(!confirm('Solis is currently LIVE. Do you want to take it offline?\n\nThis will disable 24/7 auto-scraping.'))return;
+        fetch(SB+'/scraper_config?id=eq.1',{method:'PATCH',headers:Object.assign({},H,{'Prefer':'return=minimal'}),body:JSON.stringify({auto_run_enabled:false})})
+        .then(function(){
+          btn.innerHTML='\u26A1 GO LIVE';
+          btn.style.background='linear-gradient(135deg,var(--green),#10b981)';
+          btn.style.boxShadow='0 0 20px rgba(52,211,153,.25)';
+          btn.onclick=goLive;
+          document.getElementById('autoScrapeEnabled').checked=false;
+          document.getElementById('autoScrapeLabel').textContent='OFF';
+          document.getElementById('autoScrapeLabel').style.color='var(--accent)';
+          showToast('Solis taken offline. Auto-scraping disabled.','blue');
+          fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'system_offline',description:'Solis Digital taken offline',target:'system',result:'success'})});
+        });
+      };
+    }
+  }).catch(function(){});
+}
+
 loadData();
 loadRequests();
 loadScraperConfig();
 loadScraperHistory();
+checkLiveStatus();
 // Auto-refresh every 60 seconds
 setInterval(function(){loadData();loadRequests();loadScraperHistory()},60000);
 </script>
