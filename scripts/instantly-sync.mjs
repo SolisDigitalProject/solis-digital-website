@@ -71,6 +71,12 @@ function buildIssues(lead) {
   return issues;
 }
 
+function buildEmailBody(lead, issues) {
+  const name = lead.business_name || 'your business';
+  const site = lead.website || 'your website';
+  return `Hi,\n\nI was looking at local ${lead.industry || 'businesses'} in ${lead.location || 'your area'} and ran a quick audit on ${site}.\n\nI found a few things that might be costing you customers:\n\n1. ${issues[0]}\n2. ${issues[1]}\n3. ${issues[2]}\n\nYour site scored ${lead.speed_score || 'below average'}/100 on Google's speed test — anything below 50 means visitors are leaving before the page even loads.\n\nI put together a full audit report with specific fixes. Want me to send it over?\n\nNo cost, no strings — just thought it might be useful.`;
+}
+
 /**
  * List all Instantly campaigns to find the target campaign_id
  */
@@ -154,8 +160,10 @@ async function pushLeads() {
       email: lead.email,
       first_name: extractFirstName(lead.email),
       company_name: lead.business_name || '',
+      website: lead.website || '',
       custom_variables: {
         business_name: lead.business_name || '',
+        company_name: lead.business_name || '',
         website: lead.website || '',
         industry: lead.industry || '',
         location: lead.location || '',
@@ -168,7 +176,8 @@ async function pushLeads() {
         issue_3: issues[2],
         number_of_issues: String(issues.length),
         audit_summary: lead.audit_summary || '',
-        calendly_link: 'https://calendly.com/solisdigital/strategy-call'
+        email_body: buildEmailBody(lead, issues),
+        calendly_link: 'https://calendly.com/solisdigital-info/solis-digital-free-strategy-call'
       }
     };
   });
