@@ -10,6 +10,7 @@ import { SB_REST as SB_URL, sbHeaders as HEADERS } from './config.mjs';
 
 async function query(endpoint) {
   const res = await fetch(`${SB_URL}${endpoint}`, { headers: HEADERS });
+  if (!res.ok) { console.error(`Query failed: ${endpoint} (${res.status})`); return []; }
   return res.json();
 }
 

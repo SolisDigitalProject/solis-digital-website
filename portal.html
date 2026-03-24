@@ -60,7 +60,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .info-row .lbl{color:var(--text3)}
 .info-row .val{color:var(--white);font-weight:600}
 
-@media(max-width:600px){.scores{grid-template-columns:1fr 1fr 1fr}.scores .score-card .val{font-size:24px}}
+/* Sign out button */
+.sign-out{position:absolute;top:16px;right:20px;background:none;border:1px solid var(--border);color:var(--text3);font-size:11px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:var(--font);transition:all .2s}
+.sign-out:hover{color:var(--white);border-color:var(--border2)}
+.portal{position:relative}
+
+/* Last updated note */
+.last-updated{font-size:11px;color:var(--text3);margin-top:-8px;margin-bottom:16px}
+
+/* Contact footer */
+.portal-footer{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text3)}
+.portal-footer a{color:var(--accent);text-decoration:none;font-weight:600}
+
+@media(max-width:600px){.scores{grid-template-columns:1fr}.scores .score-card .val{font-size:24px}}
 </style>
 </head>
 <body>
@@ -81,6 +93,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <!-- Portal Content -->
 <div class="portal" id="portal">
+  <button class="sign-out" onclick="signOut()">Sign Out</button>
   <div class="welcome">
     <h2 id="portalTitle">Loading...</h2>
     <p id="portalSub"></p>
@@ -101,6 +114,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <div id="auditSummary" style="font-size:12px;color:var(--text2);line-height:1.6;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);display:none"></div>
     </div>
   </div>
+
+  <div class="last-updated" id="lastUpdated" style="display:none"></div>
 
   <!-- Project Milestones -->
   <div class="panel">
@@ -135,8 +150,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     </div>
   </div>
 
-  <div style="text-align:center;margin-top:32px;font-size:11px;color:var(--text3)">
-    Powered by <a href="https://www.solisdigital.co.uk" style="color:var(--accent);text-decoration:none;font-weight:700">Solis Digital</a> &mdash; <a href="mailto:info@solisdigital.co.uk" style="color:var(--text3);text-decoration:none">info@solisdigital.co.uk</a>
+  <div class="portal-footer">
+    Need help? Email <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>
+  </div>
+
+  <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text3)">
+    Powered by <a href="https://www.solisdigital.co.uk" style="color:var(--accent);text-decoration:none;font-weight:700">Solis Digital</a>
   </div>
 </div>
 
@@ -151,6 +170,13 @@ var urlToken=params.get('token');
 if(urlToken){
   document.getElementById('tokenInput').value=urlToken;
   authenticate();
+}
+
+function signOut(){
+  document.getElementById('tokenInput').value='';
+  document.getElementById('portal').style.display='none';
+  document.getElementById('authGate').style.display='block';
+  document.getElementById('authErr').style.display='none';
 }
 
 function authenticate(){
@@ -230,7 +256,7 @@ function loadPortal(proj){
 
   // Website scores — fetch from lead if linked
   if(proj.business_name){
-    fetch(SB+'/leads?business_name=eq.'+encodeURIComponent(proj.business_name)+'&select=speed_score,seo_score,mobile_score,audit_summary&limit=1',{headers:H})
+    fetch(SB+'/leads?business_name=eq.'+encodeURIComponent(proj.business_name)+'&select=speed_score,seo_score,mobile_score,audit_summary,updated_at,created_at&limit=1',{headers:H})
     .then(function(r){return r.json()})
     .then(function(leads){
       if(!leads||!leads.length)return;
@@ -248,6 +274,12 @@ function loadPortal(proj){
           var el=document.getElementById('auditSummary');
           el.style.display='block';
           el.textContent=l.audit_summary;
+        }
+        var ts=l.updated_at||l.created_at;
+        if(ts){
+          var lu=document.getElementById('lastUpdated');
+          lu.style.display='block';
+          lu.textContent='Scores last updated: '+new Date(ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
         }
       }
     });
