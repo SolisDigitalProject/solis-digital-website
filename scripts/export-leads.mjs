@@ -28,7 +28,7 @@ function extractFirstName(email) {
 async function main() {
   const url = `${SB_URL}/rest/v1/leads?status=eq.Audited&email=not.is.null&select=email,business_name,website,industry,speed_score,seo_score,audit_summary`;
   const res = await fetch(url, {
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    headers: sbHeaders
   });
   if (!res.ok) { console.error(`Failed to fetch leads: ${res.status}`); process.exit(1); }
 

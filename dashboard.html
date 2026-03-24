@@ -1992,7 +1992,9 @@ function getApifyToken(){
 function scraperLog(msg){
   var log=document.getElementById('scraperRunLog');
   var t=new Date().toLocaleTimeString();
-  log.innerHTML+='<div>['+t+'] '+msg+'</div>';
+  var div=document.createElement('div');
+  div.textContent='['+t+'] '+msg;
+  log.appendChild(div);
   log.scrollTop=log.scrollHeight;
 }
 
@@ -2177,6 +2179,7 @@ function processScraperResults(items){
   // Check existing leads to avoid duplicates
   fetch(SB+'/leads?select=business_name,location',{headers:H})
   .then(function(r){return r.json()})
+  .catch(function(err){console.error('Failed to fetch existing leads:',err);return[]})
   .then(function(existing){
     var existingKeys={};
     existing.forEach(function(e){existingKeys[(e.business_name||'').toLowerCase()+'|'+(e.location||'').toLowerCase()]=true});
@@ -2282,6 +2285,9 @@ function toggleAutoScrape(){
     })
   }).then(function(r){
     if(r.ok) showToast(enabled?'Auto-scraping enabled! Runs every '+interval+' hours.':'Auto-scraping disabled.',enabled?'green':'blue');
+  }).catch(function(err){
+    console.error('toggleAutoScrape error:',err);
+    showToast('Failed to save auto-scrape settings: '+err.message,'red');
   });
 }
 
@@ -2346,6 +2352,14 @@ function goLive(){
   }
 
   if(!confirm('Launch Solis Digital?\n\nThis will activate:\n\u2714 24/7 automated lead scraping (every 24h)\n\u2714 Bulk audit for all new leads\n\u2714 Lead scoring pipeline\n\u2714 Scraper config saved to server\n\nReady to go live?'))return;
+
+  // Validate that at least one industry and one city chip is selected
+  var selectedIndustries=document.querySelectorAll('#scraperIndustries .chip-tag.active');
+  var selectedCities=document.querySelectorAll('#scraperCities .chip-tag.active');
+  if(!selectedIndustries.length||!selectedCities.length){
+    alert('Please select at least one industry and one city before going live.');
+    return;
+  }
 
   var btn=document.getElementById('btnGoLive');
   btn.disabled=true;

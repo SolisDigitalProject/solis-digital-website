@@ -90,6 +90,7 @@ www.solisdigital.co.uk`
 
 async function query(endpoint) {
   const res = await fetch(`${SB_URL}${endpoint}`, { headers: HEADERS });
+  if (!res.ok) { console.error(`Query failed: ${endpoint} (${res.status})`); return []; }
   return res.json();
 }
 
