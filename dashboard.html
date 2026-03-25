@@ -405,7 +405,7 @@ if(sessionStorage.getItem('solis_auth')==='1'){
         <select id="np_package" style="padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font);cursor:pointer">
           <option value="Starter">Starter</option>
           <option value="Growth" selected>Growth</option>
-          <option value="Premium">Premium</option>
+          <option value="Accelerator">Accelerator</option>
         </select>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
@@ -1330,7 +1330,7 @@ function createNewProject(){
   var domain=document.getElementById('np_domain').value.trim();
   // Generate onboard token
   var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
-  var launchDays=pkg==='Launch'?7:pkg==='Growth'?14:21;
+  var launchDays=pkg==='Starter'?7:pkg==='Growth'?10:14;
   var est=new Date();est.setDate(est.getDate()+launchDays);
 
   var body={
