@@ -1671,6 +1671,14 @@ function generateFramerBrief(projectId){
       p+='.\n\n';
     }
 
+    // Target Audience
+    if(b.target_audience||b.customer_pains){
+      p+='TARGET AUDIENCE:\n';
+      if(b.target_audience)p+=b.target_audience+'\n';
+      if(b.customer_pains)p+='Pain points: '+b.customer_pains+'\n';
+      p+='\n';
+    }
+
     // Pages
     p+='PAGES TO CREATE:\n';
     if(b.pages&&b.pages.length)p+=b.pages.map(function(pg){return'- '+pg}).join('\n')+'\n';
