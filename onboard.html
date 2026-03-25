@@ -229,7 +229,7 @@ function showError(title,msg){
 function showAlreadySubmitted(){
   var d=new Date(project.client_brief_submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   var pkg=project.package||project.plan_type||'';
-  var days=pkg==='Accelerate'?21:pkg==='Growth'?14:7;
+  var days=pkg==='Accelerator'?14:pkg==='Growth'?10:7;
   document.getElementById('mainContent').innerHTML='<div class="already"><h2>Brief Already Submitted</h2>'+(pkg?'<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(52,211,153,.2);border-radius:100px;font-size:12px;font-weight:700;color:var(--green);background:rgba(52,211,153,.04);margin-bottom:16px">'+pkg+' Plan</div>':'')+'<p>You submitted your project brief on <strong style="color:var(--accent)">'+d+'</strong>.</p><p>Our team is building your website and you can expect it to be ready within <strong style="color:var(--accent)">'+days+' days</strong> of submission.</p><p style="color:var(--text3);font-size:12px;margin-top:16px">Need to make changes? Contact us at info@solisdigital.co.uk</p></div>';
 }
 
@@ -247,7 +247,7 @@ function buildForm(){
   html+='<p>Fill in what you can — skip anything you\'re not sure about. We\'ll follow up on anything we need. Fields marked <span style="color:var(--red)">*</span> are the only ones required. Everything else is optional but helps us build faster.</p>';
   html+='<p style="font-size:13px;color:var(--accent);margin-top:8px">Takes about 5-10 minutes. Your progress is not lost if you scroll between steps.</p>';
   var planLabel=project.package||project.plan_type||'';
-  var planDays=planLabel==='Accelerate'?21:planLabel==='Growth'?14:7;
+  var planDays=planLabel==='Accelerator'?14:planLabel==='Growth'?10:7;
   if(planLabel)html+='<div style="display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border:1px solid rgba(52,211,153,.2);border-radius:100px;font-size:12px;font-weight:700;color:var(--green);background:rgba(52,211,153,.04);margin-top:12px"><span style="font-size:14px">&#x2705;</span> '+esc(planLabel)+' Plan &mdash; estimated delivery in '+planDays+' days</div>';
   html+='<div class="biz-badge">'+esc(project.business_name)+'</div>';
   html+='</div>';
@@ -605,7 +605,7 @@ function buildForm(){
   html+='</div>';
 
   html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-submit" id="submitBtn" onclick="submitBrief()">Submit My Brief</button></div>';
-  var deliveryMsg=planLabel==='Accelerate'?'within 21 days':planLabel==='Growth'?'within 14 days':'within 5-7 days';
+  var deliveryMsg=planLabel==='Accelerator'?'within 14 days':planLabel==='Growth'?'within 10 days':'within 5-7 days';
   html+='<p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5">Once submitted, our team will begin building your website '+deliveryMsg+'. Need to make changes later? Email info@solisdigital.co.uk</p>';
   html+='</div>'; // end step4
 

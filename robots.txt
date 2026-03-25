@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /dashboard.html
+Disallow: /onboard.html
+Disallow: /portal.html
 Disallow: /scripts/
 
 Sitemap: https://www.solisdigital.co.uk/sitemap.xml
