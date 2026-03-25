@@ -210,7 +210,7 @@ async function pushLeads() {
 
   // Record in outreach table so we don't push duplicates
   for (const lead of newLeads) {
-    await fetch(`${SB_URL}/outreach`, {
+    const oRes = await fetch(`${SB_URL}/outreach`, {
       method: 'POST',
       headers: { ...HEADERS, 'Prefer': 'return=minimal' },
       body: JSON.stringify({
@@ -222,15 +222,17 @@ async function pushLeads() {
         subject: `${lead.business_name} — pushed to Instantly campaign`
       })
     });
+    if (!oRes.ok) console.warn(`  Failed to record outreach for ${lead.email}: ${oRes.status}`);
   }
 
   // Update lead statuses to "In Outreach"
   for (const lead of newLeads) {
-    await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
+    const lRes = await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
       method: 'PATCH',
       headers: { ...HEADERS, 'Prefer': 'return=minimal' },
       body: JSON.stringify({ status: 'In Outreach' })
     });
+    if (!lRes.ok) console.warn(`  Failed to update lead ${lead.id}: ${lRes.status}`);
   }
 
   await logAction({

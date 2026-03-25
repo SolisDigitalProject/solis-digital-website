@@ -660,7 +660,7 @@ var allClients=[];
 var allOutreach=[];
 var currentFilter='All';
 
-function q(endpoint){return fetch(SB+endpoint,{headers:H}).then(function(r){return r.json()})}
+function q(endpoint){return fetch(SB+endpoint,{headers:H}).then(function(r){return r.ok?r.json():[]}).catch(function(){return []})}
 
 function loadData(){
   Promise.all([
@@ -767,7 +767,7 @@ function loadData(){
     } else {
       document.getElementById('inquiries').innerHTML='<div class="loading-s" style="padding:20px">No inquiries yet.</div>';
     }
-  });
+  }).catch(function(err){console.error('loadData error:',err)});
 }
 
 function renderLeadsTable(leads){
