@@ -286,7 +286,7 @@ function loadPortal(proj){
           lu.textContent='Scores last updated: '+new Date(ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
         }
       }
-    });
+    }).catch(function(err){console.error('Scores fetch error:',err)});
   }
 }
 </script>

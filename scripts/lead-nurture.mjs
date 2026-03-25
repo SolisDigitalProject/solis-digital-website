@@ -183,7 +183,7 @@ async function process() {
     // This script tracks sequence progression and logs to outreach table
 
     // Record in outreach table
-    await fetch(`${SB_URL}/outreach`, {
+    const oRes = await fetch(`${SB_URL}/outreach`, {
       method: 'POST',
       headers: { ...HEADERS, 'Prefer': 'return=minimal' },
       body: JSON.stringify({
@@ -195,11 +195,12 @@ async function process() {
         subject: subject
       })
     });
+    if (!oRes.ok) console.warn(`  Failed to record outreach for ${seq.email}: ${oRes.status}`);
 
     // Advance or complete the sequence
     if (seq.sequence_step >= 4) {
       // Final step — mark as completed
-      await fetch(`${SB_URL}/nurture_sequences?id=eq.${seq.id}`, {
+      const cRes = await fetch(`${SB_URL}/nurture_sequences?id=eq.${seq.id}`, {
         method: 'PATCH',
         headers: { ...HEADERS, 'Prefer': 'return=minimal' },
         body: JSON.stringify({
@@ -208,14 +209,16 @@ async function process() {
           sequence_step: 4
         })
       });
+      if (!cRes.ok) console.warn(`  Failed to complete sequence ${seq.id}: ${cRes.status}`);
 
       // Update lead status to show sequence is done
       if (seq.lead_id) {
-        await fetch(`${SB_URL}/leads?id=eq.${seq.lead_id}`, {
+        const lRes = await fetch(`${SB_URL}/leads?id=eq.${seq.lead_id}`, {
           method: 'PATCH',
           headers: { ...HEADERS, 'Prefer': 'return=minimal' },
           body: JSON.stringify({ notes: 'Nurture sequence completed (4/4 emails sent)' })
         });
+        if (!lRes.ok) console.warn(`  Failed to update lead ${seq.lead_id}: ${lRes.status}`);
       }
       console.log(`     ✅ Sequence COMPLETED for ${seq.business_name}`);
     } else {
@@ -224,7 +227,7 @@ async function process() {
       const daysUntilNext = SEQUENCE_SCHEDULE[nextStep] - SEQUENCE_SCHEDULE[seq.sequence_step];
       const nextSend = new Date(Date.now() + daysUntilNext * 86400000).toISOString();
 
-      await fetch(`${SB_URL}/nurture_sequences?id=eq.${seq.id}`, {
+      const aRes = await fetch(`${SB_URL}/nurture_sequences?id=eq.${seq.id}`, {
         method: 'PATCH',
         headers: { ...HEADERS, 'Prefer': 'return=minimal' },
         body: JSON.stringify({
@@ -233,6 +236,7 @@ async function process() {
           last_sent_at: now
         })
       });
+      if (!aRes.ok) console.warn(`  Failed to advance sequence ${seq.id}: ${aRes.status}`);
       console.log(`     → Next: Step ${nextStep} in ${daysUntilNext} days`);
     }
   }
