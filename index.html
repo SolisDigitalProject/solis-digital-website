@@ -191,6 +191,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;
 .price-guarantee{text-align:center;margin-top:32px;padding:20px;border:1px dashed var(--border2);border-radius:12px}
 .price-guarantee p{font-size:14px;color:var(--text2);line-height:1.7}
 .price-guarantee strong{color:var(--white)}
+.price-roi{text-align:center;margin-bottom:48px}
+.price-roi h3{font-size:28px;font-weight:800;color:var(--white);margin-bottom:8px}
+.price-roi p{font-size:16px;color:var(--text2);max-width:600px;margin:0 auto}
+.pc .roi-note{font-size:13px;color:var(--accent);font-style:italic;margin-top:12px;margin-bottom:20px;line-height:1.5;padding:10px;background:rgba(99,102,241,.08);border-radius:8px}
+.upsell-sec{margin-top:64px}
+.upsell-sec .sec-h{font-size:24px;margin-bottom:32px}
+.upsell-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.upsell-card{padding:28px;background:var(--surface);border:1px solid var(--border);border-radius:14px;transition:all .3s}
+.upsell-card:hover{border-color:var(--accent)}
+.upsell-card .pt{margin-bottom:4px}
+.upsell-card .pa{font-size:24px;margin-bottom:8px}
+.addon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:32px}
+.addon-item{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:14px;color:var(--text2)}
+.addon-item span:last-child{color:var(--white);font-weight:700}
+.upgrade-path{margin-top:48px;text-align:center;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+.upgrade-path h3{font-size:18px;color:var(--white);margin-bottom:16px}
+.upgrade-steps{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.upgrade-step{padding:10px 20px;border:1px solid var(--border2);border-radius:8px;font-size:13px;color:var(--text2)}
+.upgrade-arrow{color:var(--accent);font-size:18px;font-weight:700}
+@media(max-width:768px){.upsell-grid,.addon-grid{grid-template-columns:1fr}.upgrade-steps{flex-direction:column}}
 
 /* FAQ */
 .faq-list{max-width:720px}
@@ -423,11 +443,14 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <section class="sec" id="pricing"><div class="ctn">
 <div class="sec-ey rv">Pricing</div>
 <div class="sec-h rv">Transparent pricing.<br>No hidden fees. <em>Ever.</em></div>
-<p class="sec-p rv">100% satisfaction guarantee on every package.</p>
+<div class="price-roi rv">
+  <h3>What would 5 new clients per month do for your business?</h3>
+  <p>Most businesses we work with see ROI within the first 30 days.</p>
+</div>
 <div class="pg">
 <div class="pc rv">
-  <div class="pt">Starter</div>
-  <div class="pa">&pound;497 <span class="pe">one-off</span></div>
+  <div class="pt">Launch</div>
+  <div class="pa">&pound;997 <span class="pe">+ &pound;49/mo</span></div>
   <p class="pd">Professional online presence for small businesses ready to grow.</p>
   <ul class="pl">
     <li>5-page responsive website</li>
@@ -435,45 +458,98 @@ footer{border-top:1px solid var(--border);padding:48px 0}
     <li>Basic SEO setup</li>
     <li>Contact form + Google Maps</li>
     <li>SSL certificate</li>
-    <li>Delivered in 5–7 days</li>
+    <li>Hosting &amp; domain managed by Solis</li>
+    <li>Delivered in 5&ndash;7 days</li>
   </ul>
+  <div class="roi-note">Your website is your 24/7 salesperson. Our clients typically receive 3&ndash;5 new enquiries per month &mdash; that&rsquo;s &pound;1,500&ndash;&pound;10,000 in new revenue from a single investment.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
 <div class="pc pop rv">
   <div class="pt">Growth</div>
-  <div class="pa">&pound;997 <span class="pe">+ &pound;197/mo</span></div>
+  <div class="pa">&pound;1,497 <span class="pe">+ &pound;297/mo</span></div>
   <p class="pd">Full growth engine for businesses serious about scaling.</p>
   <ul class="pl">
     <li>10-page custom website</li>
     <li>Advanced SEO optimisation</li>
-    <li>AI chatbot integration</li>
     <li>Google Business optimisation</li>
     <li>Monthly analytics reporting</li>
-    <li>Booking system</li>
+    <li>Booking system integration</li>
     <li>Content updates included</li>
+    <li>Hosting, domain &amp; maintenance included</li>
+    <li>White-label performance dashboard</li>
     <li>Priority support</li>
   </ul>
+  <div class="roi-note">One new client per month pays for this entire plan. Our Growth clients average 8&ndash;12 new monthly enquiries within 90 days.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
 <div class="pc rv">
-  <div class="pt">Enterprise</div>
-  <div class="pa">&pound;2,497 <span class="pe">+ &pound;397/mo</span></div>
-  <p class="pd">Full-service digital transformation for established businesses.</p>
+  <div class="pt">Accelerate</div>
+  <div class="pa">&pound;2,997 <span class="pe">+ &pound;997/mo</span></div>
+  <p class="pd">Full-service digital transformation with ads, SEO &amp; social &mdash; all included.</p>
   <ul class="pl">
     <li>Unlimited pages</li>
     <li>E-commerce / booking platform</li>
     <li>Full marketing automation</li>
     <li>Google &amp; Meta Ads management</li>
+    <li>&pound;500/mo ad budget included</li>
     <li>Monthly SEO campaigns</li>
     <li>Social media management</li>
+    <li>Hosting, domain &amp; maintenance included</li>
+    <li>White-label performance dashboard</li>
     <li>Dedicated account manager</li>
     <li>White-glove onboarding</li>
   </ul>
+  <div class="roi-note">A dental practice on Accelerate saw 47 new patient bookings in their first quarter. At an average patient value of &pound;800/year, that&rsquo;s &pound;37,600 in annual revenue.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
 </div>
+
+<!-- UPSELLS -->
+<div class="upsell-sec rv">
+<div class="sec-h">Power Up Your Plan</div>
+<div class="upsell-grid">
+  <div class="upsell-card">
+    <div class="pt">AI Chatbot</div>
+    <div class="pa">&pound;197 <span class="pe">+ &pound;47/mo</span></div>
+    <p class="pd">24/7 AI assistant trained on your services. Captures leads, books appointments, answers FAQs &mdash; even while you sleep.</p>
+  </div>
+  <div class="upsell-card">
+    <div class="pt">Google Reviews Automation</div>
+    <div class="pa">&pound;97 <span class="pe">+ &pound;27/mo</span></div>
+    <p class="pd">Automated review requests after every appointment. SMS + email follow-ups. Bad reviews flagged privately before they go public.</p>
+  </div>
+</div>
+</div>
+
+<!-- ADD-ONS -->
+<div class="upsell-sec rv">
+<div class="sec-h">One-Off Add-Ons</div>
+<div class="addon-grid">
+  <div class="addon-item"><span>Extra page</span><span>&pound;97</span></div>
+  <div class="addon-item"><span>SEO blog post (1,000 words)</span><span>&pound;147</span></div>
+  <div class="addon-item"><span>Email template design</span><span>&pound;197</span></div>
+  <div class="addon-item"><span>Landing page (ads/campaign)</span><span>&pound;297</span></div>
+  <div class="addon-item"><span>Logo &amp; brand kit</span><span>&pound;497</span></div>
+  <div class="addon-item"><span>Video editing (30s social clip)</span><span>&pound;97</span></div>
+  <div class="addon-item"><span>Google Ads setup (no management)</span><span>&pound;297</span></div>
+  <div class="addon-item"><span>Quarterly website refresh</span><span>&pound;297</span></div>
+</div>
+</div>
+
+<!-- UPGRADE PATH -->
+<div class="upgrade-path rv">
+  <h3>Grow With Us</h3>
+  <div class="upgrade-steps">
+    <div class="upgrade-step">Launch</div>
+    <div class="upgrade-arrow">&rarr;</div>
+    <div class="upgrade-step">Growth <small>(setup fee waived)</small></div>
+    <div class="upgrade-arrow">&rarr;</div>
+    <div class="upgrade-step">Accelerate <small>(setup reduced to &pound;997)</small></div>
+  </div>
+</div>
+
 <div class="price-guarantee rv">
-  <p><strong>100% Satisfaction Guarantee.</strong> We don't stop until you're happy with your website. Every project includes 2 rounds of revisions and dedicated support throughout.</p>
+  <p><strong>100% Satisfaction Guarantee.</strong> We don&rsquo;t stop until you&rsquo;re happy with your website. Every project includes 2 rounds of revisions and dedicated support throughout.</p>
 </div>
 </div></section>
 
