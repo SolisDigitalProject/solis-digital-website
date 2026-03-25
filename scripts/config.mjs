@@ -2,21 +2,51 @@
 /**
  * Solis Digital — Shared Configuration
  * All scripts import credentials from here.
- * Set environment variables or they fall back to defaults.
+ * Loads .env file automatically if present.
  *
- * Required env vars for production:
- *   SUPABASE_URL    — Supabase project URL
- *   SUPABASE_KEY    — Supabase anon key
- *   PAGESPEED_API_KEY — Google PageSpeed API key
- *   ANTHROPIC_API_KEY — Claude API key (for bulk-audit & generate-copy)
+ * Required env vars (set in .env at project root):
+ *   SUPABASE_URL      — Supabase project URL
+ *   SUPABASE_KEY      — Supabase anon key
+ *   PAGESPEED_API_KEY  — Google PageSpeed API key
+ *   INSTANTLY_API_KEY  — Instantly API key (for outreach campaigns)
+ *   ANTHROPIC_API_KEY  — Claude API key (for bulk-audit & generate-copy)
  */
 
-export const SB_URL = process.env.SUPABASE_URL || 'https://zqcpktpnfikmshqeqxlg.supabase.co';
-export const SB_REST = process.env.SUPABASE_URL
-  ? process.env.SUPABASE_URL + '/rest/v1'
-  : 'https://zqcpktpnfikmshqeqxlg.supabase.co/rest/v1';
-export const SB_KEY = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxY3BrdHBuZmlrbXNocWVxeGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDg5MDIsImV4cCI6MjA4ODkyNDkwMn0.whtTwOyOihSqhjPPj8YMEV-T4-m_-jYTWJ2m6LtUYKE';
-export const PAGESPEED_KEY = process.env.PAGESPEED_API_KEY || 'AIzaSyCCd15XjzZE5aoAJ8zJjCLkkW9evdkuHj0';
+import { readFileSync } from 'fs';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Auto-load .env from project root
+const __dirname = dirname(fileURLToPath(import.meta.url));
+try {
+  const envPath = resolve(__dirname, '..', '.env');
+  const envFile = readFileSync(envPath, 'utf8');
+  for (const line of envFile.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (!process.env[key]) process.env[key] = val;
+  }
+} catch { /* .env file not found — rely on system env vars */ }
+
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable: ${name}\n` +
+      `Set it in your .env file at the project root or export it in your shell.`
+    );
+  }
+  return value;
+}
+
+export const SB_URL = requireEnv('SUPABASE_URL');
+export const SB_REST = SB_URL + '/rest/v1';
+export const SB_KEY = requireEnv('SUPABASE_KEY');
+export const PAGESPEED_KEY = requireEnv('PAGESPEED_API_KEY');
 
 export const sbHeaders = {
   'apikey': SB_KEY,

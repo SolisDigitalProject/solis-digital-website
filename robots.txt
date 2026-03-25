@@ -4,5 +4,6 @@ Disallow: /dashboard.html
 Disallow: /onboard.html
 Disallow: /portal.html
 Disallow: /scripts/
+Disallow: /templates/
 
 Sitemap: https://www.solisdigital.co.uk/sitemap.xml

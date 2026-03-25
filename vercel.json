@@ -20,7 +20,23 @@
       "destination": "/404"
     },
     {
+      "source": "/templates/:path*",
+      "destination": "/404"
+    },
+    {
       "source": "/contract-template.md",
+      "destination": "/404"
+    },
+    {
+      "source": "/SOLIS-OPERATING-SYSTEM.md",
+      "destination": "/404"
+    },
+    {
+      "source": "/AGENCY-BLUEPRINT.md",
+      "destination": "/404"
+    },
+    {
+      "source": "/ZYPFLOW-INTEGRATION.md",
       "destination": "/404"
     }
   ]

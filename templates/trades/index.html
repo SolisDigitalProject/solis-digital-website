@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{business_name}} — Trusted {{trade_type}} in {{city}} | {{tagline}}</title>
+<meta name="description" content="{{business_name}} — trusted {{trade_type}} in {{city}} and surrounding areas. {{years_experience}}+ years experience. Call {{phone}} for a free quote today.">
+<meta name="keywords" content="{{trade_type}} {{city}}, {{service_1}}, {{service_2}}, {{service_3}}, emergency {{trade_type}} {{city}}, local {{trade_type}} near me">
+<link rel="canonical" href="{{website_url}}">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#1e3a5f">
+
+<!-- Open Graph -->
+<meta property="og:title" content="{{business_name}} — Trusted {{trade_type}} in {{city}}">
+<meta property="og:description" content="{{years_experience}}+ years experience. Professional {{trade_type}} services in {{city}} and surrounding areas. Free quotes. Call {{phone}}.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{website_url}}">
+<meta property="og:site_name" content="{{business_name}}">
+<meta property="og:locale" content="en_GB">
+<meta property="og:image" content="{{og_image_url}}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{business_name}} — Trusted {{trade_type}} in {{city}}">
+<meta name="twitter:description" content="{{years_experience}}+ years experience. Professional {{trade_type}} services in {{city}}. Free quotes — call {{phone}}.">
+
+<!-- Schema.org LocalBusiness + Trade Type Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "HomeAndConstructionBusiness", "{{schema_trade_type}}"],
+  "name": "{{business_name}}",
+  "description": "Professional {{trade_type}} services in {{city}} and surrounding areas. {{years_experience}}+ years experience. Fully accredited and insured.",
+  "url": "{{website_url}}",
+  "telephone": "{{phone}}",
+  "email": "{{email}}",
+  "image": "{{og_image_url}}",
+  "priceRange": "{{price_range}}",
+  "areaServed": [
+    {"@type": "City", "name": "{{city}}"},
+    {"@type": "Place", "name": "{{area_1}}"},
+    {"@type": "Place", "name": "{{area_2}}"},
+    {"@type": "Place", "name": "{{area_3}}"},
+    {"@type": "Place", "name": "{{area_4}}"},
+    {"@type": "Place", "name": "{{area_5}}"},
+    {"@type": "Place", "name": "{{area_6}}"},
+    {"@type": "Place", "name": "{{area_7}}"},
+    {"@type": "Place", "name": "{{area_8}}"}
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{street_address}}",
+    "addressLocality": "{{city}}",
+    "addressRegion": "{{county}}",
+    "postalCode": "{{postcode}}",
+    "addressCountry": "GB"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{{latitude}}",
+    "longitude": "{{longitude}}"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "{{weekday_open}}",
+      "closes": "{{weekday_close}}"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "{{saturday_open}}",
+      "closes": "{{saturday_close}}"
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{avg_rating}}",
+    "reviewCount": "{{review_count}}"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "{{trade_type}} Services",
+    "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_1}}"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_2}}"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_3}}"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_4}}"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_5}}"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "{{service_6}}"}}
+    ]
+  }
+}
+</script>
+
+<!-- Fonts: Oswald (headings) + Open Sans (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+
+<style>
+/* ============================================================
+   TRADES TEMPLATE — SOLIS DIGITAL
+   Dark navy + safety orange. Mobile-first. Trustworthy.
+   ============================================================ */
+
+/* --- RESET & VARIABLES --- */
+:root {
+  --navy: #1e3a5f;
+  --navy-dark: #142944;
+  --navy-deep: #0e1f33;
+  --orange: #f47920;
+  --orange-light: #ff9a4a;
+  --orange-dark: #d4631a;
+  --yellow: #ffc107;
+  --white: #ffffff;
+  --off-white: #f8f9fa;
+  --light-grey: #e9ecef;
+  --mid-grey: #6c757d;
+  --dark-grey: #343a40;
+  --text-dark: #1a1a2e;
+  --text-body: #2d3748;
+  --text-muted: #64748b;
+  --green: #16a34a;
+  --star: #fbbf24;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.15);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.2);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+  --transition: 0.3s ease;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--text-body);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* --- CONTAINER --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- SECTION SPACING --- */
+.section {
+  padding: 64px 0;
+}
+.section--navy {
+  background: var(--navy);
+  color: var(--white);
+}
+.section--light {
+  background: var(--off-white);
+}
+.section--dark {
+  background: var(--navy-deep);
+  color: var(--white);
+}
+
+/* --- SECTION HEADERS --- */
+.section-label {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.section-subtitle {
+  font-size: 17px;
+  color: var(--text-muted);
+  max-width: 640px;
+  line-height: 1.7;
+}
+.section--navy .section-subtitle,
+.section--dark .section-subtitle {
+  color: rgba(255,255,255,0.7);
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.section-header .section-subtitle {
+  margin: 0 auto;
+}
+
+/* --- BUTTONS --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 32px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.btn--primary {
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: 0 4px 16px rgba(244,121,32,0.35);
+}
+.btn--primary:hover {
+  background: var(--orange-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(244,121,32,0.45);
+}
+.btn--secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.3);
+}
+.btn--secondary:hover {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.08);
+}
+.btn--white {
+  background: var(--white);
+  color: var(--navy);
+  font-weight: 700;
+}
+.btn--white:hover {
+  background: var(--off-white);
+  transform: translateY(-2px);
+}
+.btn--large {
+  font-size: 18px;
+  padding: 18px 40px;
+  border-radius: var(--radius-lg);
+}
+.btn--phone {
+  background: var(--green);
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 700;
+  padding: 16px 36px;
+  border-radius: var(--radius-lg);
+}
+.btn--phone:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--navy-dark);
+  border-bottom: 3px solid var(--orange);
+  transition: box-shadow var(--transition);
+}
+.nav.scrolled {
+  box-shadow: var(--shadow-lg);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav__logo {
+  width: 44px;
+  height: 44px;
+  background: var(--orange);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--white);
+}
+.nav__name {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.nav__links {
+  display: none;
+  gap: 28px;
+}
+.nav__links a {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  transition: color var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.nav__links a:hover {
+  color: var(--orange);
+}
+.nav__cta {
+  display: none;
+}
+.nav__phone-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--green);
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 20px;
+}
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+  z-index: 1001;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* Mobile Nav Overlay */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--navy-dark);
+  z-index: 999;
+  padding: 32px 24px;
+  flex-direction: column;
+  gap: 0;
+}
+.mobile-nav.open {
+  display: flex;
+}
+.mobile-nav a {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  letter-spacing: 1px;
+}
+.mobile-nav a:hover {
+  color: var(--orange);
+}
+.mobile-nav__phone {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--green);
+  color: var(--white) !important;
+  padding: 18px 24px !important;
+  border-radius: var(--radius-lg);
+  font-size: 20px !important;
+  justify-content: center;
+  border: none !important;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 50%, var(--navy-dark) 100%);
+  overflow: hidden;
+  padding-top: 72px;
+}
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background: url('{{hero_image_url}}') center/cover no-repeat;
+  opacity: 0.15;
+}
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(14,31,51,0.92) 0%, rgba(30,58,95,0.85) 100%);
+}
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  width: 100%;
+}
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(244,121,32,0.15);
+  border: 1px solid rgba(244,121,32,0.3);
+  border-radius: 100px;
+  padding: 8px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--orange-light);
+}
+.hero__badge-icon {
+  font-size: 16px;
+}
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 7vw, 64px);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero__title span {
+  color: var(--orange);
+}
+.hero__subtitle {
+  font-size: clamp(17px, 2.5vw, 20px);
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+  max-width: 560px;
+  margin-bottom: 32px;
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.hero__phone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 32px;
+}
+.hero__phone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: var(--green);
+  border-radius: 50%;
+  font-size: 24px;
+  animation: pulse-ring 2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(22,163,74,0); }
+  100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+}
+.hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+.hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+}
+.hero__trust-icon {
+  font-size: 18px;
+}
+
+/* ============================================================
+   EMERGENCY CALLOUT BANNER
+   ============================================================ */
+.emergency {
+  background: linear-gradient(90deg, var(--orange-dark), var(--orange));
+  color: var(--white);
+  padding: 16px 0;
+  text-align: center;
+}
+.emergency__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.emergency__icon {
+  font-size: 22px;
+  animation: flash 1.5s ease-in-out infinite;
+}
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.emergency a {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.service-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  border: 1px solid var(--light-grey);
+  transition: all var(--transition);
+  text-align: center;
+}
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--orange);
+}
+.service-card__icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+}
+.service-card__title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: var(--navy);
+}
+.service-card__text {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   WHY CHOOSE US — TRUST SIGNALS
+   ============================================================ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.stat-card {
+  text-align: center;
+  padding: 32px 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.stat-card__number {
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 700;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-card__label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.7);
+}
+.why-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 48px;
+}
+.why-feature {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.why-feature__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(244,121,32,0.15);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.why-feature__title {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.why-feature__text {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   SERVICE AREAS
+   ============================================================ */
+.areas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.area-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--light-grey);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--navy);
+  transition: all var(--transition);
+}
+.area-tag:hover {
+  border-color: var(--orange);
+  box-shadow: var(--shadow-sm);
+}
+.area-tag__icon {
+  color: var(--orange);
+  font-size: 16px;
+}
+.areas-map {
+  width: 100%;
+  height: 300px;
+  background: var(--light-grey);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  border: 2px dashed var(--mid-grey);
+  color: var(--mid-grey);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   PROJECT GALLERY
+   ============================================================ */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.gallery-item {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--light-grey);
+  border: 2px dashed var(--mid-grey);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition);
+}
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+.gallery-item__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(14,31,51,0.8) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.gallery-item:hover .gallery-item__overlay {
+  opacity: 1;
+}
+.gallery-item__caption {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
+}
+.gallery-placeholder {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mid-grey);
+  text-align: center;
+  padding: 12px;
+}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.review-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  border: 1px solid var(--light-grey);
+  box-shadow: var(--shadow-sm);
+}
+.review-card__stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+.review-card__star {
+  color: var(--star);
+  font-size: 18px;
+}
+.review-card__text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-body);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.review-card__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.review-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 16px;
+}
+.review-card__name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+.review-card__source {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.reviews-summary {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.reviews-summary__score {
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+.reviews-summary__stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0;
+  font-size: 24px;
+  color: var(--star);
+}
+.reviews-summary__count {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   ACCREDITATIONS
+   ============================================================ */
+.accreditations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.accreditation-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 16px;
+  transition: all var(--transition);
+}
+.accreditation-item:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--orange);
+}
+.accreditation-item img {
+  max-height: 48px;
+  max-width: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  transition: opacity var(--transition);
+}
+.accreditation-item:hover img {
+  opacity: 1;
+}
+.accreditation-placeholder {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+}
+
+/* ============================================================
+   QUOTE FORM
+   ============================================================ */
+.quote-form {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 40px 24px;
+  box-shadow: var(--shadow-xl);
+}
+.quote-form__title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.quote-form__subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--light-grey);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-dark);
+  background: var(--white);
+  transition: border-color var(--transition);
+  -webkit-appearance: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(244,121,32,0.15);
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.quote-form .btn {
+  width: 100%;
+  font-size: 18px;
+  padding: 18px;
+}
+.form-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.form-trust span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+.contact-block {
+  text-align: center;
+}
+.contact-block__icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(244,121,32,0.12);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 24px;
+}
+.contact-block__label {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.contact-block__value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.contact-block__value a {
+  color: var(--navy);
+  transition: color var(--transition);
+}
+.contact-block__value a:hover {
+  color: var(--orange);
+}
+.contact-phone__number {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 700;
+  color: var(--navy);
+  display: block;
+  margin-bottom: 12px;
+}
+.contact-phone__number a {
+  color: var(--navy);
+}
+.contact-phone__number a:hover {
+  color: var(--orange);
+}
+.hours-table {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: left;
+}
+.hours-table tr td {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--light-grey);
+}
+.hours-table tr td:first-child {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.hours-table tr td:last-child {
+  text-align: right;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: var(--navy-deep);
+  color: rgba(255,255,255,0.7);
+  padding: 60px 0 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.footer__brand {
+  margin-bottom: 16px;
+}
+.footer__brand-name {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+}
+.footer__brand-text {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 12px;
+  color: rgba(255,255,255,0.5);
+}
+.footer__heading {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+.footer__list li {
+  margin-bottom: 10px;
+}
+.footer__list a {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  transition: color var(--transition);
+}
+.footer__list a:hover {
+  color: var(--white);
+}
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+.footer-social {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  transition: all var(--transition);
+}
+.footer-social:hover {
+  background: var(--orange);
+  color: var(--white);
+}
+.footer-bottom {
+  padding: 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+}
+.footer-bottom a {
+  color: var(--orange);
+  font-weight: 600;
+  transition: color var(--transition);
+}
+.footer-bottom a:hover {
+  color: var(--orange-light);
+}
+.footer-accreditations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: center;
+}
+.footer-accreditation {
+  height: 32px;
+  opacity: 0.4;
+  filter: brightness(0) invert(1);
+  transition: opacity var(--transition);
+}
+.footer-accreditation:hover {
+  opacity: 0.8;
+}
+
+/* ============================================================
+   STICKY MOBILE CTA
+   ============================================================ */
+.sticky-cta {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: var(--navy-dark);
+  border-top: 3px solid var(--orange);
+  padding: 12px 16px;
+  gap: 10px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+}
+.sticky-cta__phone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--green);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+}
+.sticky-cta__quote {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--orange);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (600px+)
+   ============================================================ */
+@media (min-width: 600px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+  .areas-grid { grid-template-columns: repeat(4, 1fr); }
+  .contact-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr 1fr; }
+  .accreditations-grid { grid-template-columns: repeat(4, 1fr); }
+  .why-features { grid-template-columns: repeat(2, 1fr); }
+
+  .quote-form { padding: 48px 40px; }
+  .section { padding: 80px 0; }
+}
+
+/* ============================================================
+   RESPONSIVE — DESKTOP (900px+)
+   ============================================================ */
+@media (min-width: 900px) {
+  .services-grid { grid-template-columns: repeat(3, 1fr); }
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+  .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+  .reviews-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  .accreditations-grid { grid-template-columns: repeat(6, 1fr); }
+
+  .section { padding: 100px 0; }
+
+  .nav__links { display: flex; }
+  .nav__cta { display: inline-flex; }
+  .nav__phone-mobile { display: none; }
+  .hamburger { display: none; }
+
+  .sticky-cta { display: none; }
+
+  .hero__content { padding: 80px 20px; }
+
+  .contact-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ============================================================
+   RESPONSIVE — LARGE DESKTOP (1100px+)
+   ============================================================ */
+@media (min-width: 1100px) {
+  .hero__title { font-size: 62px; }
+  .container { padding: 0 40px; }
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print {
+  .nav, .sticky-cta, .mobile-nav { display: none !important; }
+  .hero { min-height: auto; padding: 40px 0; }
+  body { color: #000; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__brand">
+      <div class="nav__logo">{{business_initials}}</div>
+      <span class="nav__name">{{business_name}}</span>
+    </a>
+    <div class="nav__links" id="navLinks">
+      <a href="#services">Services</a>
+      <a href="#why-us">Why Us</a>
+      <a href="#gallery">Our Work</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#areas">Areas</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="tel:{{phone}}" class="nav__phone-mobile" aria-label="Call {{business_name}}">&#9742;</a>
+      <a href="#quote" class="btn btn--primary nav__cta">Get a Free Quote</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav Overlay -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#why-us" onclick="closeMenu()">Why Choose Us</a>
+  <a href="#gallery" onclick="closeMenu()">Our Work</a>
+  <a href="#reviews" onclick="closeMenu()">Reviews</a>
+  <a href="#areas" onclick="closeMenu()">Areas Covered</a>
+  <a href="#quote" onclick="closeMenu()">Get a Quote</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="tel:{{phone}}" class="mobile-nav__phone" onclick="closeMenu()">&#9742; Call {{phone_display}}</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero__bg"></div>
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="hero__badge">
+      <span class="hero__badge-icon">&#9733;</span>
+      {{avg_rating}} Rated on Google &mdash; {{review_count}}+ Reviews
+    </div>
+    <h1 class="hero__title">
+      Trusted <span>{{trade_type}}</span><br>in {{city}}
+    </h1>
+    <p class="hero__subtitle">
+      {{business_name}} provides professional, reliable {{trade_type_lower}} services across {{city}} and surrounding areas. Over {{years_experience}} years of experience. Fully insured and accredited.
+    </p>
+    <a href="tel:{{phone}}" class="hero__phone">
+      <span class="hero__phone-icon">&#9742;</span>
+      {{phone_display}}
+    </a>
+    <div class="hero__actions">
+      <a href="#quote" class="btn btn--primary btn--large">Get a Free Quote</a>
+      <a href="#services" class="btn btn--secondary btn--large">Our Services</a>
+    </div>
+    <div class="hero__trust">
+      <span class="hero__trust-item">
+        <span class="hero__trust-icon">&#10003;</span> {{accreditation_1}} Registered
+      </span>
+      <span class="hero__trust-item">
+        <span class="hero__trust-icon">&#10003;</span> Fully Insured
+      </span>
+      <span class="hero__trust-item">
+        <span class="hero__trust-icon">&#10003;</span> Free Quotes
+      </span>
+      <span class="hero__trust-item">
+        <span class="hero__trust-icon">&#10003;</span> No Call-Out Charge
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EMERGENCY CALLOUT BANNER
+     ============================================================ -->
+<section class="emergency" id="emergency">
+  <div class="container">
+    <div class="emergency__inner">
+      <span class="emergency__icon">&#9888;</span>
+      24/7 Emergency Callout Available &mdash;
+      <a href="tel:{{phone}}">Call {{phone_display}} Now</a>
+      <span class="emergency__icon">&#9888;</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICES
+     ============================================================ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Our {{trade_type}} Services</h2>
+      <p class="section-subtitle">From routine maintenance to complete installations, we deliver quality workmanship you can trust. All work guaranteed.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-card__icon">&#128295;</div>
+        <h3 class="service-card__title">{{service_1}}</h3>
+        <p class="service-card__text">{{service_1_description}}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">&#128296;</div>
+        <h3 class="service-card__title">{{service_2}}</h3>
+        <p class="service-card__text">{{service_2_description}}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">&#9889;</div>
+        <h3 class="service-card__title">{{service_3}}</h3>
+        <p class="service-card__text">{{service_3_description}}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">&#127777;</div>
+        <h3 class="service-card__title">{{service_4}}</h3>
+        <p class="service-card__text">{{service_4_description}}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">&#128167;</div>
+        <h3 class="service-card__title">{{service_5}}</h3>
+        <p class="service-card__text">{{service_5_description}}</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__icon">&#9881;</div>
+        <h3 class="service-card__title">{{service_6}}</h3>
+        <p class="service-card__text">{{service_6_description}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY CHOOSE US
+     ============================================================ -->
+<section class="section section--navy" id="why-us">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Why Choose Us</p>
+      <h2 class="section-title">{{city}}'s Most Trusted {{trade_type}}</h2>
+      <p class="section-subtitle">We've built our reputation on honest pricing, quality work, and showing up when we say we will.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card__number">{{years_experience}}+</div>
+        <div class="stat-card__label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__number">{{jobs_completed}}+</div>
+        <div class="stat-card__label">Jobs Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__number">{{avg_rating}}</div>
+        <div class="stat-card__label">Google Rating</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__number">{{review_count}}+</div>
+        <div class="stat-card__label">5-Star Reviews</div>
+      </div>
+    </div>
+    <div class="why-features">
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128176;</div>
+        <div>
+          <div class="why-feature__title">Honest, Upfront Pricing</div>
+          <p class="why-feature__text">No hidden charges. We'll give you a clear, written quote before any work begins.</p>
+        </div>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128338;</div>
+        <div>
+          <div class="why-feature__title">On Time, Every Time</div>
+          <p class="why-feature__text">We respect your time. Punctual arrivals and clear communication throughout every job.</p>
+        </div>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128737;</div>
+        <div>
+          <div class="why-feature__title">Fully Insured &amp; Accredited</div>
+          <p class="why-feature__text">{{accreditation_1}} registered, fully insured, and compliant with all current regulations.</p>
+        </div>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128077;</div>
+        <div>
+          <div class="why-feature__title">Work Guaranteed</div>
+          <p class="why-feature__text">All our work comes with a written guarantee for your complete peace of mind.</p>
+        </div>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128692;</div>
+        <div>
+          <div class="why-feature__title">Local &amp; Family-Run</div>
+          <p class="why-feature__text">We live and work in {{city}}. Your neighbours recommend us because we do right by our community.</p>
+        </div>
+      </div>
+      <div class="why-feature">
+        <div class="why-feature__icon">&#128222;</div>
+        <div>
+          <div class="why-feature__title">24/7 Emergency Service</div>
+          <p class="why-feature__text">Burst pipe at midnight? Electrical fault on a Sunday? We're here when you need us most.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SERVICE AREAS
+     ============================================================ -->
+<section class="section section--light" id="areas">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Areas We Cover</p>
+      <h2 class="section-title">{{trade_type}} Services Across {{city}} &amp; Beyond</h2>
+      <p class="section-subtitle">We proudly serve {{city}} and the surrounding areas. Not sure if we cover your location? Give us a call.</p>
+    </div>
+    <div class="areas-map">
+      <!-- Replace with Google Maps embed or static map image -->
+      &#128205; Map Placeholder &mdash; Google Maps embed goes here
+    </div>
+    <div class="areas-grid">
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_1}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_2}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_3}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_4}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_5}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_6}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_7}}</div>
+      <div class="area-tag"><span class="area-tag__icon">&#128205;</span> {{area_8}}</div>
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <a href="tel:{{phone}}" class="btn btn--primary">Not Listed? Call Us &mdash; {{phone_display}}</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROJECT GALLERY
+     ============================================================ -->
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Our Work</p>
+      <h2 class="section-title">Recent Projects</h2>
+      <p class="section-subtitle">See the quality of our work for yourself. Every project completed to the highest standard.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <!-- <img src="{{gallery_image_1}}" alt="{{gallery_caption_1}}"> -->
+        <p class="gallery-placeholder">{{gallery_caption_1}}<br>Project Photo 1</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_1}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_2}}<br>Project Photo 2</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_2}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_3}}<br>Project Photo 3</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_3}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_4}}<br>Project Photo 4</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_4}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_5}}<br>Project Photo 5</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_5}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_6}}<br>Project Photo 6</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_6}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_7}}<br>Project Photo 7</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_7}}</span></div>
+      </div>
+      <div class="gallery-item">
+        <p class="gallery-placeholder">{{gallery_caption_8}}<br>Project Photo 8</p>
+        <div class="gallery-item__overlay"><span class="gallery-item__caption">{{gallery_caption_8}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     REVIEWS
+     ============================================================ -->
+<section class="section section--light" id="reviews">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Customer Reviews</p>
+      <h2 class="section-title">What Our Customers Say</h2>
+    </div>
+    <div class="reviews-summary">
+      <div class="reviews-summary__score">{{avg_rating}}</div>
+      <div class="reviews-summary__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="reviews-summary__count">Based on {{review_count}}+ Google Reviews</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-card__stars">
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+        </div>
+        <p class="review-card__text">"{{review_1_text}}"</p>
+        <div class="review-card__author">
+          <div class="review-card__avatar">{{review_1_initial}}</div>
+          <div>
+            <div class="review-card__name">{{review_1_name}}</div>
+            <div class="review-card__source">Google Review</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__stars">
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+        </div>
+        <p class="review-card__text">"{{review_2_text}}"</p>
+        <div class="review-card__author">
+          <div class="review-card__avatar">{{review_2_initial}}</div>
+          <div>
+            <div class="review-card__name">{{review_2_name}}</div>
+            <div class="review-card__source">Google Review</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-card__stars">
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+          <span class="review-card__star">&#9733;</span>
+        </div>
+        <p class="review-card__text">"{{review_3_text}}"</p>
+        <div class="review-card__author">
+          <div class="review-card__avatar">{{review_3_initial}}</div>
+          <div>
+            <div class="review-card__name">{{review_3_name}}</div>
+            <div class="review-card__source">Google Review</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="{{google_reviews_url}}" target="_blank" rel="noopener" class="btn btn--primary">Read All Reviews on Google</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ACCREDITATIONS
+     ============================================================ -->
+<section class="section section--dark" id="accreditations">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Accreditations &amp; Memberships</p>
+      <h2 class="section-title">Fully Accredited &amp; Certified</h2>
+      <p class="section-subtitle">We hold all the industry accreditations you'd expect from a professional, trustworthy tradesperson.</p>
+    </div>
+    <div class="accreditations-grid">
+      <div class="accreditation-item">
+        <!-- <img src="{{accreditation_logo_1}}" alt="{{accreditation_1}}"> -->
+        <span class="accreditation-placeholder">{{accreditation_1}}</span>
+      </div>
+      <div class="accreditation-item">
+        <span class="accreditation-placeholder">{{accreditation_2}}</span>
+      </div>
+      <div class="accreditation-item">
+        <span class="accreditation-placeholder">{{accreditation_3}}</span>
+      </div>
+      <div class="accreditation-item">
+        <span class="accreditation-placeholder">Checkatrade</span>
+      </div>
+      <div class="accreditation-item">
+        <span class="accreditation-placeholder">TrustATrader</span>
+      </div>
+      <div class="accreditation-item">
+        <span class="accreditation-placeholder">Which? Trusted Traders</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GET A QUOTE FORM
+     ============================================================ -->
+<section class="section section--navy" id="quote">
+  <div class="container">
+    <div class="quote-form">
+      <h2 class="quote-form__title">Get a Free Quote</h2>
+      <p class="quote-form__subtitle">Fill in your details and we'll get back to you within the hour. No obligation.</p>
+      <form action="{{form_action_url}}" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="07700 900000" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label for="service">Service Required</label>
+          <select id="service" name="service" required>
+            <option value="" disabled selected>Select a service...</option>
+            <option value="{{service_1}}">{{service_1}}</option>
+            <option value="{{service_2}}">{{service_2}}</option>
+            <option value="{{service_3}}">{{service_3}}</option>
+            <option value="{{service_4}}">{{service_4}}</option>
+            <option value="{{service_5}}">{{service_5}}</option>
+            <option value="{{service_6}}">{{service_6}}</option>
+            <option value="Other">Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Brief Description of Work</label>
+          <textarea id="message" name="message" placeholder="Tell us a bit about the job — what needs doing, roughly when, anything we should know..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="date">Preferred Date</label>
+          <input type="date" id="date" name="preferred_date">
+        </div>
+        <button type="submit" class="btn btn--primary btn--large">Send My Free Quote Request</button>
+        <div class="form-trust">
+          <span>&#128274; Your details are safe</span>
+          <span>&#9889; Response within 1 hour</span>
+          <span>&#128176; No obligation</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Contact {{business_name}}</h2>
+    </div>
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="contact-phone__number"><a href="tel:{{phone}}">{{phone_display}}</a></span>
+      <a href="tel:{{phone}}" class="btn btn--phone btn--large">&#9742; Call Us Now</a>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-block">
+        <div class="contact-block__icon">&#128231;</div>
+        <div class="contact-block__label">Email</div>
+        <div class="contact-block__value"><a href="mailto:{{email}}">{{email}}</a></div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block__icon">&#128205;</div>
+        <div class="contact-block__label">Address</div>
+        <div class="contact-block__value">{{street_address}}<br>{{city}}, {{postcode}}</div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block__icon">&#128338;</div>
+        <div class="contact-block__label">Opening Hours</div>
+        <div class="contact-block__value">
+          <table class="hours-table">
+            <tr><td>Mon &ndash; Fri</td><td>{{weekday_open}} &ndash; {{weekday_close}}</td></tr>
+            <tr><td>Saturday</td><td>{{saturday_open}} &ndash; {{saturday_close}}</td></tr>
+            <tr><td>Sunday</td><td>{{sunday_hours}}</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="contact-block">
+        <div class="contact-block__icon">&#9888;</div>
+        <div class="contact-block__label">Emergency</div>
+        <div class="contact-block__value">24/7 Callouts<br><a href="tel:{{phone}}">{{phone_display}}</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer__brand">
+          <div class="footer__brand-name">{{business_name}}</div>
+        </div>
+        <p class="footer__brand-text">Professional {{trade_type_lower}} services in {{city}} and surrounding areas. Over {{years_experience}} years of experience. Fully accredited, insured, and guaranteed.</p>
+        <div class="footer-socials">
+          <a href="{{facebook_url}}" class="footer-social" aria-label="Facebook" target="_blank" rel="noopener">f</a>
+          <a href="{{instagram_url}}" class="footer-social" aria-label="Instagram" target="_blank" rel="noopener">&#9741;</a>
+          <a href="{{google_reviews_url}}" class="footer-social" aria-label="Google" target="_blank" rel="noopener">G</a>
+        </div>
+        <div class="footer-accreditations">
+          <!-- Accreditation badge images -->
+          <img src="{{accreditation_logo_1}}" alt="{{accreditation_1}}" class="footer-accreditation">
+          <img src="{{accreditation_logo_2}}" alt="{{accreditation_2}}" class="footer-accreditation">
+          <img src="{{accreditation_logo_3}}" alt="{{accreditation_3}}" class="footer-accreditation">
+        </div>
+      </div>
+      <div>
+        <h4 class="footer__heading">Services</h4>
+        <ul class="footer__list">
+          <li><a href="#services">{{service_1}}</a></li>
+          <li><a href="#services">{{service_2}}</a></li>
+          <li><a href="#services">{{service_3}}</a></li>
+          <li><a href="#services">{{service_4}}</a></li>
+          <li><a href="#services">{{service_5}}</a></li>
+          <li><a href="#services">{{service_6}}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__heading">Areas</h4>
+        <ul class="footer__list">
+          <li><a href="#areas">{{area_1}}</a></li>
+          <li><a href="#areas">{{area_2}}</a></li>
+          <li><a href="#areas">{{area_3}}</a></li>
+          <li><a href="#areas">{{area_4}}</a></li>
+          <li><a href="#areas">{{area_5}}</a></li>
+          <li><a href="#areas">{{area_6}}</a></li>
+          <li><a href="#areas">{{area_7}}</a></li>
+          <li><a href="#areas">{{area_8}}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer__heading">Contact</h4>
+        <ul class="footer__list">
+          <li><a href="tel:{{phone}}">{{phone_display}}</a></li>
+          <li><a href="mailto:{{email}}">{{email}}</a></li>
+          <li>{{street_address}}</li>
+          <li>{{city}}, {{postcode}}</li>
+        </ul>
+        <div style="margin-top:20px;">
+          <a href="#quote" class="btn btn--primary" style="font-size:14px;padding:12px 20px;">Get a Quote</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {{current_year}} {{business_name}}. All rights reserved.</span>
+      <span>&bull;</span>
+      <span>Website by <a href="https://www.solisdigital.co.uk" target="_blank" rel="noopener">Solis Digital</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     STICKY MOBILE CTA (visible on mobile only)
+     ============================================================ -->
+<div class="sticky-cta" id="stickyCta">
+  <a href="tel:{{phone}}" class="sticky-cta__phone">&#9742; Call Now</a>
+  <a href="#quote" class="sticky-cta__quote">&#9997; Free Quote</a>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT — Mobile Menu + Nav Scroll
+     ============================================================ -->
+<script>
+(function() {
+  // Mobile menu toggle
+  var hamburger = document.getElementById('hamburger');
+  var mobileNav = document.getElementById('mobileNav');
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function() {
+    var isOpen = mobileNav.classList.contains('open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      hamburger.classList.add('active');
+      mobileNav.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  });
+
+  // Expose closeMenu globally for inline onclick handlers
+  window.closeMenu = closeMenu;
+
+  // Nav scroll shadow
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 20) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // Hide sticky CTA when near the quote form
+  var stickyCta = document.getElementById('stickyCta');
+  var quoteSection = document.getElementById('quote');
+  if (stickyCta && quoteSection) {
+    window.addEventListener('scroll', function() {
+      var rect = quoteSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        stickyCta.style.transform = 'translateY(100%)';
+      } else {
+        stickyCta.style.transform = 'translateY(0)';
+      }
+    }, { passive: true });
+  }
+
+  // Smooth scroll for anchor links (fallback for older browsers)
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        var offset = 80; // nav height
+        var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
