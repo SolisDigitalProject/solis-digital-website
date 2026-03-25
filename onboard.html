@@ -228,7 +228,9 @@ function showError(title,msg){
 
 function showAlreadySubmitted(){
   var d=new Date(project.client_brief_submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('mainContent').innerHTML='<div class="already"><h2>Brief Already Submitted</h2><p>You submitted your project brief on <strong style="color:var(--accent)">'+d+'</strong>.</p><p>Our team is reviewing your brief and will begin building your website in Framer shortly.</p><p style="color:var(--text3);font-size:12px;margin-top:16px">Need to make changes? Contact us at info@solisdigital.co.uk</p></div>';
+  var pkg=project.package||project.plan_type||'';
+  var days=pkg==='Accelerate'?21:pkg==='Growth'?14:7;
+  document.getElementById('mainContent').innerHTML='<div class="already"><h2>Brief Already Submitted</h2>'+(pkg?'<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(52,211,153,.2);border-radius:100px;font-size:12px;font-weight:700;color:var(--green);background:rgba(52,211,153,.04);margin-bottom:16px">'+pkg+' Plan</div>':'')+'<p>You submitted your project brief on <strong style="color:var(--accent)">'+d+'</strong>.</p><p>Our team is building your website and you can expect it to be ready within <strong style="color:var(--accent)">'+days+' days</strong> of submission.</p><p style="color:var(--text3);font-size:12px;margin-top:16px">Need to make changes? Contact us at info@solisdigital.co.uk</p></div>';
 }
 
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
@@ -244,6 +246,9 @@ function buildForm(){
   html+='<h2>Let\'s Build Your Perfect Website</h2>';
   html+='<p>Fill in what you can — skip anything you\'re not sure about. We\'ll follow up on anything we need. Fields marked <span style="color:var(--red)">*</span> are the only ones required. Everything else is optional but helps us build faster.</p>';
   html+='<p style="font-size:13px;color:var(--accent);margin-top:8px">Takes about 5-10 minutes. Your progress is not lost if you scroll between steps.</p>';
+  var planLabel=project.package||project.plan_type||'';
+  var planDays=planLabel==='Accelerate'?21:planLabel==='Growth'?14:7;
+  if(planLabel)html+='<div style="display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border:1px solid rgba(52,211,153,.2);border-radius:100px;font-size:12px;font-weight:700;color:var(--green);background:rgba(52,211,153,.04);margin-top:12px"><span style="font-size:14px">&#x2705;</span> '+esc(planLabel)+' Plan &mdash; estimated delivery in '+planDays+' days</div>';
   html+='<div class="biz-badge">'+esc(project.business_name)+'</div>';
   html+='</div>';
 
@@ -281,6 +286,8 @@ function buildForm(){
   html+='<div class="field"><label>Brief Business Description <span class="req">*</span><span class="info-tip" data-tip="This will likely be used as your homepage hero text. 2-3 punchy sentences about what you do and who you serve.">?</span></label><textarea id="f_description" placeholder="We are a family-run dental practice in South London offering NHS and private treatments. We specialise in cosmetic dentistry and nervous patient care." style="min-height:80px"></textarea></div>';
   html+='<div class="field"><label>Detailed About Us <span class="opt">your story</span><span class="info-tip" data-tip="The longer version for your About page. Your history, values, journey, why you do what you do.">?</span></label><textarea id="f_aboutDetailed" placeholder="Tell us your story. How did the business start? What drives you? What are you proud of?" style="min-height:100px"></textarea></div>';
   html+='<div class="field"><label>What Makes You Unique? (USP) <span class="req">*</span><span class="info-tip" data-tip="Why should someone choose you over competitors? We will weave this throughout the site.">?</span></label><textarea id="f_usp" placeholder="e.g. We are the only practice in SE London offering same-day crowns with CEREC technology. 25+ years experience, 5-star Google rating, evening appointments available." style="min-height:70px"></textarea></div>';
+  html+='<div class="field"><label>Target Customers <span class="req">*</span><span class="info-tip" data-tip="Who is your ideal customer? This shapes the entire website design, messaging, and tone.">?</span></label><textarea id="f_targetAudience" placeholder="e.g. Families with young children in South London, aged 25-45, worried about finding a gentle dentist. Also professionals wanting cosmetic treatments like whitening and veneers." style="min-height:80px"></textarea></div>';
+  html+='<div class="field"><label>What problems do your customers have? <span class="opt">helps us write better copy</span></label><textarea id="f_customerPains" placeholder="e.g. Scared of the dentist, can\'t find evening appointments, unsure about costs, previous bad experiences..." style="min-height:60px"></textarea></div>';
   html+='<div class="field"><label>Mission / Values Statement <span class="opt">optional</span></label><textarea id="f_mission" placeholder="e.g. Our mission is to make quality dental care accessible and anxiety-free for every patient." style="min-height:60px"></textarea></div>';
   html+='</div>';
 
@@ -516,6 +523,7 @@ function buildForm(){
   html+='<div class="field"><label>Target Keywords <span class="info-tip" data-tip="What would someone type into Google to find your business?">?</span></label><textarea id="f_keywords" placeholder="e.g.\ndentist south london\ncosmetic dentistry SE15\nteeth whitening peckham\nemergency dental care" style="min-height:80px"></textarea></div>';
   html+='<div class="field"><label>Target Locations (Local SEO)</label><input type="text" id="f_seoLocations" placeholder="e.g. Peckham, Camberwell, Dulwich, South London, SE15"></div>';
   html+='<div class="field"><label>Do you have a Google Business Profile?</label><select id="f_googleBusiness"><option value="yes">Yes, fully set up</option><option value="partial">Yes, but needs updating</option><option value="no">No</option><option value="unsure">Not sure</option></select></div>';
+  html+='<div class="field"><label>Google Review Link <span class="opt">if you have one</span><span class="info-tip" data-tip="The link customers click to leave you a Google review. Find it in Google Business Profile under \'Ask for reviews\'. We use this for review automation.">?</span></label><input type="url" id="f_googleReviewLink" placeholder="https://g.page/r/your-business/review"></div>';
 
   html+='<div class="field"><label>Social Media Accounts <span class="opt">paste links</span></label></div>';
   html+='<div class="row">';
@@ -550,6 +558,7 @@ function buildForm(){
   html+='<div class="section"><h3>Media & Assets</h3><div class="desc">No photos? No problem — we\'ll source professional stock photography that fits your brand. Just let us know your preference.</div>';
   html+='<div class="field"><label>Will you provide photos?</label><select id="f_photoSource"><option value="provide">Yes, I will provide all photos</option><option value="mix">Some, supplement with stock photography</option><option value="stock">No, please use stock photography</option></select></div>';
   html+='<div class="field"><label>Upload Photos <span class="opt">you can also email these later</span></label><input type="file" id="f_photoUpload" accept="image/*" multiple><div class="hint">Upload your best photos: premises, team, products, before/after results. Max 20 files.</div></div>';
+  html+='<div class="field"><label>Upload Documents <span class="opt">menus, brochures, price lists, PDFs</span></label><input type="file" id="f_docUpload" accept=".pdf,.doc,.docx,.txt,.csv,.xls,.xlsx" multiple><div class="hint">Upload any existing content: menus, price lists, brochures, treatment guides. We will use these to build your site content.</div></div>';
   html+='<div class="field"><label>Do you have videos?</label><select id="f_hasVideos" onchange="toggleConditional(\'videoLinks\',this.value!==\'no\')"><option value="no">No</option><option value="yes-provide">Yes, I will provide them</option><option value="youtube">Yes, on YouTube/Vimeo</option><option value="want">No, but I would like some</option></select></div>';
   html+='<div class="conditional" id="videoLinks"><div class="field"><label>Video Links</label><textarea id="f_videoUrls" placeholder="Paste YouTube or Vimeo links, one per line" style="min-height:60px"></textarea></div></div>';
   html+='<div class="row">';
@@ -587,10 +596,7 @@ function buildForm(){
   html+='<div class="field"><label>Need Email Migration?</label><select id="f_emailMigration"><option value="no">No, keep current setup</option><option value="yes">Yes, need help migrating</option><option value="setup">Need new email set up</option></select></div>';
   html+='</div>';
   html+='<div class="field"><label>Current Hosting Provider <span class="opt">if known</span></label><input type="text" id="f_currentHosting" placeholder="e.g. GoDaddy, 123 Reg, Wix, Squarespace, WordPress + SiteGround"></div>';
-  html+='<div class="row">';
-  html+='<div class="field"><label>Preferred Launch Date</label><input type="date" id="f_launchDate"></div>';
-  html+='<div class="field"><label>Project Budget Range</label><select id="f_budget"><option value="">Prefer not to say</option><option value="starter">Starter (under 500)</option><option value="standard">Standard (500-1,500)</option><option value="premium">Premium (1,500-3,000)</option><option value="enterprise">Enterprise (3,000+)</option><option value="discuss">Need to discuss</option></select></div>';
-  html+='</div>';
+  html+='<div class="field"><label>Any Hard Deadlines? <span class="opt">e.g. event, grand opening, seasonal</span></label><input type="text" id="f_deadline" placeholder="e.g. Grand opening on April 15th, need site live by then"></div>';
   html+='</div>';
 
   // Final notes
@@ -599,7 +605,8 @@ function buildForm(){
   html+='</div>';
 
   html+='<div class="nav-btns"><button class="btn-back" onclick="prevStep()">Back</button><button class="btn-submit" id="submitBtn" onclick="submitBrief()">Submit My Brief</button></div>';
-  html+='<p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5">Once submitted, our team will begin building your website in Framer. Need to make changes later? Email info@solisdigital.co.uk</p>';
+  var deliveryMsg=planLabel==='Accelerate'?'within 21 days':planLabel==='Growth'?'within 14 days':'within 5-7 days';
+  html+='<p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;line-height:1.5">Once submitted, our team will begin building your website '+deliveryMsg+'. Need to make changes later? Email info@solisdigital.co.uk</p>';
   html+='</div>'; // end step4
 
   document.getElementById('mainContent').innerHTML=html;
@@ -662,6 +669,7 @@ function validateStep(step){
     if(!gv('f_industry'))errors.push(['f_industry','Please select your industry']);
     if(!gv('f_description'))errors.push(['f_description','Please provide a brief business description']);
     if(!gv('f_usp'))errors.push(['f_usp','Please describe what makes your business unique']);
+    if(!gv('f_targetAudience'))errors.push(['f_targetAudience','Please describe your target customers']);
     if(!gv('f_emailMain'))errors.push(['f_emailMain','Please provide your main email address']);
     if(!gv('f_phoneMain'))errors.push(['f_phoneMain','Please provide your main phone number']);
   } else if(step===2){
@@ -866,6 +874,8 @@ function submitBrief(){
     description:gv('f_description'),
     about_detailed:gv('f_aboutDetailed'),
     usp:gv('f_usp'),
+    target_audience:gv('f_targetAudience'),
+    customer_pains:gv('f_customerPains'),
     mission:gv('f_mission'),
 
     // Locations & Contact
@@ -947,6 +957,7 @@ function submitBrief(){
     keywords:gv('f_keywords'),
     seo_locations:gv('f_seoLocations'),
     google_business:gv('f_googleBusiness'),
+    google_review_link:gv('f_googleReviewLink'),
     social_media:{
       instagram:gv('f_socialInstagram'),
       facebook:gv('f_socialFacebook'),
@@ -983,8 +994,7 @@ function submitBrief(){
     email_hosting:gv('f_emailHosting'),
     email_migration:gv('f_emailMigration'),
     current_hosting:gv('f_currentHosting'),
-    launch_date:gv('f_launchDate'),
-    budget:gv('f_budget'),
+    hard_deadline:gv('f_deadline'),
 
     // Final
     final_notes:gv('f_finalNotes'),
