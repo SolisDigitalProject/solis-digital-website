@@ -7,6 +7,7 @@
  */
 
 import { SB_REST as SB_URL, PAGESPEED_KEY, sbHeaders as HEADERS } from './config.mjs';
+import { notify } from './notify.mjs';
 
 const CHECKS = [
   { type: 'uptime', url: 'https://www.solisdigital.co.uk/', name: 'Main Website' },
@@ -91,8 +92,15 @@ async function run() {
   });
 
   if (!allOk) {
-    console.log('\n🚨 FAILURES DETECTED — would send alert email in production');
-    // In Make.com: this triggers an email alert via Gmail/Resend module
+    console.log('\n🚨 FAILURES DETECTED — sending Slack alerts');
+    for (const f of failures) {
+      await notify('system_alert', {
+        system: f.metadata.name,
+        status: f.status,
+        details: f.error_message,
+        response_time: f.response_time_ms
+      });
+    }
   }
 
   console.log(`\n✅ Health check complete. ${results.length} checks, ${failures.length} failures.`);

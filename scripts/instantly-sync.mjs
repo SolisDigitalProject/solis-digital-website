@@ -1,24 +1,65 @@
 #!/usr/bin/env node
 /**
- * Solis Digital — Instantly.ai Integration
+ * Solis Digital — Instantly.ai Integration (Multi-Campaign)
  *
- * Automatically pushes audited leads into an Instantly campaign
- * with personalised merge tags from audit data.
+ * Automatically pushes audited leads into the correct niche Instantly campaign
+ * based on their industry. Routes dental → dental campaign, aesthetics → aesthetics
+ * campaign, trades → trades campaign, everything else → generic campaign.
  *
  * Modes:
- *   node scripts/instantly-sync.mjs push      — Push new audited leads to Instantly campaign
- *   node scripts/instantly-sync.mjs campaigns  — List all Instantly campaigns (to find campaign_id)
+ *   node scripts/instantly-sync.mjs push      — Push new audited leads to niche campaigns
+ *   node scripts/instantly-sync.mjs campaigns  — List all Instantly campaigns
  *
  * Required env vars:
  *   INSTANTLY_API_KEY  — Instantly API v2 Bearer token
- *   INSTANTLY_CAMPAIGN_ID — Target campaign ID (get via 'campaigns' mode)
  */
 
 import { SB_REST as SB_URL, sbHeaders as HEADERS } from './config.mjs';
 
 const API_KEY = process.env.INSTANTLY_API_KEY;
-const CAMPAIGN_ID = process.env.INSTANTLY_CAMPAIGN_ID;
 const INSTANTLY_BASE = 'https://api.instantly.ai/api/v2';
+
+// Niche campaign routing — maps industry keywords to campaign IDs
+const CAMPAIGN_MAP = {
+  dental: 'ef020206-24f1-4d6a-8233-d52b9b5dd177',
+  aesthetics: 'a5493fd5-835b-4a5f-a085-7c91aa7acfb5',
+  trades: 'f27305ec-12be-4b76-b399-762dd7dcd584',
+  generic: '591dbb42-a2ba-4ade-933a-ef3466584f67'
+};
+
+// Industry keywords → niche mapping
+const INDUSTRY_NICHE = {
+  // Dental
+  'dentist': 'dental', 'dental': 'dental', 'dental practice': 'dental',
+  'dental clinic': 'dental', 'orthodontist': 'dental', 'oral surgeon': 'dental',
+  // Aesthetics
+  'aesthetics': 'aesthetics', 'aesthetics clinic': 'aesthetics', 'skin clinic': 'aesthetics',
+  'beauty salon': 'aesthetics', 'cosmetic clinic': 'aesthetics', 'botox': 'aesthetics',
+  'lip filler': 'aesthetics', 'dermatology': 'aesthetics', 'med spa': 'aesthetics',
+  'beauty': 'aesthetics', 'cosmetic': 'aesthetics', 'salon': 'aesthetics',
+  // Trades
+  'plumber': 'trades', 'plumbing': 'trades', 'electrician': 'trades',
+  'electrical': 'trades', 'builder': 'trades', 'building': 'trades',
+  'roofer': 'trades', 'roofing': 'trades', 'carpenter': 'trades',
+  'painter': 'trades', 'decorator': 'trades', 'handyman': 'trades',
+  'locksmith': 'trades', 'gas engineer': 'trades', 'heating': 'trades',
+  'hvac': 'trades', 'landscaper': 'trades', 'gardener': 'trades'
+};
+
+function getNiche(industry) {
+  if (!industry) return 'generic';
+  const lower = industry.toLowerCase().trim();
+  if (INDUSTRY_NICHE[lower]) return INDUSTRY_NICHE[lower];
+  // Partial match — check if industry contains any keyword
+  for (const [keyword, niche] of Object.entries(INDUSTRY_NICHE)) {
+    if (lower.includes(keyword) || keyword.includes(lower)) return niche;
+  }
+  return 'generic';
+}
+
+function getCampaignId(niche) {
+  return CAMPAIGN_MAP[niche] || CAMPAIGN_MAP.generic;
+}
 
 function instantlyHeaders() {
   return {
@@ -120,131 +161,149 @@ async function listCampaigns() {
 }
 
 /**
- * Push audited leads to Instantly campaign with personalised variables
+ * Push audited leads to the correct niche Instantly campaign
+ * Routes automatically: dental → dental campaign, aesthetics → aesthetics, etc.
  */
 async function pushLeads() {
   if (!API_KEY) {
     console.error('Missing INSTANTLY_API_KEY env var');
     process.exit(1);
   }
-  if (!CAMPAIGN_ID) {
-    console.error('Missing INSTANTLY_CAMPAIGN_ID env var. Run with "campaigns" mode first to find it.');
-    process.exit(1);
-  }
 
   console.log('Fetching audited leads to push to Instantly...\n');
 
-  // Get audited leads with emails
+  // Get audited leads with emails (score 60+ threshold for quality)
   const leads = await query(
-    '/leads?select=id,email,business_name,website,industry,location,speed_score,seo_score,mobile_score,ssl_secure,audit_summary,lead_score&status=eq.Audited&email=not.is.null&order=lead_score.desc'
+    '/leads?select=id,email,business_name,website,industry,location,speed_score,seo_score,mobile_score,ssl_secure,audit_summary,lead_score&status=eq.Audited&email=not.is.null&lead_score=gte.60&order=lead_score.desc'
   );
 
-  // Get leads already pushed (tracked via outreach table with source=instantly)
-  const pushed = await query('/outreach?select=contact_email&status=eq.Sent');
+  // Get leads already pushed (tracked via outreach table)
+  const pushed = await query('/outreach?select=contact_email');
   const pushedEmails = new Set(pushed.map(p => p.contact_email));
 
   // Filter to only new leads
   const newLeads = leads.filter(l => l.email && !pushedEmails.has(l.email));
 
   if (newLeads.length === 0) {
-    console.log('No new leads to push. All audited leads already in Instantly.');
+    console.log('No new leads to push. All qualifying leads already in Instantly.');
     return;
   }
 
   console.log(`Found ${newLeads.length} new leads to push to Instantly.\n`);
 
-  // Build Instantly lead objects with custom variables (merge tags)
-  const instantlyLeads = newLeads.map(lead => {
-    const issues = buildIssues(lead);
-    return {
-      email: lead.email,
-      first_name: extractFirstName(lead.email),
-      company_name: lead.business_name || '',
-      website: lead.website || '',
-      custom_variables: {
-        business_name: lead.business_name || '',
-        company_name: lead.business_name || '',
-        website: lead.website || '',
-        industry: lead.industry || '',
-        location: lead.location || '',
-        speed_score: String(lead.speed_score || 'N/A'),
-        seo_score: String(lead.seo_score || 'N/A'),
-        mobile_score: String(lead.mobile_score || 'N/A'),
-        lead_score: String(lead.lead_score || 0),
-        issue_1: issues[0],
-        issue_2: issues[1],
-        issue_3: issues[2],
-        number_of_issues: String(issues.length),
-        audit_summary: lead.audit_summary || '',
-        email_body: buildEmailBody(lead, issues),
-        calendly_link: 'https://calendly.com/solisdigital-info/solis-digital-free-strategy-call'
-      }
-    };
-  });
+  // Group leads by niche for campaign routing
+  const nicheGroups = { dental: [], aesthetics: [], trades: [], generic: [] };
+  for (const lead of newLeads) {
+    const niche = getNiche(lead.industry);
+    nicheGroups[niche].push(lead);
+  }
 
-  // Push in batches of 100 (Instantly allows up to 1000)
-  const batchSize = 100;
   let totalPushed = 0;
 
-  for (let i = 0; i < instantlyLeads.length; i += batchSize) {
-    const batch = instantlyLeads.slice(i, i + batchSize);
+  for (const [niche, nicheLeads] of Object.entries(nicheGroups)) {
+    if (nicheLeads.length === 0) continue;
 
-    const res = await fetch(`${INSTANTLY_BASE}/leads`, {
-      method: 'POST',
-      headers: instantlyHeaders(),
-      body: JSON.stringify({
-        campaign_id: CAMPAIGN_ID,
-        skip_if_in_campaign: true,
-        leads: batch
-      })
-    });
+    const campaignId = getCampaignId(niche);
+    console.log(`\n📧 ${niche.toUpperCase()} campaign: ${nicheLeads.length} leads → ${campaignId}`);
 
-    if (res.ok) {
-      totalPushed += batch.length;
-      console.log(`  Batch ${Math.floor(i / batchSize) + 1}: pushed ${batch.length} leads`);
-    } else {
-      const err = await res.text();
-      console.error(`  Batch ${Math.floor(i / batchSize) + 1} failed: ${res.status} ${err}`);
-    }
-  }
-
-  // Record in outreach table so we don't push duplicates
-  for (const lead of newLeads) {
-    const oRes = await fetch(`${SB_URL}/outreach`, {
-      method: 'POST',
-      headers: { ...HEADERS, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
+    // Build Instantly lead objects with custom variables (merge tags)
+    const instantlyLeads = nicheLeads.map(lead => {
+      const issues = buildIssues(lead);
+      return {
         email: lead.email,
-        contact_email: lead.email,
-        status: 'Sent',
-        sequence_step: 1,
-        sent_at: new Date().toISOString(),
-        subject: `${lead.business_name} — pushed to Instantly campaign`
-      })
+        first_name: extractFirstName(lead.email),
+        company_name: lead.business_name || '',
+        website: lead.website || '',
+        custom_variables: {
+          business_name: lead.business_name || '',
+          company_name: lead.business_name || '',
+          website: lead.website || '',
+          industry: lead.industry || '',
+          location: lead.location || '',
+          speed_score: String(lead.speed_score || 'N/A'),
+          seo_score: String(lead.seo_score || 'N/A'),
+          mobile_score: String(lead.mobile_score || 'N/A'),
+          lead_score: String(lead.lead_score || 0),
+          issue_1: issues[0],
+          issue_2: issues[1],
+          issue_3: issues[2],
+          number_of_issues: String(issues.length),
+          audit_summary: lead.audit_summary || '',
+          email_body: buildEmailBody(lead, issues),
+          calendly_link: 'https://calendly.com/solisdigital-info/solis-digital-free-strategy-call'
+        }
+      };
     });
-    if (!oRes.ok) console.warn(`  Failed to record outreach for ${lead.email}: ${oRes.status}`);
+
+    // Push in batches of 100
+    const batchSize = 100;
+    for (let i = 0; i < instantlyLeads.length; i += batchSize) {
+      const batch = instantlyLeads.slice(i, i + batchSize);
+
+      const res = await fetch(`${INSTANTLY_BASE}/leads`, {
+        method: 'POST',
+        headers: instantlyHeaders(),
+        body: JSON.stringify({
+          campaign_id: campaignId,
+          skip_if_in_campaign: true,
+          leads: batch
+        })
+      });
+
+      if (res.ok) {
+        totalPushed += batch.length;
+        console.log(`  Batch ${Math.floor(i / batchSize) + 1}: pushed ${batch.length} leads`);
+      } else {
+        const err = await res.text();
+        console.error(`  Batch ${Math.floor(i / batchSize) + 1} failed: ${res.status} ${err}`);
+      }
+
+      // Rate limit: 100ms delay between batches
+      if (i + batchSize < instantlyLeads.length) await new Promise(r => setTimeout(r, 100));
+    }
+
+    // Record in outreach table so we don't push duplicates
+    for (const lead of nicheLeads) {
+      const oRes = await fetch(`${SB_URL}/outreach`, {
+        method: 'POST',
+        headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({
+          email: lead.email,
+          contact_email: lead.email,
+          status: 'Sent',
+          sequence_step: 1,
+          sent_at: new Date().toISOString(),
+          subject: `${lead.business_name} — pushed to ${niche} campaign`
+        })
+      });
+      if (!oRes.ok) console.warn(`  Failed to record outreach for ${lead.email}: ${oRes.status}`);
+    }
+
+    // Update lead statuses to "In Outreach"
+    for (const lead of nicheLeads) {
+      const lRes = await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
+        method: 'PATCH',
+        headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ status: 'In Outreach' })
+      });
+      if (!lRes.ok) console.warn(`  Failed to update lead ${lead.id}: ${lRes.status}`);
+    }
+
+    await logAction({
+      action_type: 'instantly_push',
+      description: `Pushed ${nicheLeads.length} ${niche} leads to Instantly`,
+      target: 'outreach',
+      result: 'success',
+      details: { count: nicheLeads.length, campaign_id: campaignId, niche }
+    });
   }
 
-  // Update lead statuses to "In Outreach"
-  for (const lead of newLeads) {
-    const lRes = await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
-      method: 'PATCH',
-      headers: { ...HEADERS, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ status: 'In Outreach' })
-    });
-    if (!lRes.ok) console.warn(`  Failed to update lead ${lead.id}: ${lRes.status}`);
+  // Summary
+  console.log(`\n✅ Pushed ${totalPushed} leads across ${Object.entries(nicheGroups).filter(([,v]) => v.length > 0).length} campaigns`);
+  for (const [niche, nicheLeads] of Object.entries(nicheGroups)) {
+    if (nicheLeads.length > 0) console.log(`   ${niche}: ${nicheLeads.length} leads`);
   }
-
-  await logAction({
-    action_type: 'instantly_push',
-    description: `Pushed ${totalPushed} leads to Instantly campaign`,
-    target: 'outreach',
-    result: 'success',
-    details: { count: totalPushed, campaign_id: CAMPAIGN_ID }
-  });
-
-  console.log(`\n✅ Pushed ${totalPushed} leads to Instantly campaign ${CAMPAIGN_ID}`);
-  console.log(`   Lead statuses updated to "In Outreach"`);
+  console.log(`   All lead statuses updated to "In Outreach"`);
 }
 
 // CLI

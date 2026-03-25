@@ -20,6 +20,7 @@
  */
 
 import { SB_REST as SB_URL, sbHeaders as HEADERS } from './config.mjs';
+import { notify } from './notify.mjs';
 
 async function query(endpoint) {
   const res = await fetch(`${SB_URL}${endpoint}`, { headers: HEADERS });
@@ -108,6 +109,15 @@ async function handleEvent(payload) {
       await patch(`/nurture_sequences?id=eq.${sequences[0].id}`, { status: 'paused' });
       console.log(`  Paused nurture sequence for ${email} (replied)`);
     }
+
+    // Notify founders via Slack on replies
+    const leads = await query(`/leads?email=eq.${encodeURIComponent(email)}&select=business_name,industry,location&limit=1`);
+    const leadInfo = leads[0] || {};
+    await notify('reply', {
+      name: leadInfo.business_name || email,
+      email,
+      preview: payload.reply_text || payload.body || 'Lead replied to your email'
+    });
   }
 
   await logAction({

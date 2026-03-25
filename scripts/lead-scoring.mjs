@@ -19,6 +19,7 @@
  */
 
 import { SB_URL, SB_KEY, sbHeaders } from './config.mjs';
+import { notify } from './notify.mjs';
 
 // High-value industries — businesses that benefit most from a quality website
 const HIGH_VALUE_INDUSTRIES = [
@@ -117,6 +118,21 @@ async function main() {
   scored.slice(0, 10).forEach((l, i) => {
     console.log(`  ${i + 1}. [${l.lead_score}pts] ${l.business_name} — ${l.industry || 'Unknown'} (${l.location || 'Unknown'})`);
   });
+
+  // Notify Slack about high-priority leads (score 90+)
+  const highPriority = scored.filter(l => l.lead_score >= 90);
+  for (const lead of highPriority.slice(0, 5)) {
+    await notify('high_lead', {
+      name: lead.business_name || 'Unknown',
+      score: lead.lead_score,
+      city: lead.location || '',
+      industry: lead.industry || '',
+      website: lead.website || ''
+    });
+  }
+  if (highPriority.length > 0) {
+    console.log(`\n🔥 Sent ${Math.min(highPriority.length, 5)} high-priority lead alerts to Slack`);
+  }
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
