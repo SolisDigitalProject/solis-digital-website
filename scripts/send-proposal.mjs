@@ -8,6 +8,8 @@
  * Usage:
  *   node scripts/send-proposal.mjs --email "client@example.com" --package "Growth"
  *   node scripts/send-proposal.mjs --lead-id "uuid" --package "Starter"
+ *   node scripts/send-proposal.mjs --email "client@example.com" --package "Growth" --addons "chatbot,reviews"
+ *   node scripts/send-proposal.mjs --email "client@example.com" --package "Starter" --addons "landing_page,logo"
  *
  * Required env vars:
  *   RESEND_API_KEY — Resend transactional email API key
@@ -20,6 +22,39 @@ const RESEND_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'alex@solisdigital.co.uk';
 const FROM_NAME = 'Alex — Solis Digital';
 
+// ── Recurring Add-Ons (setup + monthly) ──────────────────────────────────
+const RECURRING_ADDONS = {
+  chatbot: {
+    name: 'AI Chatbot',
+    description: '24/7 AI assistant trained on your services. Captures leads, books appointments, answers FAQs.',
+    setup: 197,
+    monthly: 47,
+    setup_link: 'https://buy.stripe.com/4gMfZg6WY1qj50W0oG2880g',
+    monthly_link: 'https://buy.stripe.com/00w00ibde0mfalg1sK2880h'
+  },
+  reviews: {
+    name: 'Google Reviews Automation',
+    description: 'Automated review requests after every appointment. SMS + email follow-ups. Bad reviews flagged privately.',
+    setup: 97,
+    monthly: 27,
+    setup_link: 'https://buy.stripe.com/4gM14m3KM3yr1OKfjA2880i',
+    monthly_link: 'https://buy.stripe.com/3cI8wO4OQ6KD2SOgnE2880j'
+  }
+};
+
+// ── One-Off Add-Ons ──────────────────────────────────────────────────────
+const ONEOFF_ADDONS = {
+  extra_page:   { name: 'Extra Page',               price: 97,  link: 'https://buy.stripe.com/5kQeVc5SUc4X1OKc7o2880k' },
+  blog_post:    { name: 'SEO Blog Post (1,000 words)', price: 147, link: 'https://buy.stripe.com/fZu5kCftu9WPdxs1sK2880l' },
+  email_template: { name: 'Email Template Design',   price: 197, link: 'https://buy.stripe.com/eVq4gy4OQ7OH1OK8Vc2880m' },
+  landing_page: { name: 'Landing Page',              price: 297, link: 'https://buy.stripe.com/eVqaEWa9ad91alggnE2880n' },
+  logo:         { name: 'Logo & Brand Kit',          price: 497, link: 'https://buy.stripe.com/7sYdR85SU8SL1OK4EW2880o' },
+  video:        { name: 'Video Editing (30s clip)',   price: 97,  link: 'https://buy.stripe.com/cNi28q0yA2unalg1sK2880p' },
+  google_ads:   { name: 'Google Ads Setup',          price: 297, link: 'https://buy.stripe.com/dRmfZg9565Gz7949Zg2880q' },
+  quarterly_refresh: { name: 'Quarterly Website Refresh', price: 297, link: 'https://buy.stripe.com/fZu5kC6WY2un9hc7R82880r' }
+};
+
+// ── Core Packages ────────────────────────────────────────────────────────
 const PACKAGES = {
   Starter: {
     name: 'Starter',
@@ -96,7 +131,57 @@ async function logAction(action) {
   });
 }
 
-function buildProposalHTML(lead, pkg) {
+function buildAddonsHTML(addonKeys) {
+  if (!addonKeys || addonKeys.length === 0) return '';
+
+  const rows = [];
+  for (const key of addonKeys) {
+    const recurring = RECURRING_ADDONS[key];
+    const oneoff = ONEOFF_ADDONS[key];
+    if (recurring) {
+      rows.push(`
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;">${recurring.name}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;">£${recurring.setup} setup + £${recurring.monthly}/mo</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:center;">
+            <a href="${recurring.setup_link}" style="color:#d4af37;font-size:13px;text-decoration:none;font-weight:600;">Pay Setup</a> ·
+            <a href="${recurring.monthly_link}" style="color:#d4af37;font-size:13px;text-decoration:none;font-weight:600;">Subscribe</a>
+          </td>
+        </tr>`);
+    } else if (oneoff) {
+      rows.push(`
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;">${oneoff.name}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;">£${oneoff.price} one-off</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:center;">
+            <a href="${oneoff.link}" style="color:#d4af37;font-size:13px;text-decoration:none;font-weight:600;">Pay Now</a>
+          </td>
+        </tr>`);
+    }
+  }
+
+  if (rows.length === 0) return '';
+
+  return `
+      <!-- Add-Ons -->
+      <div style="margin:24px 0;">
+        <h3 style="color:#333;font-size:16px;margin:0 0 12px;">Optional Add-Ons</h3>
+        <table style="width:100%;border-collapse:collapse;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+          <thead>
+            <tr style="background:#f8f9fa;">
+              <th style="padding:10px 12px;text-align:left;font-size:13px;color:#666;font-weight:600;">Add-On</th>
+              <th style="padding:10px 12px;text-align:left;font-size:13px;color:#666;font-weight:600;">Price</th>
+              <th style="padding:10px 12px;text-align:center;font-size:13px;color:#666;font-weight:600;">Action</th>
+            </tr>
+          </thead>
+          <tbody>${rows.join('')}
+          </tbody>
+        </table>
+        <p style="color:#999;font-size:12px;margin:8px 0 0;">Add-ons can be purchased at any time — no commitment required.</p>
+      </div>`;
+}
+
+function buildProposalHTML(lead, pkg, addonKeys) {
   const issues = [];
   if (lead.speed_score != null && lead.speed_score < 70) issues.push(`Speed score: ${lead.speed_score}/100`);
   if (lead.seo_score != null && lead.seo_score < 70) issues.push(`SEO score: ${lead.seo_score}/100`);
@@ -156,6 +241,8 @@ function buildProposalHTML(lead, pkg) {
         <a href="${pkg.payment_link}" style="display:inline-block;background:#d4af37;color:#0a0a0a;text-decoration:none;padding:14px 32px;border-radius:6px;font-weight:700;font-size:16px;">Get Started Now</a>
       </div>
 
+      ${buildAddonsHTML(addonKeys)}
+
       <!-- Expected Outcome -->
       <div style="text-align:center;margin:24px 0;padding:16px;background:#f8f9fa;border-radius:8px;">
         <p style="color:#666;margin:0 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:1px;">Expected Outcome</p>
@@ -187,12 +274,17 @@ function buildProposalHTML(lead, pkg) {
 </html>`;
 }
 
-async function sendProposal(email, packageName, leadId) {
+async function sendProposal(email, packageName, leadId, addonStr) {
   const pkg = PACKAGES[packageName];
   if (!pkg) {
     console.error(`Unknown package: ${packageName}. Use: Starter, Growth, or Accelerator`);
     process.exit(1);
   }
+
+  // Parse add-ons (comma-separated keys)
+  const addonKeys = addonStr
+    ? addonStr.split(',').map(k => k.trim()).filter(k => RECURRING_ADDONS[k] || ONEOFF_ADDONS[k])
+    : [];
 
   // Fetch lead data
   let lead;
@@ -213,7 +305,7 @@ async function sendProposal(email, packageName, leadId) {
     process.exit(1);
   }
 
-  const html = buildProposalHTML(lead, pkg);
+  const html = buildProposalHTML(lead, pkg, addonKeys);
   const subject = `Your ${pkg.name} proposal — ${lead.business_name || 'Solis Digital'}`;
 
   if (!RESEND_KEY) {
@@ -287,8 +379,11 @@ for (let i = 0; i < args.length; i += 2) {
 if (!flags.package) {
   console.log('Usage: node scripts/send-proposal.mjs --email "client@example.com" --package "Growth"');
   console.log('       node scripts/send-proposal.mjs --lead-id "uuid" --package "Starter"');
+  console.log('       node scripts/send-proposal.mjs --email "x@y.com" --package "Growth" --addons "chatbot,reviews"');
   console.log('\nPackages: Starter, Growth, Accelerator');
+  console.log('\nRecurring add-ons: ' + Object.keys(RECURRING_ADDONS).join(', '));
+  console.log('One-off add-ons:   ' + Object.keys(ONEOFF_ADDONS).join(', '));
   process.exit(0);
 }
 
-sendProposal(flags.email, flags.package, flags['lead-id']).catch(console.error);
+sendProposal(flags.email, flags.package, flags['lead-id'], flags.addons).catch(console.error);
