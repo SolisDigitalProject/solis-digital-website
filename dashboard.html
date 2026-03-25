@@ -1282,6 +1282,21 @@ function renderProjects(projects){
       html+='</details>';
     }
 
+    // Add-on status bar
+    var hasAddons=(p.addon_chatbot_status&&p.addon_chatbot_status!=='not_purchased')||(p.addon_reviews_status&&p.addon_reviews_status!=='not_purchased');
+    if(hasAddons||p.plan_type){
+      html+='<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px">';
+      if(p.plan_type)html+='<span style="color:var(--accent);font-weight:700;text-transform:uppercase">'+esc(p.plan_type)+' Plan</span>';
+      if(p.setup_fee_paid)html+='<span style="color:var(--green);font-weight:700">Setup Paid</span>';
+      if(p.subscription_active)html+='<span style="color:var(--green);font-weight:700">Sub Active</span>';
+      else if(p.setup_fee_paid)html+='<span style="color:var(--accent);font-weight:700">Sub Pending</span>';
+      if(p.addon_chatbot_status==='pending_setup')html+='<button class="btn-call" onclick="setupChatbot('+p.id+')" style="font-size:10px;padding:3px 10px;background:rgba(99,102,241,.1);color:var(--blue);border-color:rgba(99,102,241,.2);font-weight:700">Setup Chatbot</button>';
+      else if(p.addon_chatbot_status==='active')html+='<span style="color:var(--green);font-weight:700">Chatbot Active</span>';
+      if(p.addon_reviews_status==='pending_setup')html+='<button class="btn-call" onclick="setupReviews('+p.id+')" style="font-size:10px;padding:3px 10px;background:rgba(99,102,241,.1);color:var(--blue);border-color:rgba(99,102,241,.2);font-weight:700">Setup Reviews</button>';
+      else if(p.addon_reviews_status==='active')html+='<span style="color:var(--green);font-weight:700">Reviews Active</span>';
+      html+='</div>';
+    }
+
     // Framer Build Sheet button (only if brief exists)
     if(p.brief_data||p.client_brief){
       html+='<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">';
@@ -1315,7 +1330,7 @@ function createNewProject(){
   var domain=document.getElementById('np_domain').value.trim();
   // Generate onboard token
   var token='';for(var i=0;i<32;i++)token+='0123456789abcdef'[Math.floor(Math.random()*16)];
-  var launchDays=pkg==='Starter'?5:pkg==='Growth'?7:10;
+  var launchDays=pkg==='Launch'?7:pkg==='Growth'?14:21;
   var est=new Date();est.setDate(est.getDate()+launchDays);
 
   var body={
@@ -1795,6 +1810,86 @@ function showPromptOverlay(text){
   box.appendChild(header);box.appendChild(ta);box.appendChild(footer);
   overlay.appendChild(box);document.body.appendChild(overlay);
   ta.select();
+}
+
+// ── ADD-ON AUTO-SETUP ──
+
+function setupChatbot(projectId){
+  // Fetch project to get business details
+  fetch(SB+'/projects?id=eq.'+projectId+'&select=*',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data.length)return;
+    var p=data[0];
+    var b=p.brief_data||{};
+    if(typeof b==='string')b=JSON.parse(b);
+
+    // Generate Tawk.to widget config instructions + auto-training prompt
+    var chatbotPrompt='TAWK.TO SETUP FOR: '+p.business_name+'\n\n';
+    chatbotPrompt+='1. Go to tawk.to → Admin → Add Property → "'+p.business_name+'"\n';
+    chatbotPrompt+='2. Copy the widget code and add it to the Framer site\n';
+    chatbotPrompt+='3. Set up these automated responses:\n\n';
+    chatbotPrompt+='GREETING: "Hi! Welcome to '+p.business_name+'. How can we help you today?"\n\n';
+    chatbotPrompt+='FAQ TRIGGERS:\n';
+    if(b.services){
+      chatbotPrompt+='- Services: ';
+      if(Array.isArray(b.services))chatbotPrompt+=b.services.map(function(s){return typeof s==='object'?s.name:s}).join(', ');
+      else chatbotPrompt+=b.services;
+      chatbotPrompt+='\n';
+    }
+    if(b.hours)chatbotPrompt+='- Opening hours: '+JSON.stringify(b.hours)+'\n';
+    if(b.phoneMain||b.phone)chatbotPrompt+='- Contact: '+(b.phoneMain||b.phone)+'\n';
+    if(b.emailMain||b.email)chatbotPrompt+='- Email: '+(b.emailMain||b.email)+'\n';
+    if(b.booking_system)chatbotPrompt+='- Booking: Direct to '+b.booking_system+'\n';
+    chatbotPrompt+='\n4. Enable: Triggers → Visitor opens page → Send greeting after 5 seconds\n';
+    chatbotPrompt+='5. Enable: Shortcuts for common queries (services, booking, location)\n';
+
+    navigator.clipboard.writeText(chatbotPrompt).then(function(){
+      showToast('Chatbot setup guide copied! Follow the steps to set up Tawk.to for this client.','green');
+    }).catch(function(){showPromptOverlay(chatbotPrompt)});
+
+    // Mark as active
+    fetch(SB+'/projects?id=eq.'+projectId,{method:'PATCH',headers:H,body:JSON.stringify({addon_chatbot_status:'active'})})
+    .then(function(){loadData()});
+  });
+}
+
+function setupReviews(projectId){
+  fetch(SB+'/projects?id=eq.'+projectId+'&select=*',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json()})
+  .then(function(data){
+    if(!data.length)return;
+    var p=data[0];
+    var b=p.brief_data||{};
+    if(typeof b==='string')b=JSON.parse(b);
+
+    var reviewPrompt='GOOGLE REVIEWS AUTOMATION FOR: '+p.business_name+'\n\n';
+    reviewPrompt+='ZYPFLOW SCENARIO SETUP:\n\n';
+    reviewPrompt+='1. Trigger: Webhook (receives appointment completion data)\n';
+    reviewPrompt+='2. Delay: 2 hours after appointment\n';
+    reviewPrompt+='3. Send Email via Resend:\n';
+    reviewPrompt+='   Subject: "How was your visit to '+p.business_name+'?"\n';
+    reviewPrompt+='   Body: "Hi {{name}}, thank you for visiting '+p.business_name+' today. We\'d love to hear about your experience. If you were happy with our service, a Google review would mean the world to us: [GOOGLE_REVIEW_LINK]"\n';
+    reviewPrompt+='4. Delay: 3 days (if no review)\n';
+    reviewPrompt+='5. Send SMS reminder via Twilio:\n';
+    reviewPrompt+='   "Hi {{name}}, quick reminder — if you enjoyed your visit to '+p.business_name+', we\'d really appreciate a Google review! [LINK]"\n';
+    reviewPrompt+='6. Filter: If review score < 4 → Route to internal alert (do NOT publish)\n';
+    reviewPrompt+='7. If review score >= 4 → Auto-thank reply\n\n';
+    reviewPrompt+='GOOGLE REVIEW LINK FORMAT:\n';
+    reviewPrompt+='https://search.google.com/local/writereview?placeid=[PLACE_ID]\n\n';
+    reviewPrompt+='TO FIND PLACE ID:\n';
+    reviewPrompt+='1. Go to: https://developers.google.com/maps/documentation/places/web-service/place-id-finder\n';
+    reviewPrompt+='2. Search for "'+p.business_name+'"\n';
+    reviewPrompt+='3. Copy the Place ID\n';
+
+    navigator.clipboard.writeText(reviewPrompt).then(function(){
+      showToast('Reviews automation guide copied! Follow the steps to set up Google Reviews for this client.','green');
+    }).catch(function(){showPromptOverlay(reviewPrompt)});
+
+    // Mark as active
+    fetch(SB+'/projects?id=eq.'+projectId,{method:'PATCH',headers:H,body:JSON.stringify({addon_reviews_status:'active'})})
+    .then(function(){loadData()});
+  });
 }
 
 // Toast notification system
