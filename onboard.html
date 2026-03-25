@@ -1201,6 +1201,79 @@ function showSuccess(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+/* ===== DRAFT AUTO-SAVE ===== */
+var DRAFT_KEY='solis_onboard_draft_'+(new URLSearchParams(window.location.search).get('token')||'unknown');
+var draftIndicator;
+
+function initDraftSave(){
+  // Create draft indicator
+  draftIndicator=document.createElement('div');
+  draftIndicator.style.cssText='position:fixed;bottom:20px;right:20px;background:rgba(52,211,153,.15);color:#34d399;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;pointer-events:none';
+  draftIndicator.textContent='Draft saved';
+  document.body.appendChild(draftIndicator);
+
+  // Restore draft on load
+  try{
+    var saved=localStorage.getItem(DRAFT_KEY);
+    if(saved){
+      var draft=JSON.parse(saved);
+      Object.keys(draft).forEach(function(name){
+        var el=document.querySelector('[name="'+name+'"]');
+        if(el){
+          if(el.type==='checkbox')el.checked=draft[name];
+          else el.value=draft[name];
+        }
+      });
+      showDraftMsg('Draft restored');
+    }
+  }catch(e){}
+
+  // Save on every input change (debounced)
+  var saveTimer;
+  document.addEventListener('input',function(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(saveDraft,1000);
+  });
+  document.addEventListener('change',function(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(saveDraft,500);
+  });
+}
+
+function saveDraft(){
+  try{
+    var data={};
+    document.querySelectorAll('input,textarea,select').forEach(function(el){
+      if(el.name){
+        data[el.name]=el.type==='checkbox'?el.checked:el.value;
+      }
+    });
+    localStorage.setItem(DRAFT_KEY,JSON.stringify(data));
+    showDraftMsg('Draft saved');
+  }catch(e){}
+}
+
+function showDraftMsg(msg){
+  if(!draftIndicator)return;
+  draftIndicator.textContent=msg;
+  draftIndicator.style.opacity='1';
+  setTimeout(function(){draftIndicator.style.opacity='0';},2000);
+}
+
+function clearDraft(){
+  try{localStorage.removeItem(DRAFT_KEY);}catch(e){}
+}
+
+// Clear draft on successful submission
+var origShowSuccess=showSuccess;
+showSuccess=function(){
+  clearDraft();
+  origShowSuccess();
+};
+
+// Init draft system after page loads
+setTimeout(initDraftSave,500);
+
 /* ===== INIT ===== */
 init();
 </script>

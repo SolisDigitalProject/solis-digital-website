@@ -20,8 +20,11 @@ const CHECKS = [
 async function checkEndpoint(check) {
   const start = Date.now();
   try {
-    const opts = { headers: check.type === 'supabase' ? HEADERS : {}, signal: AbortSignal.timeout(15000) };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const opts = { headers: check.type === 'supabase' ? HEADERS : {}, signal: controller.signal };
     const res = await fetch(check.url, opts);
+    clearTimeout(timeoutId);
     const elapsed = Date.now() - start;
     return {
       check_type: check.type,
@@ -33,6 +36,7 @@ async function checkEndpoint(check) {
       metadata: { name: check.name }
     };
   } catch (err) {
+    clearTimeout(timeoutId);
     return {
       check_type: check.type,
       target_url: check.url,

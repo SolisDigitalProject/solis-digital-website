@@ -20,7 +20,7 @@ if (!CLAUDE_KEY) {
 }
 
 async function fetchLeads() {
-  const url = `${SB_URL}/rest/v1/leads?status=eq.New&website=not.is.null&has_website=eq.true&select=id,business_name,website,industry,location,google_rating,review_count`;
+  const url = `${SB_URL}/rest/v1/leads?status=eq.New&website=not.is.null&has_website=eq.true&select=id,business_name,website,industry,location,google_rating,review_count&limit=50`;
   const res = await fetch(url, { headers: sbHeaders });
   if (!res.ok) throw new Error(`Failed to fetch leads: ${res.status}`);
   return res.json();

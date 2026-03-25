@@ -54,7 +54,7 @@ async function run() {
 
   // Top 5 leads to call today
   const topCallLeads = leads
-    .filter(l => l.phone && (!l.notes || l.notes.indexOf('Called') === -1))
+    .filter(l => l.phone && !(l.notes || '').includes('Called'))
     .sort((a, b) => (b.lead_score || 0) - (a.lead_score || 0))
     .slice(0, 5);
 

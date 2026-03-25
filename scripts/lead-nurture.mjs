@@ -3,9 +3,6 @@
  * Solis Digital — Auto Lead Nurture Engine
  * Manages the Day 1/3/7/14 follow-up sequence for leads.
  *
- * This nurture sequence is for INBOUND leads only. Cold outreach leads
- * are handled by Instantly campaigns.
- *
  * Two modes:
  * 1. ENQUEUE: Adds audited leads with emails to the nurture sequence
  * 2. PROCESS: Sends due emails and advances sequence steps
@@ -106,33 +103,18 @@ async function logAction(action) {
 }
 
 /**
- * ENQUEUE: Find audited INBOUND leads with emails that aren't already in a
- * nurture sequence. Leads that already have an outreach record (i.e. cold
- * scraped leads managed by Instantly campaigns) are skipped.
+ * ENQUEUE: Find audited leads with emails that aren't already in a nurture sequence
  */
 async function enqueue() {
-  console.log('📥 Enqueuing new inbound leads into nurture sequence...\n');
+  console.log('📥 Enqueuing new leads into nurture sequence...\n');
 
-  const [leads, existing, outreachRecords] = await Promise.all([
+  const [leads, existing] = await Promise.all([
     query('/leads?select=id,email,business_name,status&email=neq.null&status=eq.Audited'),
-    query('/nurture_sequences?select=lead_id'),
-    // Fetch all emails that already have ANY outreach record — these are cold
-    // leads handled by Instantly and must not enter the inbound nurture sequence.
-    query('/outreach?select=email')
+    query('/nurture_sequences?select=lead_id')
   ]);
 
-  const existingIds = new Set(existing.map(e => e.lead_id));
-  const outreachEmails = new Set(outreachRecords.map(o => o.email?.toLowerCase()));
-  const newLeads = leads.filter(l => {
-    if (!l.email) return false;
-    if (existingIds.has(l.id)) return false;
-    // Skip leads that already exist in the outreach table (cold outreach via Instantly)
-    if (outreachEmails.has(l.email.toLowerCase())) {
-      console.log(`  ⏭ Skipping ${l.business_name} (${l.email}) — already in outreach (cold lead)`);
-      return false;
-    }
-    return true;
-  });
+  const existingIds = new Set((existing || []).map(e => e.lead_id));
+  const newLeads = leads.filter(l => l.email && !existingIds.has(l.id));
 
   if (newLeads.length === 0) {
     console.log('No new leads to enqueue. All audited leads are already in sequences.');
@@ -193,6 +175,11 @@ async function process() {
 
     const subject = template.subject.replace('{{business_name}}', seq.business_name || 'your business');
     const body = template.body.replace(/\{\{business_name\}\}/g, seq.business_name || 'your business');
+
+    // Validate no unresolved template variables remain
+    if (/\{\{[^}]+\}\}/.test(subject) || /\{\{[^}]+\}\}/.test(body)) {
+      console.warn(`  Warning: Unresolved template variables in email for ${seq.email}`);
+    }
 
     console.log(`  📧 Step ${seq.sequence_step}/4 → ${seq.email} (${seq.business_name})`);
     console.log(`     Subject: ${subject}`);

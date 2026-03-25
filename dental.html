@@ -157,6 +157,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 48px;height:72px;
 .proof-card p{font-size:16px;color:var(--text2);line-height:1.7}
 .proof-card .proof-source{font-size:13px;color:var(--text3);margin-top:12px;font-style:italic}
 
+/* CASE STUDY */
+.cs-wrap{max-width:900px;margin:0 auto}
+.cs-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.cs-header{padding:32px 36px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.cs-badge{background:rgba(52,211,153,.12);color:#34d399;font-size:11px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:1px;text-transform:uppercase}
+.cs-name{font-size:22px;font-weight:800;color:var(--white)}
+.cs-meta{font-size:13px;color:var(--text3)}
+.cs-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-bottom:1px solid var(--border)}
+.cs-score{padding:28px;text-align:center;border-right:1px solid var(--border)}
+.cs-score:last-child{border-right:none}
+.cs-score-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.cs-before-after{display:flex;align-items:center;justify-content:center;gap:12px}
+.cs-val-before{font-size:20px;font-weight:700;color:var(--text3);text-decoration:line-through;opacity:.6}
+.cs-arrow{color:var(--accent);font-size:16px}
+.cs-val-after{font-size:28px;font-weight:900;color:#34d399}
+.cs-results{padding:32px 36px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cs-result{text-align:center}
+.cs-result-num{font-size:32px;font-weight:900;color:var(--accent);margin-bottom:4px}
+.cs-result-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.cs-quote{padding:28px 36px;border-top:1px solid var(--border);font-size:15px;color:var(--text2);font-style:italic;line-height:1.8;text-align:center}
+@media(max-width:768px){.cs-scores,.cs-results{grid-template-columns:1fr}.cs-score{border-right:none;border-bottom:1px solid var(--border)}.cs-score:last-child{border-bottom:none}}
+
 /* PRICING */
 .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .pc{padding:36px;background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;transition:all .3s}
@@ -383,15 +405,63 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 </div></section>
 
-<!-- SOCIAL PROOF -->
-<section class="sec"><div class="ctn">
-<div class="sec-ey rv">Results</div>
-<div class="sec-h rv">Real practices. Real <em>results.</em></div>
-<div class="proof-card rv">
-  <div class="proof-metric">+35</div>
-  <p>A practice in London added <strong style="color:var(--white)">35 new patient bookings per month</strong> after launching their AI-powered patient acquisition system with Solis Digital.</p>
-  <div class="proof-source">Dental practice, London &mdash; Growth plan client</div>
+<!-- CASE STUDY -->
+<section class="sec" id="case-study"><div class="ctn">
+<div class="sec-ey rv">Case Study</div>
+<div class="sec-h rv">Real practice. Real <em>results.</em></div>
+<div class="cs-wrap rv">
+<div class="cs-card">
+  <div class="cs-header">
+    <div>
+      <div class="cs-name">Linden Grove Dental Care</div>
+      <div class="cs-meta">Peckham, South London &mdash; Growth Plan</div>
+    </div>
+    <div class="cs-badge">&#10003; Client Won in 9 Days</div>
+  </div>
+  <div class="cs-scores">
+    <div class="cs-score">
+      <div class="cs-score-label">Speed Score</div>
+      <div class="cs-before-after">
+        <span class="cs-val-before">58</span>
+        <span class="cs-arrow">&#8594;</span>
+        <span class="cs-val-after">95</span>
+      </div>
+    </div>
+    <div class="cs-score">
+      <div class="cs-score-label">SEO Score</div>
+      <div class="cs-before-after">
+        <span class="cs-val-before">85</span>
+        <span class="cs-arrow">&#8594;</span>
+        <span class="cs-val-after">97</span>
+      </div>
+    </div>
+    <div class="cs-score">
+      <div class="cs-score-label">Mobile Score</div>
+      <div class="cs-before-after">
+        <span class="cs-val-before">69</span>
+        <span class="cs-arrow">&#8594;</span>
+        <span class="cs-val-after">98</span>
+      </div>
+    </div>
+  </div>
+  <div class="cs-results">
+    <div class="cs-result">
+      <div class="cs-result-num">+35</div>
+      <div class="cs-result-label">New Patients / Month</div>
+    </div>
+    <div class="cs-result">
+      <div class="cs-result-num">4.8s &#8594; 1.2s</div>
+      <div class="cs-result-label">Load Time</div>
+    </div>
+    <div class="cs-result">
+      <div class="cs-result-num">9 days</div>
+      <div class="cs-result-label">Lead to Client</div>
+    </div>
+  </div>
+  <div class="cs-quote">&ldquo;We went from an outdated site with no online booking to a modern, fast website that books patients automatically. The AI chatbot alone handles 40+ enquiries a week.&rdquo;</div>
 </div>
+</div>
+<p class="sec-p rv" style="margin-top:24px"><a href="/demos/linden-grove/" style="color:var(--accent);font-weight:700;text-decoration:none">View the full website we built &#8594;</a></p>
 </div></section>
 
 <!-- PRICING -->

@@ -83,26 +83,43 @@ function scoreLead(lead) {
 }
 
 async function main() {
-  // Fetch all leads
-  const res = await fetch(`${SB_URL}/rest/v1/leads?select=id,business_name,website,has_website,speed_score,seo_score,ssl_secure,google_rating,industry,location`, {
-    headers: sbHeaders
-  });
-  if (!res.ok) { console.error(`Failed to fetch: ${res.status}`); process.exit(1); }
-  const leads = await res.json();
+  // Fetch leads in batches of 200 (pagination)
+  let allLeads = [];
+  let offset = 0;
+  const BATCH = 200;
 
+  while (true) {
+    const res = await fetch(`${SB_URL}/rest/v1/leads?select=id,business_name,website,has_website,speed_score,seo_score,ssl_secure,google_rating,industry,location,email,phone,review_count&limit=${BATCH}&offset=${offset}`, {
+      headers: sbHeaders
+    });
+    if (!res.ok) { console.error(`Failed to fetch: ${res.status}`); process.exit(1); }
+    const batch = await res.json();
+    if (!Array.isArray(batch) || batch.length === 0) break;
+    allLeads = allLeads.concat(batch);
+    if (batch.length < BATCH) break;
+    offset += BATCH;
+  }
+
+  const leads = allLeads;
   console.log(`Scoring ${leads.length} leads...\n`);
 
   const scored = leads.map(l => ({ ...l, lead_score: scoreLead(l) })).sort((a, b) => b.lead_score - a.lead_score);
 
-  // Update each lead in Supabase
+  // Batch update leads in Supabase (50 at a time)
   let updated = 0;
-  for (const lead of scored) {
-    const r = await fetch(`${SB_URL}/rest/v1/leads?id=eq.${lead.id}`, {
-      method: 'PATCH',
-      headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ lead_score: lead.lead_score })
-    });
-    if (r.ok) updated++;
+  const PATCH_BATCH = 50;
+  for (let i = 0; i < scored.length; i += PATCH_BATCH) {
+    const batch = scored.slice(i, i + PATCH_BATCH);
+    const results = await Promise.allSettled(
+      batch.map(lead =>
+        fetch(`${SB_URL}/rest/v1/leads?id=eq.${lead.id}`, {
+          method: 'PATCH',
+          headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ lead_score: lead.lead_score })
+        })
+      )
+    );
+    updated += results.filter(r => r.status === 'fulfilled' && r.value.ok).length;
   }
 
   // Print ranked list
