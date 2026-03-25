@@ -140,8 +140,8 @@ async function pushLeads() {
   );
 
   // Get leads already pushed (tracked via outreach table with source=instantly)
-  const pushed = await query('/outreach?select=lead_email&status=eq.Sent');
-  const pushedEmails = new Set(pushed.map(p => p.lead_email));
+  const pushed = await query('/outreach?select=contact_email&status=eq.Sent');
+  const pushedEmails = new Set(pushed.map(p => p.contact_email));
 
   // Filter to only new leads
   const newLeads = leads.filter(l => l.email && !pushedEmails.has(l.email));
@@ -215,7 +215,7 @@ async function pushLeads() {
       headers: { ...HEADERS, 'Prefer': 'return=minimal' },
       body: JSON.stringify({
         email: lead.email,
-        lead_email: lead.email,
+        contact_email: lead.email,
         status: 'Sent',
         sequence_step: 1,
         sent_at: new Date().toISOString(),

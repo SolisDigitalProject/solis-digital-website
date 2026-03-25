@@ -41,7 +41,7 @@ async function runPageSpeed(website) {
     speed_score: Math.round((cats.performance?.score || 0) * 100),
     seo_score: Math.round((cats.seo?.score || 0) * 100),
     mobile_score: Math.round((cats.accessibility?.score || 0) * 100),
-    ssl_secure: url.startsWith('https') && !data.lighthouseResult?.audits?.['is-on-https']?.details?.items?.length
+    ssl_secure: url.startsWith('https') && !(data.lighthouseResult?.audits?.['is-on-https']?.details?.items?.length > 0)
   };
 }
 

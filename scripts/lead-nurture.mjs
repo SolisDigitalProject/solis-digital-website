@@ -188,7 +188,7 @@ async function process() {
       headers: { ...HEADERS, 'Prefer': 'return=minimal' },
       body: JSON.stringify({
         email: seq.email,
-        lead_email: seq.email,
+        contact_email: seq.email,
         status: 'Sent',
         sequence_step: seq.sequence_step,
         sent_at: now,

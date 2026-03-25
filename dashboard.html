@@ -976,7 +976,7 @@ function renderEmailTracker(leads,outreach){
   // Build a lookup of outreach by lead email
   var outreachByEmail={};
   outreach.forEach(function(o){
-    var email=o.email||o.lead_email||'';
+    var email=o.contact_email||o.email||o.lead_email||'';
     if(email){
       if(!outreachByEmail[email])outreachByEmail[email]=[];
       outreachByEmail[email].push(o);
