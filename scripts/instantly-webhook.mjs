@@ -78,7 +78,7 @@ async function handleEvent(payload) {
   console.log(`Processing: ${eventType} → ${email} (status: ${status})`);
 
   // Update outreach record
-  const outreach = await query(`/outreach?lead_email=eq.${encodeURIComponent(email)}&order=created_at.desc&limit=1`);
+  const outreach = await query(`/outreach?contact_email=eq.${encodeURIComponent(email)}&order=created_at.desc&limit=1`);
   if (outreach.length > 0) {
     const record = outreach[0];
     const updates = { status };
