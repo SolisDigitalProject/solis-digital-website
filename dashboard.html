@@ -638,6 +638,64 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   </div>
 </div>
 
+<!-- SECTION: ADD-ONS & AUTOMATION -->
+<div class="section-divider"><h2>&#9889; Add-Ons &amp; Automation</h2><div class="line"></div></div>
+<div class="panels-3" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Google Reviews Automation</h3>
+      <span class="badge" id="reviewsBadge" style="background:rgba(52,211,153,.1);color:var(--green)">0 sent</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:12px">
+        <div style="background:var(--bg);padding:12px;border-radius:8px;border:1px solid var(--border)"><div style="font-size:20px;font-weight:900;color:var(--accent)" id="rvSent">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">SENT</div></div>
+        <div style="background:var(--bg);padding:12px;border-radius:8px;border:1px solid var(--border)"><div style="font-size:20px;font-weight:900;color:var(--green)" id="rvReviewed">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">REVIEWED</div></div>
+        <div style="background:var(--bg);padding:12px;border-radius:8px;border:1px solid var(--border)"><div style="font-size:20px;font-weight:900;color:var(--blue)" id="rvRate">0%</div><div style="font-size:10px;color:var(--text3);margin-top:2px">CONV RATE</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">Automated review request emails sent after client appointments. Run: <code style="color:var(--accent)">node scripts/review-automation.mjs</code></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-h">
+      <h3>AI Chatbot</h3>
+      <span class="badge" id="chatbotBadge">0 active</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div id="chatbotList" style="font-size:12px;color:var(--text3)">Loading chatbot configs...</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:12px">AI-powered chat widget for client sites. Setup: <code style="color:var(--accent)">node scripts/chatbot-manager.mjs setup --project &lt;id&gt;</code></div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-h">
+      <h3>SEO Blog Posts</h3>
+      <span class="badge" id="blogBadge">0 posts</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div id="blogList" style="font-size:12px;color:var(--text3)">Loading blog posts...</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:12px">AI-generated SEO content. Run: <code style="color:var(--accent)">node scripts/seo-blog-generator.mjs generate --project &lt;id&gt; --topic "keyword"</code></div>
+    </div>
+  </div>
+</div>
+
+<!-- Quarterly Refresh Audits -->
+<div class="panels-full" style="padding-bottom:16px">
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Quarterly Website Refresh Audits</h3>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-s btn-sm" onclick="runRefreshAudit()">Run Audit Now</button>
+        <span class="badge" id="refreshBadge">0 audits</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Website</th><th>Speed</th><th>SEO</th><th>Mobile</th><th>Change</th><th>Issues</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="refreshTable"><tr><td colspan="8" class="loading-s">Loading refresh audits...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <!-- SECTION: RECENT INQUIRIES -->
 <div class="section-divider"><h2>&#128233; Inbound Inquiries</h2><div class="line"></div></div>
 <div class="panels-full" style="padding-bottom:48px">
@@ -2588,13 +2646,106 @@ function checkLiveStatus(){
   }).catch(function(){});
 }
 
+// ── ADD-ONS & AUTOMATION DATA ──
+
+function loadAddOnData(){
+  // Review Requests
+  q('/review_requests?select=status').then(function(reqs){
+    if(!reqs||!reqs.length){return}
+    var sent=reqs.filter(function(r){return r.status!=='pending'}).length;
+    var reviewed=reqs.filter(function(r){return r.status==='reviewed'}).length;
+    var rate=sent>0?Math.round(reviewed/sent*100):0;
+    document.getElementById('rvSent').textContent=sent;
+    document.getElementById('rvReviewed').textContent=reviewed;
+    document.getElementById('rvRate').textContent=rate+'%';
+    document.getElementById('reviewsBadge').textContent=sent+' sent';
+  });
+
+  // Chatbot Configs
+  q('/chatbot_configs?select=id,business_name,project_id,is_active&order=created_at.desc').then(function(configs){
+    if(!configs||!configs.length){
+      document.getElementById('chatbotList').innerHTML='<div style="color:var(--text3)">No chatbots configured yet.</div>';
+      document.getElementById('chatbotBadge').textContent='0 active';
+      return;
+    }
+    var active=configs.filter(function(c){return c.is_active});
+    document.getElementById('chatbotBadge').textContent=active.length+' active';
+    var html='';
+    configs.slice(0,5).forEach(function(c){
+      html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">';
+      html+='<span style="color:var(--white);font-weight:600">'+esc(c.business_name)+'</span>';
+      html+='<span class="pill '+(c.is_active?'pill-interested':'pill-not-called')+'">'+(c.is_active?'Active':'Inactive')+'</span>';
+      html+='</div>';
+    });
+    document.getElementById('chatbotList').innerHTML=html;
+  });
+
+  // Blog Posts
+  q('/blog_posts?select=id,title,status,created_at&order=created_at.desc&limit=5').then(function(posts){
+    if(!posts||!posts.length){
+      document.getElementById('blogList').innerHTML='<div style="color:var(--text3)">No blog posts generated yet.</div>';
+      document.getElementById('blogBadge').textContent='0 posts';
+      return;
+    }
+    document.getElementById('blogBadge').textContent=posts.length+' posts';
+    var statusPill={'draft':'pill-sent','review':'pill-opened','approved':'pill-replied','published':'pill-interested'};
+    var html='';
+    posts.forEach(function(p){
+      html+='<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;gap:8px">';
+      html+='<span style="color:var(--white);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">'+esc(p.title)+'</span>';
+      html+='<span class="pill '+(statusPill[p.status]||'pill-sent')+'">'+esc(p.status)+'</span>';
+      html+='</div>';
+    });
+    document.getElementById('blogList').innerHTML=html;
+  });
+
+  // Refresh Audits
+  q('/refresh_audits?select=*&order=created_at.desc&limit=10').then(function(audits){
+    if(!audits||!audits.length){
+      document.getElementById('refreshTable').innerHTML='<tr><td colspan="8" class="loading-s">No refresh audits yet. Run: node scripts/quarterly-refresh.mjs audit</td></tr>';
+      document.getElementById('refreshBadge').textContent='0 audits';
+      return;
+    }
+    document.getElementById('refreshBadge').textContent=audits.length+' audits';
+    var html='';
+    audits.forEach(function(a){
+      var sCol=a.speed_score>=80?'var(--green)':a.speed_score>=50?'var(--accent)':'var(--red)';
+      var seCol=a.seo_score>=80?'var(--green)':a.seo_score>=50?'var(--accent)':'var(--red)';
+      var mCol=a.mobile_score>=80?'var(--green)':a.mobile_score>=50?'var(--accent)':'var(--red)';
+      var change='';
+      if(a.previous_speed!=null){
+        var diff=a.speed_score-a.previous_speed;
+        change=diff>0?'<span style="color:var(--green)">\u25b2+'+diff+'</span>':diff<0?'<span style="color:var(--red)">\u25bc'+diff+'</span>':'<span style="color:var(--text3)">=</span>';
+      } else { change='<span style="color:var(--text3)">First</span>'; }
+      var issues=(a.issues_found||[]).length;
+      var statusPill={'pending':'pill-sent','sent':'pill-opened','actioned':'pill-interested','dismissed':'pill-not-called'};
+      html+='<tr>';
+      html+='<td style="font-weight:600;color:var(--white);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(a.website_url||'')+'</td>';
+      html+='<td><strong style="color:'+sCol+'">'+(a.speed_score||'—')+'</strong></td>';
+      html+='<td><strong style="color:'+seCol+'">'+(a.seo_score||'—')+'</strong></td>';
+      html+='<td><strong style="color:'+mCol+'">'+(a.mobile_score||'—')+'</strong></td>';
+      html+='<td>'+change+'</td>';
+      html+='<td>'+(issues>0?'<span style="color:var(--red);font-weight:700">'+issues+'</span>':'<span style="color:var(--green)">\u2705</span>')+'</td>';
+      html+='<td><span class="pill '+(statusPill[a.status]||'pill-sent')+'">'+esc(a.status||'')+'</span></td>';
+      html+='<td style="font-size:11px;color:var(--text3)">'+new Date(a.created_at).toLocaleDateString('en-GB')+'</td>';
+      html+='</tr>';
+    });
+    document.getElementById('refreshTable').innerHTML=html;
+  });
+}
+
+function runRefreshAudit(){
+  showToast('Run quarterly-refresh.mjs from terminal: node scripts/quarterly-refresh.mjs audit','blue');
+}
+
 loadData();
 loadRequests();
 loadScraperConfig();
 loadScraperHistory();
 checkLiveStatus();
+loadAddOnData();
 // Auto-refresh every 60 seconds
-setInterval(function(){loadData();loadRequests();loadScraperHistory()},60000);
+setInterval(function(){loadData();loadRequests();loadScraperHistory();loadAddOnData()},60000);
 </script>
 </body>
 </html>
