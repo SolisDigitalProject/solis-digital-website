@@ -150,8 +150,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     </div>
   </div>
 
+  <!-- Support Panel -->
+  <div class="panel">
+    <div class="panel-h">
+      <h3>Need Something Changed?</h3>
+    </div>
+    <div class="panel-body">
+      <p style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px">Request a change to your website, update content, or ask us anything. We typically action requests within 24 hours.</p>
+      <div style="display:flex;gap:10px">
+        <a href="mailto:info@solisdigital.co.uk?subject=Change%20Request" style="display:inline-block;padding:10px 20px;background:var(--accent);color:#0a0a0a;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">Email a Request</a>
+        <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" style="display:inline-block;padding:10px 20px;background:var(--bg);color:var(--accent);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">Book a Call</a>
+      </div>
+    </div>
+  </div>
+
   <div class="portal-footer">
-    Need help? Email <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a>
+    Need help? Email <a href="mailto:info@solisdigital.co.uk">info@solisdigital.co.uk</a> &mdash; We respond within 24 hours
   </div>
 
   <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text3)">
@@ -195,9 +209,13 @@ function authenticate(){
     document.getElementById('authGate').style.display='none';
     document.getElementById('portal').style.display='block';
     loadPortal(data[0]);
-  }).catch(function(){
+  }).catch(function(err){
     clearTimeout(timeout);
-    document.getElementById('authErr').textContent='Connection failed. Please check your internet and try again.';
+    if(err.name==='AbortError'){
+      document.getElementById('authErr').textContent='Request timed out. Please check your internet connection and try again.';
+    } else {
+      document.getElementById('authErr').textContent='Connection failed. Please check your internet and try again.';
+    }
     document.getElementById('authErr').style.display='block';
   });
 }
