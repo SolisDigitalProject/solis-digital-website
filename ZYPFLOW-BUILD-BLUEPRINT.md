@@ -1,140 +1,194 @@
 # ZYPFLOW.CO.UK — Complete Build Blueprint
 
-> How to build Zypflow as a standalone SaaS product, reusing the proven Solis Digital architecture but rebranded and productised for scale.
+> Zypflow is its own product — an AI-powered automation platform for agencies and businesses. Solis Digital is a separate agency that happens to be built by the same founders. They are **independent businesses**.
 
 ---
 
 ## WHAT IS ZYPFLOW
 
-Zypflow is the **automation platform** that powers Solis Digital — extracted, rebranded, and sold as a standalone product to other agencies and businesses.
+Zypflow is an **AI workflow automation platform** that helps agencies and businesses automate lead generation, client acquisition, and operations — without writing code.
 
-**Solis Digital** = the agency (services company, you do the work)
-**Zypflow** = the platform (SaaS product, the software does the work)
+**It is NOT Solis Digital repackaged.** They are two separate companies:
 
-Think of it like this:
-- Solis Digital is like a marketing agency that uses HubSpot
-- Zypflow IS the HubSpot — but built specifically for small agencies and local businesses
+| | Solis Digital | Zypflow |
+|--|--------------|---------|
+| **Type** | Web design agency (service business) | SaaS platform (product business) |
+| **Customers** | Local UK businesses (dentists, salons, trades) | Agencies, freelancers, marketing consultants, SMBs |
+| **Revenue model** | Project fees + monthly retainers | Monthly subscriptions |
+| **What you sell** | "We build your website and get you clients" | "Software that automates your client acquisition" |
+| **Delivery** | You do the work | The software does the work |
+| **Domain** | solisdigital.co.uk | zypflow.co.uk |
+| **Brand** | Premium dark/gold, agency feel | Modern, clean, SaaS feel |
+| **Relationship** | Solis may use Zypflow internally | Zypflow has no mention of Solis |
 
 ---
 
 ## POSITIONING
 
-**Tagline:** "The AI-powered client acquisition system for small agencies"
+**Tagline:** "Automate your entire client pipeline with AI."
 
-**One-liner:** Zypflow scrapes leads, audits their websites, sends personalised cold emails, nurtures replies, and tracks everything in one dashboard — on autopilot.
+**One-liner:** Zypflow is the AI automation platform that finds leads, qualifies them, runs outreach, and manages your pipeline — so you can focus on delivery.
 
-**Target customers:**
-1. **Small web agencies** (1-5 people) who want the same system you built but don't have the tech skills
-2. **Freelance web designers** who need a lead generation engine
-3. **Marketing consultants** who want to offer website audits as a service
-4. **Local business owners** who want to manage their own online presence
+**Category:** AI-powered workflow automation + CRM for small agencies and businesses. Sits between Make.com (too technical) and HubSpot (too expensive) — purpose-built for lead generation and client acquisition.
 
-**Pricing model:**
-| Plan | Price | What They Get |
-|------|-------|---------------|
-| Starter | £49/mo | Dashboard + lead management + manual audit tool |
-| Growth | £149/mo | Everything + automated scraping + cold email + nurture sequences |
-| Agency | £349/mo | Everything + white-label + multi-client + API access |
+**Core value props:**
+1. **Find leads automatically** — scrape Google Maps by industry + location, enrich with contact data
+2. **Audit & qualify instantly** — AI analyses websites, scores leads, generates personalised insights
+3. **Outreach on autopilot** — personalised cold email sequences using audit data as the hook
+4. **Manage everything in one place** — pipeline, calls, proposals, projects, client portal
+5. **Build custom workflows** — drag-and-drop automation builder for any business process
 
 ---
 
-## ARCHITECTURE — WHAT TO REUSE VS REBUILD
+## TARGET CUSTOMERS
 
-### Reuse Directly (90% done)
-| Component | Solis Version | Zypflow Version |
-|-----------|--------------|-----------------|
-| Supabase backend | Same tables, same RLS | New Supabase project, same schema + multi-tenant `org_id` column |
-| Lead scoring algorithm | `lead-scoring.mjs` | Same logic, wrapped in edge function |
-| PageSpeed audit engine | `bulk-audit.mjs` | Same, but triggered per-user not globally |
-| AI summary generation | Claude API calls | Same prompts, same pattern |
-| Email sending | Resend API | Same, but from user's own domain |
-| Dashboard UI | `dashboard.html` | Rebuild in Next.js/React for proper auth + multi-tenant |
-| Client portal | `portal.html` | Same concept, rebrand |
-| Chatbot widget | `chatbot-widget.js` | Same, dynamically themed per user |
-| Review automation | `review-automation.mjs` | Same logic, edge function |
-| Blog generator | `seo-blog-generator.mjs` | Same, per-tenant |
+### Primary: Small Agencies (1-10 people)
+- Web design agencies drowning in delivery but starving for leads
+- Marketing consultants who offer website audits manually
+- SEO freelancers who want to scale beyond referrals
+- **Pain:** "I'm great at the work but terrible at finding clients consistently"
 
-### Rebuild for SaaS
-| Component | Why |
-|-----------|-----|
-| **Authentication** | Supabase Auth (email/password + Google OAuth) — replaces the "Weetabix" password |
-| **Multi-tenancy** | Every table gets an `org_id` column. RLS policies filter by authenticated user's org |
-| **Billing** | Stripe Billing with subscription tiers. Usage-based for scraping credits |
-| **Onboarding wizard** | Guide new users through: connect domain, set industry/location, configure emails |
-| **API layer** | RESTful API for white-label integrations |
-| **Admin panel** | Super-admin view to manage all tenants (you) |
+### Secondary: Local Business Owners
+- Small businesses who want to manage their own marketing
+- Companies tired of paying agencies but lacking the tools
+- **Pain:** "I don't know where my next customer is coming from"
+
+### Tertiary: Marketing Teams at SMBs
+- In-house marketers who need automation without enterprise pricing
+- Teams using 5+ disconnected tools (CRM, email, scraping, analytics)
+- **Pain:** "I'm paying £500/mo for tools that don't talk to each other"
 
 ---
 
-## DATABASE SCHEMA (Multi-Tenant Version)
+## PRODUCT FEATURES
 
-Every table from Solis gets an `org_id` column. Here's the upgraded schema:
+### Core Platform (All Plans)
 
-```sql
--- Organisations (tenants)
-CREATE TABLE organisations (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
-  slug text UNIQUE NOT NULL,
-  owner_id uuid REFERENCES auth.users(id),
-  plan text DEFAULT 'starter' CHECK (plan IN ('starter', 'growth', 'agency', 'enterprise')),
-  stripe_customer_id text,
-  stripe_subscription_id text,
-  scraping_credits_remaining integer DEFAULT 100,
-  settings jsonb DEFAULT '{}',
-  created_at timestamptz DEFAULT now()
-);
+**Pipeline Dashboard**
+- Real-time KPIs: leads, audited, outreach sent, replies, clients won
+- Visual conversion funnel
+- Revenue tracking (MRR, one-off, per-client)
+- Activity feed showing all system actions
 
--- Team members
-CREATE TABLE org_members (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid REFERENCES organisations(id) ON DELETE CASCADE,
-  user_id uuid REFERENCES auth.users(id),
-  role text DEFAULT 'member' CHECK (role IN ('owner', 'admin', 'member')),
-  created_at timestamptz DEFAULT now(),
-  UNIQUE(org_id, user_id)
-);
+**Lead Management**
+- Lead database with search, filters, bulk actions
+- Status pipeline: New → Audited → Outreach → Replied → Call Booked → Won
+- Lead scoring algorithm (0-130 based on website quality, industry, contact info)
+- Import/export CSV
+- Manual add or auto-scraped
 
--- Leads (same as Solis but with org_id)
-CREATE TABLE leads (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  org_id uuid REFERENCES organisations(id) ON DELETE CASCADE,
-  business_name text NOT NULL,
-  website text,
-  email text,
-  phone text,
-  industry text,
-  location text,
-  google_rating float,
-  has_website boolean DEFAULT true,
-  status text DEFAULT 'New',
-  speed_score numeric,
-  seo_score numeric,
-  mobile_score numeric,
-  ssl_secure boolean,
-  audit_summary text,
-  lead_score integer DEFAULT 0,
-  notes text,
-  review_count integer,
-  source text DEFAULT 'manual',
-  created_at timestamptz DEFAULT now()
-);
+**Website Audit Tool**
+- Enter any URL → instant PageSpeed analysis (speed, SEO, mobile, SSL)
+- AI-generated audit summary explaining issues in plain English
+- PDF audit report generation (for sales meetings)
+- Before/after comparison tracking
 
--- Same pattern for: outreach, clients, projects, audits,
--- nurture_sequences, review_requests, blog_posts, chatbot_configs,
--- refresh_audits, health_checks, admin_actions, scraper_config
--- All get org_id column + RLS policy:
+**Contact Management**
+- Call priority list ranked by conversion likelihood
+- Click-to-call with call status tracking
+- Email/phone/website for each lead
+- Notes and activity history
 
--- Example RLS policy (repeat for every table):
-CREATE POLICY "users_own_org_data" ON leads
-  FOR ALL
-  USING (org_id IN (
-    SELECT org_id FROM org_members WHERE user_id = auth.uid()
-  ))
-  WITH CHECK (org_id IN (
-    SELECT org_id FROM org_members WHERE user_id = auth.uid()
-  ));
-```
+### Growth Features
+
+**Lead Scraping Engine**
+- Google Maps scraper (by industry + city)
+- Email extraction from business websites
+- Automatic deduplication
+- Configurable scraping schedule (daily/weekly)
+- Credit-based usage
+
+**Cold Email Automation**
+- Connect email accounts for sending
+- Personalised email sequences with merge tags from audit data
+- A/B testing subject lines
+- Open/reply/bounce tracking
+- Auto-pause on reply
+- Domain warmup management
+
+**Nurture Sequences**
+- Multi-step email sequences (configurable 1-7 steps)
+- Trigger-based: after audit, after reply, after X days
+- Template library with proven sequences
+- Sequence performance analytics
+
+**AI Content Generation**
+- Blog post generator (SEO-optimised, per-client)
+- Email copy generator
+- Proposal copy generator
+- Social media post generator
+
+### Agency Features
+
+**AI Chatbot Builder**
+- Create chatbots for client websites
+- Per-client knowledge base (services, FAQs, hours, contact)
+- Embeddable widget with customisable colours/branding
+- Conversation history and analytics
+- Powered by Claude API
+
+**Google Reviews Automation**
+- Configure Google review URL per client
+- Queue review request emails to customers
+- Branded email templates
+- Conversion tracking (sent → reviewed)
+
+**Client Portal**
+- Branded portal for each client
+- Project milestones and status tracking
+- Website performance scores (live)
+- Change request system
+
+**Website Refresh Monitoring**
+- Automated monthly re-audits of client websites
+- Score degradation alerts
+- AI-generated recommendations
+- Branded performance reports emailed to clients
+
+**White-Label**
+- Custom domain for the platform
+- Custom branding (logo, colours)
+- Branded client portals
+- Branded email sending (your domain)
+- Remove all Zypflow branding
+
+**Workflow Builder**
+- Visual drag-and-drop automation builder
+- Triggers: schedule, webhook, database change, email event
+- Actions: send email, update record, run audit, call API, AI generate
+- Conditions and branching logic
+- Pre-built templates for common workflows
+- Connect external APIs (Zapier-style)
+
+**API Access**
+- RESTful API for all platform features
+- Webhook endpoints for integrations
+- API key management
+- Rate limiting per plan
+
+---
+
+## PRICING
+
+| | Free | Starter | Growth | Agency |
+|--|------|---------|--------|--------|
+| **Price** | £0/mo | £49/mo | £149/mo | £349/mo |
+| **Leads** | 25 | 200 | 1,000 | Unlimited |
+| **Scraping credits** | 0 | 100/mo | 500/mo | Unlimited |
+| **Email accounts** | 0 | 1 | 5 | 25 |
+| **Emails/month** | 0 | 500 | 5,000 | 50,000 |
+| **Audit tool** | 5/mo | Unlimited | Unlimited | Unlimited |
+| **AI generations** | 3/mo | 20/mo | 100/mo | Unlimited |
+| **Chatbots** | — | — | 1 | Unlimited |
+| **Review automation** | — | — | 1 client | Unlimited |
+| **Client portals** | — | — | 3 | Unlimited |
+| **Workflow builder** | — | Basic (3 workflows) | Full | Full + custom |
+| **Team members** | 1 | 1 | 5 | 15 |
+| **White-label** | — | — | — | Yes |
+| **API access** | — | — | Read-only | Full |
+| **Support** | Community | Email | Priority | Dedicated |
+
+**Enterprise:** Custom pricing for 50+ seats, SLA, dedicated instance
 
 ---
 
@@ -142,239 +196,489 @@ CREATE POLICY "users_own_org_data" ON leads
 
 | Layer | Technology | Why |
 |-------|-----------|-----|
-| Frontend | **Next.js 14** (App Router) | SSR, auth middleware, API routes, React components |
-| Hosting | **Vercel** | You already use it, zero-config deploys |
-| Database | **Supabase** (new project) | Postgres, Auth, Edge Functions, Realtime |
-| Auth | **Supabase Auth** | Email/password, Google OAuth, magic links |
-| Payments | **Stripe Billing** | Subscriptions, usage metering, customer portal |
-| Email | **Resend** | Transactional + cold outreach sending |
-| AI | **Claude API** | Audit summaries, blog generation, chatbot |
-| Scraping | **Apify** | Google Maps scraper (same actor) |
-| Cold Email | **Instantly.ai API** | Campaign management, warmup, tracking |
-| Styling | **Tailwind CSS** | Fast, consistent, dark theme |
+| Frontend | **Next.js 14** (App Router) + **Tailwind CSS** | Fast, SEO-friendly, React ecosystem |
+| Backend | **Supabase** (Postgres + Auth + Edge Functions + Realtime) | Full backend in one service, generous free tier |
+| Hosting | **Vercel** | Zero-config deploys, edge network, preview deployments |
+| Auth | **Supabase Auth** | Email/password, Google OAuth, magic links, MFA |
+| Payments | **Stripe Billing** | Subscriptions, metered billing, customer portal |
+| Email sending | **Resend** | Transactional + marketing emails, domain verification |
+| AI | **Anthropic Claude API** | Audit summaries, content gen, chatbot, copy |
+| Scraping | **Apify** | Google Maps actor, reliable, scalable |
+| Cold email | **Instantly.ai API** (or build own) | Warmup, rotation, tracking |
+| File storage | **Supabase Storage** | Audit PDFs, logos, uploads |
+| Analytics | **PostHog** or **Plausible** | Product analytics, funnels, feature usage |
+| Error tracking | **Sentry** | Catch bugs before users report them |
 
 ---
 
-## PAGE STRUCTURE (zypflow.co.uk)
+## DATABASE SCHEMA
 
-### Marketing Site (public)
-```
-/                     → Landing page (hero, features, pricing, testimonials)
-/pricing              → Detailed pricing with feature comparison
-/features             → Feature deep-dive (scraping, auditing, email, chatbot)
-/blog                 → SEO content (agency growth tips, lead gen strategies)
-/login                → Auth page
-/signup               → Registration + plan selection
+### Multi-Tenant Architecture
+
+Every table has an `org_id` column. RLS policies ensure users only see their own organisation's data.
+
+```sql
+-- Core: Organisations
+CREATE TABLE organisations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  slug text UNIQUE NOT NULL,
+  owner_id uuid REFERENCES auth.users(id),
+  plan text DEFAULT 'free' CHECK (plan IN ('free','starter','growth','agency','enterprise')),
+  stripe_customer_id text UNIQUE,
+  stripe_subscription_id text,
+  settings jsonb DEFAULT '{"brand_color":"#e8a23a","logo_url":null}',
+  scraping_credits integer DEFAULT 0,
+  email_credits integer DEFAULT 0,
+  ai_credits integer DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Core: Team
+CREATE TABLE org_members (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid REFERENCES organisations(id) ON DELETE CASCADE,
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  role text DEFAULT 'member' CHECK (role IN ('owner','admin','member','viewer')),
+  invited_email text,
+  accepted_at timestamptz,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(org_id, user_id)
+);
+
+-- Pipeline: Leads
+CREATE TABLE leads (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  business_name text NOT NULL,
+  website text,
+  email text,
+  phone text,
+  industry text,
+  location text,
+  google_rating float,
+  review_count integer,
+  has_website boolean DEFAULT true,
+  status text DEFAULT 'New',
+  lead_score integer DEFAULT 0,
+  speed_score numeric,
+  seo_score numeric,
+  mobile_score numeric,
+  ssl_secure boolean,
+  audit_summary text,
+  notes text,
+  source text DEFAULT 'manual',
+  tags text[] DEFAULT '{}',
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
+-- Pipeline: Outreach
+CREATE TABLE outreach (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  lead_id uuid REFERENCES leads(id),
+  contact_email text,
+  subject text,
+  sequence_step integer DEFAULT 1,
+  status text DEFAULT 'Queued',
+  opens integer DEFAULT 0,
+  clicked boolean DEFAULT false,
+  replied_at timestamptz,
+  sent_at timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Pipeline: Clients
+CREATE TABLE clients (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  lead_id uuid REFERENCES leads(id),
+  business_name text,
+  contact_name text,
+  email text,
+  package text,
+  one_off_revenue numeric DEFAULT 0,
+  monthly_retainer numeric DEFAULT 0,
+  start_date date DEFAULT CURRENT_DATE,
+  status text DEFAULT 'Active',
+  notes text,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Projects
+CREATE TABLE projects (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  client_id uuid REFERENCES clients(id),
+  business_name text NOT NULL,
+  package text,
+  status text DEFAULT 'discovery',
+  milestones jsonb DEFAULT '[]',
+  domain text,
+  dns_status text DEFAULT 'not_started',
+  ssl_status text DEFAULT 'pending',
+  preview_url text,
+  live_url text,
+  portal_token text UNIQUE,
+  brief_data jsonb,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Audits
+CREATE TABLE audits (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  lead_id uuid REFERENCES leads(id),
+  url text NOT NULL,
+  speed_score integer,
+  seo_score integer,
+  mobile_score integer,
+  ssl_secure boolean,
+  ai_summary text,
+  full_report jsonb,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Nurture Sequences
+CREATE TABLE nurture_sequences (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  lead_id uuid REFERENCES leads(id),
+  email text NOT NULL,
+  business_name text,
+  sequence_step integer DEFAULT 1,
+  total_steps integer DEFAULT 4,
+  status text DEFAULT 'active',
+  next_send_at timestamptz,
+  last_sent_at timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Chatbot Configs (per client)
+CREATE TABLE chatbot_configs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  client_id uuid REFERENCES clients(id),
+  business_name text NOT NULL,
+  business_description text,
+  services jsonb DEFAULT '[]',
+  faqs jsonb DEFAULT '[]',
+  hours text,
+  phone text,
+  email text,
+  booking_url text,
+  custom_instructions text,
+  widget_color text DEFAULT '#e8a23a',
+  is_active boolean DEFAULT true,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Review Requests
+CREATE TABLE review_requests (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  client_id uuid REFERENCES clients(id),
+  customer_name text,
+  customer_email text,
+  google_review_url text NOT NULL,
+  status text DEFAULT 'pending',
+  sent_at timestamptz,
+  reviewed_at timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Blog Posts
+CREATE TABLE blog_posts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  client_id uuid REFERENCES clients(id),
+  title text NOT NULL,
+  slug text,
+  content text NOT NULL,
+  meta_description text,
+  keywords text[],
+  status text DEFAULT 'draft',
+  word_count integer,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Workflows (automation builder)
+CREATE TABLE workflows (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  description text,
+  trigger_type text NOT NULL CHECK (trigger_type IN ('schedule','webhook','db_change','manual','email_event')),
+  trigger_config jsonb DEFAULT '{}',
+  steps jsonb DEFAULT '[]',
+  is_active boolean DEFAULT false,
+  last_run_at timestamptz,
+  run_count integer DEFAULT 0,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Workflow Runs (execution history)
+CREATE TABLE workflow_runs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  workflow_id uuid REFERENCES workflows(id) ON DELETE CASCADE,
+  status text DEFAULT 'running' CHECK (status IN ('running','completed','failed','cancelled')),
+  steps_completed integer DEFAULT 0,
+  error_message text,
+  started_at timestamptz DEFAULT now(),
+  completed_at timestamptz
+);
+
+-- Scraper Config (per org)
+CREATE TABLE scraper_configs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  industries text[] DEFAULT '{}',
+  cities text[] DEFAULT '{}',
+  max_results integer DEFAULT 20,
+  auto_enabled boolean DEFAULT false,
+  schedule_cron text,
+  last_run_at timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Activity Log
+CREATE TABLE activity_log (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  org_id uuid NOT NULL REFERENCES organisations(id) ON DELETE CASCADE,
+  user_id uuid REFERENCES auth.users(id),
+  action text NOT NULL,
+  description text,
+  target_type text,
+  target_id text,
+  metadata jsonb DEFAULT '{}',
+  created_at timestamptz DEFAULT now()
+);
+
+-- RLS: Enable on ALL tables
+-- Example policy (apply to every table above):
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "org_isolation" ON leads FOR ALL
+  USING (org_id IN (SELECT org_id FROM org_members WHERE user_id = auth.uid()))
+  WITH CHECK (org_id IN (SELECT org_id FROM org_members WHERE user_id = auth.uid()));
 ```
 
-### App (authenticated)
+---
+
+## PAGE STRUCTURE
+
+### Marketing Site (zypflow.co.uk — public)
 ```
-/dashboard            → KPI overview (same layout as Solis Command Centre)
-/leads                → Lead management table with filters, scoring, bulk actions
-/leads/[id]           → Individual lead detail + audit results + outreach history
-/outreach             → Email campaign tracker (sent, opened, replied)
+/                     → Landing page
+/features             → Feature deep-dive with screenshots
+/pricing              → Pricing table with feature comparison + FAQ
+/blog                 → SEO content (lead gen tips, agency growth, automation)
+/blog/[slug]          → Individual blog post
+/changelog            → Product updates
+/docs                 → API documentation + guides
+/login                → Sign in
+/signup               → Create account → select plan → onboarding
+```
+
+### App (app.zypflow.co.uk — authenticated)
+```
+/dashboard            → KPI overview, funnel, recent activity
+/leads                → Lead table with filters, scoring, bulk actions
+/leads/[id]           → Lead detail: audit, outreach history, notes
+/audit                → Website audit tool (enter URL → results)
+/outreach             → Email campaigns: sequences, templates, analytics
 /outreach/sequences   → Nurture sequence builder
-/clients              → Client management + project tracker
-/clients/[id]         → Client detail + portal preview
-/audits               → Audit tool (scan any URL, save results)
-/scraper              → Scraper configuration (industries, cities, schedule)
-/chatbot              → Chatbot knowledge base manager
+/outreach/templates   → Email template library
+/clients              → Client management
+/clients/[id]         → Client detail, project, portal
+/projects             → Active website builds tracker
+/projects/[id]        → Project milestones, DNS, SSL, preview
+/scraper              → Lead scraper config (industries, cities, schedule)
+/chatbot              → Chatbot builder (per client knowledge bases)
 /reviews              → Review automation dashboard
-/blog-generator       → AI blog post generator
-/settings             → Organisation settings, team, billing, API keys
-/settings/billing     → Stripe customer portal embed
+/content              → AI content generator (blogs, emails, social)
+/workflows            → Workflow automation builder
+/workflows/[id]       → Workflow editor (visual builder)
+/portal/[token]       → Client-facing portal (no auth needed)
+/settings             → Org settings
+/settings/team        → Team members, invites, roles
+/settings/billing     → Stripe customer portal
+/settings/api         → API keys
+/settings/whitelabel  → White-label config (Agency plan)
 ```
 
 ---
 
-## LANDING PAGE CONTENT (zypflow.co.uk)
+## LANDING PAGE CONTENT
 
 ### Hero
-**Headline:** "Stop chasing clients. Let AI find them for you."
-**Subline:** "Zypflow scrapes leads, audits their websites, sends personalised emails, and books calls — while you focus on delivery."
-**CTA:** "Start Free Trial" / "See It In Action"
-**Trust badges:** "AI-Powered", "GDPR Compliant", "UK Built", "Cancel Anytime"
+**Headline:** "Automate Your Entire Client Pipeline With AI"
+**Subline:** "Find leads. Audit their websites. Send personalised outreach. Close deals. All on autopilot."
+**CTA primary:** "Start Free — No Card Required"
+**CTA secondary:** "Watch Demo"
+**Trust bar:** "Used by 500+ agencies" | "AI-Powered" | "GDPR Compliant" | "Cancel Anytime"
 
-### How It Works (4 steps)
-1. **Set Your Targets** — Choose industries + locations. Zypflow finds businesses with bad websites.
-2. **Auto-Audit** — AI analyses their site speed, SEO, and mobile experience. Generates a personalised report.
-3. **Smart Outreach** — Personalised emails sent automatically with their audit results. Nurture sequences follow up.
-4. **Close Deals** — Replies appear in your dashboard. Book calls, send proposals, onboard clients — all in one place.
+### How It Works
+1. **Connect** — Set your target industries and locations. Connect your email. Takes 5 minutes.
+2. **Discover** — Zypflow finds businesses with poor websites, scores them, and builds a prioritised pipeline.
+3. **Engage** — AI writes personalised emails using each lead's actual website issues. Sequences run automatically.
+4. **Close** — Replies, call bookings, and proposals managed in one dashboard. Track everything from first touch to signed contract.
 
-### Features Grid
-| Feature | Description |
-|---------|------------|
-| Lead Scraping | Google Maps scraper finds businesses in your target industries + cities |
-| Website Auditing | PageSpeed + AI analysis generates detailed audit reports |
-| Lead Scoring | Algorithm ranks leads 0-130 based on website quality, industry, contact info |
-| Cold Email | Personalised outreach with merge tags from audit data |
-| Nurture Sequences | 4-step automated follow-up over 14 days |
-| AI Chatbot | Embeddable widget for your clients' sites, powered by Claude |
-| Review Automation | Automated Google review request emails |
-| SEO Blog Generator | AI-written, SEO-optimised blog posts for clients |
-| Client Portal | Branded portal where clients track their project |
-| Dashboard | Real-time KPIs, funnel, call list, health monitoring |
+### Feature Sections (with screenshots)
+- **Smart Lead Scraping** — "Stop manually searching Google Maps. Zypflow finds hundreds of qualified leads in minutes."
+- **AI Website Auditor** — "Instant speed, SEO, and mobile analysis with AI-written summaries. Use as a sales weapon."
+- **Automated Outreach** — "Personalised cold emails that reference each lead's actual website problems. 3x higher reply rates than generic templates."
+- **Workflow Builder** — "Build custom automations without code. If-this-then-that logic for your entire business."
+- **Client Management** — "From lead to paying client to ongoing project — everything in one place."
 
 ### Social Proof
-Use the same case studies from Solis but reframe:
-- "Agencies using Zypflow close 3x more clients"
-- "Built on the same system that generated 47 leads in its first week"
-- Show the dashboard screenshot as proof of the product
+- "Agencies using Zypflow generate 47 qualified leads per week on average"
+- "Our users report 3x faster client acquisition vs manual prospecting"
+- Testimonial cards from beta users (even internal — Solis Digital can be a testimonial)
 
-### Pricing Section
-| | Starter | Growth | Agency |
-|--|---------|--------|--------|
-| Price | £49/mo | £149/mo | £349/mo |
-| Leads/month | 100 | 500 | Unlimited |
-| Scraping credits | 100 | 500 | Unlimited |
-| Email sending | Manual | Automated | Automated + white-label |
-| Audit tool | Yes | Yes | Yes |
-| AI chatbot | - | 1 client | Unlimited clients |
-| Review automation | - | 1 client | Unlimited clients |
-| Blog generator | - | 5/month | Unlimited |
-| Team members | 1 | 3 | 10 |
-| White-label | - | - | Yes |
-| API access | - | - | Yes |
-
-### FAQ
-- "Is this legal?" — Yes. We scrape publicly available Google Maps data. Emails comply with UK ICO guidelines.
-- "Do I need technical skills?" — No. Everything is point-and-click. Set your industries and cities, the system handles the rest.
-- "Can I white-label it?" — Agency plan includes full white-labelling — your brand, your domain.
-- "What about GDPR?" — All data processing is UK-based. Opt-out links included in every email. Data retention policies built in.
+### Comparison Table
+| | Zypflow | HubSpot | GoHighLevel | Make.com |
+|--|---------|---------|-------------|---------|
+| Price | From £49/mo | From £800/mo | From £97/mo | From £9/mo |
+| AI lead scoring | Yes | Add-on | No | No |
+| Website auditing | Built-in | No | No | No |
+| Cold email | Built-in | Add-on | Yes | No |
+| Workflow builder | Yes | Yes | Yes | Yes (complex) |
+| Made for agencies | Yes | No (enterprise) | Yes | No (developers) |
 
 ---
 
-## BUILD ORDER (Phase by Phase)
+## BUILD ORDER
 
-### Phase 1: MVP (Week 1-2) — £0 revenue target
-**Goal:** Landing page + waitlist + core dashboard
+### Phase 1: Foundation (Week 1-2)
+- [ ] Init Next.js 14 project + Tailwind + Supabase
+- [ ] Set up Supabase Auth (email/password, Google OAuth)
+- [ ] Create organisations + org_members tables
+- [ ] Build auth flow: signup → create org → onboarding
+- [ ] Build marketing landing page
+- [ ] Build dashboard shell (sidebar, KPI cards, empty states)
+- [ ] Build lead management (table, filters, add, edit, delete)
+- [ ] Build audit tool (URL input → PageSpeed → AI summary → save)
+- [ ] Deploy to Vercel
 
-1. Set up Next.js project with Tailwind
-2. Create Supabase project (new, separate from Solis)
-3. Set up Supabase Auth (email/password)
-4. Create organisations + org_members tables
-5. Build landing page (hero, features, pricing, FAQ)
-6. Build signup flow (create account → create org → redirect to dashboard)
-7. Build dashboard shell (sidebar nav, KPI cards, empty states)
-8. Build lead management page (table, filters, add lead form)
-9. Build audit tool (enter URL → run PageSpeed → show results → save)
-10. Deploy to Vercel at zypflow.co.uk
+### Phase 2: Pipeline (Week 3-4)
+- [ ] Build lead scoring (edge function, runs on insert/update)
+- [ ] Build scraper integration (Apify actor, per-org config)
+- [ ] Build outreach system (connect email, sequence builder, sending)
+- [ ] Build nurture sequences (multi-step, trigger-based)
+- [ ] Integrate Stripe Billing (checkout, subscription management)
+- [ ] Add usage metering (scraping credits, email credits, AI credits)
 
-### Phase 2: Automation (Week 3-4) — First paying users
-**Goal:** Scraping + email + nurture working
+### Phase 3: Client Tools (Week 5-6)
+- [ ] Build client management (CRUD, link to leads)
+- [ ] Build project tracker (milestones, DNS, SSL, preview URL)
+- [ ] Build client portal (token auth, scores, milestones, support)
+- [ ] Build chatbot builder (per-client config, widget embed code)
+- [ ] Build review automation (queue, send, track)
+- [ ] Build AI content generator (blog posts, email copy)
+- [ ] Deploy chatbot edge function
 
-11. Port scraper config UI from Solis dashboard
-12. Build Apify integration (same actor, triggered per-org)
-13. Port lead scoring algorithm (edge function)
-14. Build cold email integration (Instantly API)
-15. Build nurture sequence builder UI
-16. Add Stripe Billing (subscription checkout, customer portal)
-17. Add usage metering (scraping credits per plan)
+### Phase 4: Workflows + Scale (Week 7-8)
+- [ ] Build visual workflow builder (drag-and-drop, triggers, actions)
+- [ ] Build workflow execution engine (edge functions)
+- [ ] Build team management (invite, roles, permissions)
+- [ ] Build white-label system (custom domain, branding, emails)
+- [ ] Build API (REST + API keys + rate limiting)
+- [ ] Build admin panel (super-admin view of all orgs)
+- [ ] Stripe webhooks (subscription lifecycle, failed payments, usage alerts)
 
-### Phase 3: Add-Ons (Week 5-6) — Expand feature set
-**Goal:** Chatbot, reviews, blog, portal
-
-18. Port chatbot widget + edge function (per-org configs)
-19. Port review automation (per-org, per-client)
-20. Port blog generator (per-org)
-21. Build client portal (per-org branding)
-22. Build project tracker (same as Solis projects section)
-
-### Phase 4: Scale (Week 7-8) — Agency features
-**Goal:** White-label, API, team management
-
-23. Build white-label system (custom domains, branded emails)
-24. Build API (REST endpoints for lead/audit/outreach CRUD)
-25. Build team management (invite members, roles)
-26. Build admin panel (super-admin view of all orgs)
-27. Add Stripe webhooks (subscription lifecycle, failed payments)
+### Phase 5: Polish + Launch (Week 9-10)
+- [ ] Onboarding wizard (guided setup for new users)
+- [ ] Email notifications (weekly digest, high-score lead alerts)
+- [ ] Documentation site (API docs, user guides)
+- [ ] Product Hunt launch prep
+- [ ] Beta user programme (invite 20 agencies)
 
 ---
 
-## WHAT YOU CAN COPY DIRECTLY
+## BRANDING
 
-These files from Solis can be copied with minimal changes:
+| Element | Zypflow | Solis Digital |
+|---------|---------|--------------|
+| Domain | zypflow.co.uk / zypflow.com | solisdigital.co.uk |
+| Colour | Blue/purple gradient + dark bg | Gold + dark bg |
+| Font | Inter or Geist | DM Sans |
+| Logo | "Zypflow" + lightning/flow icon | Sun icon + "Solis" |
+| Tone | "We built this tool for agencies like ours" | "We build websites for local businesses" |
+| Target | Agencies, freelancers, marketers | Dentists, salons, plumbers |
+| Price point | £49-349/mo (SaaS) | £995-2997 setup + £195-997/mo (service) |
 
-| Solis File | Zypflow Equivalent | Changes Needed |
-|------------|-------------------|----------------|
-| `scripts/lead-scoring.mjs` | `lib/scoring.ts` | Convert to TypeScript, add org_id filter |
-| `scripts/bulk-audit.mjs` | `lib/audit.ts` | Same logic, edge function wrapper |
-| `scripts/review-automation.mjs` | `app/api/reviews/route.ts` | Next.js API route, auth check |
-| `scripts/seo-blog-generator.mjs` | `app/api/blog/generate/route.ts` | Same Claude prompts |
-| `scripts/quarterly-refresh.mjs` | `app/api/refresh/route.ts` | Same PageSpeed logic |
-| `scripts/chatbot-manager.mjs` | `app/api/chatbot/route.ts` | Same config structure |
-| `chatbot-widget.js` | `public/widget.js` | Dynamic theming per org |
-| `scripts/instantly-sync.mjs` | `lib/instantly.ts` | Same API calls |
-| `scripts/health-monitor.mjs` | `app/api/health/route.ts` | Per-org health checks |
-| Dashboard CSS/layout | `components/Dashboard.tsx` | React components, same design system |
-
-**The dark theme, gold accent colour scheme, KPI cards, funnel visualisation, call list, email tracker — all of this transfers directly.**
+**No cross-branding.** Zypflow never mentions Solis. Solis never mentions Zypflow to clients. They share founders but are separate brands, separate domains, separate Stripe accounts, separate Supabase projects.
 
 ---
 
 ## REVENUE MODEL
 
-| Revenue Stream | How |
-|---------------|-----|
-| Monthly subscriptions | £49-349/mo per user |
-| Usage overages | Extra scraping credits at £0.05/lead |
-| White-label setup fee | £500 one-time for Agency plan |
-| Done-for-you setup | £297 to configure their account (upsell) |
-| Solis Digital referral | Offer Zypflow users who want "done for you" → refer to Solis |
+| Stream | Description |
+|--------|------------|
+| Subscriptions | £49-349/mo per organisation |
+| Usage overages | Scraping credits: £0.05/lead over limit |
+| | Email credits: £0.01/email over limit |
+| | AI credits: £0.02/generation over limit |
+| Enterprise | Custom pricing, SLA, dedicated support |
+| Marketplace | Pre-built workflow templates (future) |
+| Partner programme | Agency referrals earn 20% recurring for 12 months |
 
-### Revenue Projections
-| Month | Users | MRR | ARR |
-|-------|-------|-----|-----|
-| 3 | 20 | £2,000 | £24,000 |
-| 6 | 80 | £8,000 | £96,000 |
-| 12 | 250 | £25,000 | £300,000 |
-| 24 | 1,000 | £100,000 | £1,200,000 |
-
----
-
-## MARKETING STRATEGY
-
-### Launch (Week 1-2)
-1. Landing page with waitlist
-2. Post on Twitter/X, LinkedIn, IndieHackers, Reddit (r/webdev, r/marketing, r/SaaS)
-3. Product Hunt launch
-4. Cold email to web agencies (use Solis's own cold email system to sell Zypflow)
-
-### Growth (Month 2-6)
-1. SEO blog content: "How to get web design clients", "Best lead generation for agencies"
-2. YouTube tutorials showing the dashboard
-3. Affiliate programme: agencies refer other agencies for 20% recurring
-4. Integration partnerships: Framer, Webflow, WordPress communities
-
-### Retention
-1. Weekly email digest of their pipeline stats
-2. In-app notifications for high-score leads
-3. Quarterly business reviews for Agency plan customers
-4. Community (Discord or Slack) for users to share strategies
+### Projections
+| Month | Free Users | Paid Users | MRR | ARR |
+|-------|-----------|-----------|-----|-----|
+| 3 | 100 | 15 | £1,500 | £18,000 |
+| 6 | 400 | 60 | £6,000 | £72,000 |
+| 12 | 1,500 | 200 | £20,000 | £240,000 |
+| 24 | 5,000 | 800 | £80,000 | £960,000 |
 
 ---
 
-## DOMAIN & BRANDING
+## GO-TO-MARKET
 
-| Element | Recommendation |
-|---------|---------------|
-| Domain | `zypflow.co.uk` (also get `.com` if available) |
-| Colours | Keep the dark theme + gold accent from Solis — it's proven and premium |
-| Font | DM Sans (same as Solis) or Inter |
-| Logo | "Zypflow" wordmark with a lightning bolt or flow icon |
-| Tone | Professional but accessible. "We built this for agencies like us." |
+### Launch Strategy
+1. **Week 1:** Landing page + waitlist live at zypflow.co.uk
+2. **Week 2:** Share on Twitter/X, LinkedIn, IndieHackers, Reddit (r/webdev, r/entrepreneur, r/SaaS, r/marketing)
+3. **Week 3:** Product Hunt launch
+4. **Week 4:** Cold email campaign to UK web agencies (use Zypflow's own system to sell Zypflow)
+5. **Month 2:** YouTube walkthrough videos, SEO blog content
+6. **Month 3:** Affiliate/referral programme launch
+
+### Content Marketing
+- Blog: "How to get web design clients in 2026", "Cold email templates that actually work", "AI tools for agencies"
+- YouTube: Dashboard walkthrough, "Watch me generate 50 leads in 10 minutes"
+- Twitter/X: Daily tips on agency growth, automation, AI workflows
+
+### Partnerships
+- **Framer community** — template marketplace integration
+- **Webflow community** — "Zypflow for Webflow agencies"
+- **WordPress agencies** — largest market segment
+- **Make.com / Zapier users** — migration path (visual builder alternative)
 
 ---
 
-## DAY 1 CHECKLIST (What To Do Right Now)
+## DAY 1 CHECKLIST
 
-- [ ] Buy `zypflow.com` if available (check `.co.uk` too)
-- [ ] Create new Supabase project for Zypflow
+- [ ] Register zypflow.com and zypflow.co.uk
+- [ ] Create new Supabase project (separate from Solis)
 - [ ] Create new Vercel project
-- [ ] Init Next.js project with Tailwind + Supabase Auth
-- [ ] Copy the database schema (with org_id additions)
-- [ ] Build landing page
-- [ ] Set up Stripe products (Starter/Growth/Agency)
-- [ ] Deploy v0.1 to zypflow.co.uk
+- [ ] Create new Stripe account
+- [ ] Init Next.js project: `npx create-next-app@latest zypflow --typescript --tailwind --app`
+- [ ] Set up Supabase Auth
+- [ ] Run the database schema SQL above
+- [ ] Build landing page with waitlist
+- [ ] Deploy v0.1
+- [ ] Share waitlist link on socials
 
-The entire Solis Digital system is your proof-of-concept. Zypflow is that system productised. You've already built the hard part — now it's just packaging.
+---
+
+## RELATIONSHIP TO SOLIS DIGITAL
+
+- Solis Digital is **customer #1** of Zypflow (dogfooding)
+- The Solis dashboard eventually migrates to run ON Zypflow
+- Solis team members get free Agency plan access
+- Revenue from each is tracked separately
+- Separate Stripe accounts, separate bank accounts
+- If either business is sold, the other is unaffected
+- No shared branding, no shared domains, no cross-linking on public pages
