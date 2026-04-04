@@ -352,7 +352,7 @@ async function sendProposal(email, packageName, leadId, addonStr) {
       details: { email: toEmail, package: pkg.name, setup: pkg.setup, monthly: pkg.monthly }
     });
 
-    // Update lead status
+    // Update lead status ONLY after confirmed email delivery
     if (lead.id) {
       await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
         method: 'PATCH',
@@ -362,8 +362,48 @@ async function sendProposal(email, packageName, leadId, addonStr) {
       console.log(`   Lead status updated to "Proposal Sent"`);
     }
   } else {
-    const err = await res.text();
-    console.error(`❌ Failed to send: ${res.status} ${err}`);
+    const errText = await res.text();
+    console.error(`❌ First attempt failed: ${res.status} ${errText}`);
+
+    // Retry once on 5xx errors
+    if (res.status >= 500) {
+      console.log('   Retrying in 3 seconds...');
+      await new Promise(r => setTimeout(r, 3000));
+      const retry = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: `${FROM_NAME} <${FROM_EMAIL}>`, to: [toEmail], subject, html })
+      });
+      if (retry.ok) {
+        const data = await retry.json();
+        console.log(`✅ Retry succeeded! Resend ID: ${data.id}`);
+        if (lead.id) {
+          await fetch(`${SB_URL}/leads?id=eq.${lead.id}`, {
+            method: 'PATCH',
+            headers: { ...HEADERS, 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ status: 'Proposal Sent' })
+          });
+        }
+      } else {
+        console.error(`❌ Retry also failed: ${retry.status}. Proposal NOT marked as sent.`);
+        await logAction({
+          action_type: 'proposal_failed',
+          description: `Failed to send ${pkg.name} proposal to ${toEmail} after retry`,
+          target: 'proposals',
+          result: 'error',
+          details: { email: toEmail, error: errText }
+        });
+      }
+    } else {
+      console.error(`❌ Email send failed (${res.status}). Proposal NOT marked as sent.`);
+      await logAction({
+        action_type: 'proposal_failed',
+        description: `Failed to send ${pkg.name} proposal to ${toEmail}`,
+        target: 'proposals',
+        result: 'error',
+        details: { email: toEmail, error: errText }
+      });
+    }
   }
 }
 

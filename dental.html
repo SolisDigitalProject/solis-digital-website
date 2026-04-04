@@ -258,6 +258,46 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   .roi-grid{grid-template-columns:1fr}
   .pg{grid-template-columns:1fr}
 }
+
+/* GSAP + LENIS PREMIUM ANIMATIONS */
+[data-anim]{opacity:0;transform:translateY(40px);will-change:opacity,transform}
+[data-anim="fade-up"].is-visible{opacity:1;transform:translateY(0)}
+[data-anim="fade-scale"]{transform:scale(0.92);opacity:0}
+[data-anim="fade-scale"].is-visible{opacity:1;transform:scale(1)}
+
+/* Fluid Typography */
+h1{font-size:clamp(2.2rem,5vw + 1rem,4.5rem) !important;letter-spacing:-0.03em;line-height:1.05}
+h2,.sec-h{font-size:clamp(1.6rem,3vw + 0.5rem,3rem) !important;letter-spacing:-0.02em}
+h3{font-size:clamp(1.1rem,1.5vw + 0.5rem,1.5rem) !important}
+.hero-sub{font-size:clamp(0.95rem,1.2vw + 0.3rem,1.25rem) !important}
+
+/* Magnetic button hover effect */
+.bm,.nc,.bo{transition:all 0.4s cubic-bezier(0.23,1,0.32,1);will-change:transform}
+.bm:hover,.nc:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 40px var(--glowS)}
+
+/* Smooth card hover lift */
+.priceCard,.cd,.step,.faq-item{transition:transform 0.5s cubic-bezier(0.23,1,0.32,1),box-shadow 0.5s ease}
+.priceCard:hover,.cd:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+
+/* Text gradient accent */
+.text-gradient{background:linear-gradient(135deg,var(--accent),var(--accentL));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Glow orb background effect */
+.glow-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;filter:blur(80px)}
+
+/* Custom cursor (desktop) */
+@media(hover:hover){
+  .cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.15s ease;mix-blend-mode:screen}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.3s ease,width 0.3s,height 0.3s,opacity 0.3s;opacity:0.5}
+  .cursor-ring.hovering{width:56px;height:56px;opacity:0.3;border-color:var(--accentL)}
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+  [data-anim]{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
@@ -285,11 +325,12 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <main>
 
 <!-- HERO -->
-<section class="hero">
-<div class="hero-ey">&#129463; AI-Powered Systems for Dental Practices</div>
-<h1>Get 20&ndash;40 New Patients Per Month &mdash; On <em>Autopilot.</em></h1>
-<p class="hero-sub">We build AI-powered patient acquisition systems for dental practices. Your website, Google rankings, AI chatbot, and 5-star reviews &mdash; all working 24/7 to fill your chair. Live in 7 days.</p>
-<div class="hero-btns">
+<section class="hero" style="position:relative;overflow:hidden">
+<div class="glow-orb" style="top:-200px;left:-200px"></div>
+<div class="hero-ey" data-anim="fade-up">&#129463; AI-Powered Systems for Dental Practices</div>
+<h1 data-anim="fade-up" data-delay="0.1">Get 20&ndash;40 New Patients Per Month &mdash; On <em class="text-gradient">Autopilot.</em></h1>
+<p class="hero-sub" data-anim="fade-up" data-delay="0.2">We build AI-powered patient acquisition systems for dental practices. Your website, Google rankings, AI chatbot, and 5-star reviews &mdash; all working 24/7 to fill your chair. Live in 7 days.</p>
+<div class="hero-btns" data-anim="fade-up" data-delay="0.3">
   <a href="#contact" class="bm">Get Your Free Practice Audit &#8594;</a>
   <a href="#roi" class="bo">See What You're Losing</a>
 </div>
@@ -308,32 +349,32 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- PAIN POINTS -->
 <section class="sec" id="pain-points"><div class="ctn">
-<div class="sec-ey rv">The Problem</div>
-<div class="sec-h rv">Your practice is losing patients<br>every single <em>day.</em></div>
-<p class="sec-p rv">Most dental practices don&rsquo;t realise how many patients they&rsquo;re losing online. Here&rsquo;s what&rsquo;s costing you.</p>
+<div class="sec-ey rv" data-anim="fade-up">The Problem</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Your practice is losing patients<br>every single <em class="text-gradient">day.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.2">Most dental practices don&rsquo;t realise how many patients they&rsquo;re losing online. Here&rsquo;s what&rsquo;s costing you.</p>
 <div class="pain-grid">
-  <div class="pain-card rv">
+  <div class="pain-card rv" data-anim="fade-up" data-delay="0.1">
     <div class="pain-icon">&#9203;</div>
     <div>
       <h4>Your website loads in 5+ seconds</h4>
       <p>53% of patients leave after 3 seconds. A slow website is silently turning away new patients before they even see your services.</p>
     </div>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card rv" data-anim="fade-up" data-delay="0.2">
     <div class="pain-icon">&#128269;</div>
     <div>
       <h4>You&rsquo;re invisible on Google for &ldquo;dentist near me&rdquo;</h4>
       <p>Patients search &ldquo;dentist near me&rdquo; hundreds of times a day in your area. If you&rsquo;re not in the top 3 results, you don&rsquo;t exist.</p>
     </div>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card rv" data-anim="fade-up" data-delay="0.3">
     <div class="pain-icon">&#128222;</div>
     <div>
       <h4>Patients call after hours and you miss the booking</h4>
       <p>40% of dental enquiries happen outside business hours. Every missed call is a patient who books with your competitor instead.</p>
     </div>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card rv" data-anim="fade-up" data-delay="0.4">
     <div class="pain-icon">&#11088;</div>
     <div>
       <h4>Competitors with worse reviews rank above you</h4>
@@ -345,32 +386,32 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- WHAT WE BUILD -->
 <section class="sec" id="services"><div class="ctn">
-<div class="sec-ey rv">What We Build</div>
-<div class="sec-h rv">Your complete patient<br>acquisition <em>system.</em></div>
-<p class="sec-p rv">Everything works together to bring patients through your door &mdash; on autopilot.</p>
+<div class="sec-ey rv" data-anim="fade-up">What We Build</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Your complete patient<br>acquisition <em class="text-gradient">system.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.2">Everything works together to bring patients through your door &mdash; on autopilot.</p>
 <div class="svg">
-  <div class="sc rv">
+  <div class="sc rv" data-anim="fade-up" data-delay="0.1">
     <div class="si">
       <h3>Patient-Converting Website</h3>
       <p>Before/after galleries, treatment pages, online booking, patient testimonials. Not a template &mdash; built specifically for dental practices. Mobile-first, lightning-fast, designed to turn visitors into booked appointments.</p>
     </div>
     <div class="sa">&#8594;</div>
   </div>
-  <div class="sc rv">
+  <div class="sc rv" data-anim="fade-up" data-delay="0.2">
     <div class="si">
       <h3>Local SEO &amp; Google Domination</h3>
       <p>Rank #1 for &ldquo;dentist [your city]&rdquo;, &ldquo;dental practice near me&rdquo;. Google Business optimisation, local citations, dental-specific content that gets you found by patients who are ready to book.</p>
     </div>
     <div class="sa">&#8594;</div>
   </div>
-  <div class="sc rv">
+  <div class="sc rv" data-anim="fade-up" data-delay="0.3">
     <div class="si">
       <h3>AI Receptionist (24/7)</h3>
       <p>Answers &ldquo;How much is a crown?&rdquo;, &ldquo;Do you do Invisalign?&rdquo;, &ldquo;What&rsquo;s your emergency number?&rdquo; &mdash; books consultations while your reception is closed. Never miss a patient enquiry again.</p>
     </div>
     <div class="sa">&#8594;</div>
   </div>
-  <div class="sc rv">
+  <div class="sc rv" data-anim="fade-up" data-delay="0.4">
     <div class="si">
       <h3>5-Star Review Automation</h3>
       <p>Automated SMS + email review requests after every appointment. Push your rating to 4.8+ stars. Bad reviews flagged privately before they go public. Build trust on autopilot.</p>
@@ -382,24 +423,24 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- ROI SECTION -->
 <section class="sec" id="roi"><div class="ctn">
-<div class="sec-ey rv">Return on Investment</div>
-<div class="sec-h rv">The math is <em>simple.</em></div>
-<p class="sec-p rv">Your investment pays for itself with a single new patient per month. Here&rsquo;s the breakdown.</p>
+<div class="sec-ey rv" data-anim="fade-up">Return on Investment</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">The math is <em class="text-gradient">simple.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.2">Your investment pays for itself with a single new patient per month. Here&rsquo;s the breakdown.</p>
 <div class="roi-grid">
-  <div class="roi-card rv">
+  <div class="roi-card rv" data-anim="fade-scale" data-delay="0.1">
     <div class="roi-num">&pound;800&ndash;2,000</div>
     <div class="roi-label">Average patient lifetime value per year. Hygiene visits, check-ups, treatments &mdash; it adds up fast.</div>
   </div>
-  <div class="roi-card rv">
+  <div class="roi-card rv" data-anim="fade-scale" data-delay="0.2">
     <div class="roi-num">10+ patients</div>
     <div class="roi-label">Extra new patients per month from a high-converting website, SEO, and AI chatbot working together.</div>
   </div>
-  <div class="roi-card rv">
+  <div class="roi-card rv" data-anim="fade-scale" data-delay="0.3">
     <div class="roi-num">&pound;96k&ndash;240k</div>
     <div class="roi-label">Potential annual revenue from just 10 extra patients per month at average lifetime value.</div>
   </div>
 </div>
-<div class="roi-bottom rv">
+<div class="roi-bottom rv" data-anim="fade-up" data-delay="0.4">
   <div class="roi-highlight">&pound;1,995 setup + &pound;395/mo</div>
   <p>Your investment in the Growth plan. <strong style="color:var(--white)">Your website pays for itself with a single new patient per month.</strong> Everything after that is pure profit.</p>
 </div>
@@ -407,9 +448,9 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- CASE STUDY -->
 <section class="sec" id="case-study"><div class="ctn">
-<div class="sec-ey rv">Case Study</div>
-<div class="sec-h rv">Real practice. Real <em>results.</em></div>
-<div class="cs-wrap rv">
+<div class="sec-ey rv" data-anim="fade-up">Case Study</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Real practice. Real <em class="text-gradient">results.</em></div>
+<div class="cs-wrap rv" data-anim="fade-scale" data-delay="0.2">
 <div class="cs-card">
   <div class="cs-header">
     <div>
@@ -461,10 +502,10 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="cs-quote">&ldquo;We went from an outdated site with no online booking to a modern, fast website that books patients automatically. The AI chatbot alone handles 40+ enquiries a week.&rdquo;</div>
 </div>
 </div>
-<p class="sec-p rv" style="margin-top:24px"><a href="/demos/linden-grove/" style="color:var(--accent);font-weight:700;text-decoration:none">View the full website we built &#8594;</a></p>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.3" style="margin-top:24px"><a href="/demos/linden-grove/" style="color:var(--accent);font-weight:700;text-decoration:none">View the full website we built &#8594;</a></p>
 
 <!-- TESTIMONIALS -->
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px" class="rv">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px" class="rv" data-anim="fade-up" data-delay="0.4">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
     <div style="color:var(--accent);font-size:18px;margin-bottom:8px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">&ldquo;Best investment we&rsquo;ve made for the practice. The website went live in 6 days and we had new patient enquiries on day one.&rdquo;</p>
@@ -485,14 +526,14 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- PRICING -->
 <section class="sec" id="pricing"><div class="ctn">
-<div class="sec-ey rv">Pricing</div>
-<div class="sec-h rv">Transparent pricing.<br>No hidden fees. <em>Ever.</em></div>
-<div class="price-roi rv">
+<div class="sec-ey rv" data-anim="fade-up">Pricing</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Transparent pricing.<br>No hidden fees. <em class="text-gradient">Ever.</em></div>
+<div class="price-roi rv" data-anim="fade-up" data-delay="0.2">
   <h3>What would 10 new patients per month do for your practice?</h3>
   <p>One new patient typically pays for your entire monthly plan. Most practices see ROI within 30 days.</p>
 </div>
 <div class="pg">
-<div class="pc rv">
+<div class="pc rv" data-anim="fade-up" data-delay="0.1">
   <div class="pt">Starter</div>
   <div class="pa">&pound;995 <span class="pe">+ &pound;195/mo</span></div>
   <p class="pd">Professional online presence that turns visitors into booked appointments.</p>
@@ -509,7 +550,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new patient pays for months of this plan. Our Starter dental clients typically see 3&ndash;5 new patient enquiries per month.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc pop rv">
+<div class="pc pop rv" data-anim="fade-up" data-delay="0.2">
   <div class="pt">Growth</div>
   <div class="pa">&pound;1,995 <span class="pe">+ &pound;395/mo</span></div>
   <p class="pd">The full patient acquisition system &mdash; website, AI receptionist, reviews, and SEO working together.</p>
@@ -528,7 +569,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new patient per month pays for this entire plan. Growth dental clients average 15&ndash;25 new patient enquiries within 90 days.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc rv">
+<div class="pc rv" data-anim="fade-up" data-delay="0.3">
   <div class="pt">Accelerator</div>
   <div class="pa">&pound;2,997 <span class="pe">+ &pound;997/mo</span></div>
   <p class="pd">Full-service growth with ads, SEO, social media &amp; a dedicated strategist for your practice.</p>
@@ -548,17 +589,17 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 </div>
 
-<div class="price-guarantee rv">
+<div class="price-guarantee rv" data-anim="fade-up" data-delay="0.4">
   <p><strong>100% Satisfaction Guarantee.</strong> We don&rsquo;t stop until you&rsquo;re happy with your website. Every project includes 2 rounds of revisions and dedicated support throughout.</p>
 </div>
 </div></section>
 
 <!-- CONTACT / AUDIT -->
 <section class="cta-s" id="contact"><div class="ctn">
-<div class="sec-ey rv">Ready to grow your practice?</div>
-<div class="sec-h rv" style="max-width:640px;margin:0 auto 20px">Get your free practice<br>audit in <em>24 hours.</em></div>
-<p class="sec-p rv" style="text-align:center;max-width:480px;margin:0 auto 36px">We&rsquo;ll analyse your practice&rsquo;s website, SEO, and online presence &mdash; then show you exactly how to get more patients. Free. No obligation.</p>
-<div class="rv ms-form">
+<div class="sec-ey rv" data-anim="fade-up">Ready to grow your practice?</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1" style="max-width:640px;margin:0 auto 20px">Get your free practice<br>audit in <em class="text-gradient">24 hours.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.2" style="text-align:center;max-width:480px;margin:0 auto 36px">We&rsquo;ll analyse your practice&rsquo;s website, SEO, and online presence &mdash; then show you exactly how to get more patients. Free. No obligation.</p>
+<div class="rv ms-form" data-anim="fade-up" data-delay="0.3">
   <div class="ms-progress">
     <div class="ms-dot active" id="dot1"></div>
     <div class="ms-dot" id="dot2"></div>
@@ -748,6 +789,50 @@ function submitAudit(){
 // Allow Enter key on URL field
 document.getElementById('auditUrl').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();goStep(2)}
+});
+</script>
+
+<!-- GSAP + Lenis for premium animations -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},touchMultiplier:2});
+    function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
+    requestAnimationFrame(raf);
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('[data-anim]').forEach(function(el){
+    var delay=parseFloat(el.getAttribute('data-delay')||'0');
+    gsap.fromTo(el,{opacity:0,y:el.getAttribute('data-anim')==='fade-scale'?0:40,scale:el.getAttribute('data-anim')==='fade-scale'?0.92:1},{
+      opacity:1,y:0,scale:1,duration:0.8,delay:delay,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true}
+    });
+  });
+  if(window.matchMedia('(hover:hover)').matches){
+    var dot=document.createElement('div');dot.className='cursor-dot';
+    var ring=document.createElement('div');ring.className='cursor-ring';
+    document.body.appendChild(dot);document.body.appendChild(ring);
+    var mx=0,my=0,dx=0,dy=0;
+    document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+(mx-4)+'px,'+(my-4)+'px)'});
+    function movRing(){dx+=(mx-dx)*0.15;dy+=(my-dy)*0.15;ring.style.transform='translate('+(dx-18)+'px,'+(dy-18)+'px)';requestAnimationFrame(movRing)}
+    movRing();
+    document.querySelectorAll('a,button,.bm,.nc,.bo,.priceCard,.cd').forEach(function(el){
+      el.addEventListener('mouseenter',function(){ring.classList.add('hovering')});
+      el.addEventListener('mouseleave',function(){ring.classList.remove('hovering')});
+    });
+  }
+  document.querySelectorAll('.bm,.nc,.bo').forEach(function(btn){
+    btn.addEventListener('mousemove',function(e){
+      var r=btn.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)*0.15;
+      var y=(e.clientY-r.top-r.height/2)*0.15;
+      btn.style.transform='translate('+x+'px,'+y+'px) scale(1.02)';
+    });
+    btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  });
 });
 </script>
 

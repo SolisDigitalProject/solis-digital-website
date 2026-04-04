@@ -219,6 +219,46 @@ if(sessionStorage.getItem('solis_auth')==='1'){
   <button class="btn btn-s btn-sm" onclick="exportCallListCSV()">&#128222; Export Call List CSV</button>
   <button class="btn btn-s btn-sm" onclick="exportCSV()">&#128231; Export Email List CSV</button>
   <button class="btn btn-s btn-sm" onclick="document.getElementById('scraperConfig').style.display=document.getElementById('scraperConfig').style.display==='none'?'block':'none'">&#128270; Scraper Config</button>
+  <button class="btn btn-s btn-sm" onclick="document.getElementById('reviewPanel').style.display=document.getElementById('reviewPanel').style.display==='none'?'block':'none'" style="border-color:var(--green);color:var(--green)">&#11088; Send Review Request</button>
+  <button class="btn btn-s btn-sm" onclick="document.getElementById('blogPanel').style.display=document.getElementById('blogPanel').style.display==='none'?'block':'none'" style="border-color:var(--blue);color:var(--blue)">&#128221; Generate Blog Post</button>
+</div>
+
+<!-- Review Request Panel -->
+<div id="reviewPanel" style="display:none;padding:0 32px 16px">
+  <div class="panel" style="border:1px solid var(--green)">
+    <div class="panel-h">
+      <h3>&#11088; Google Review Request</h3>
+      <span class="badge" style="background:var(--green);color:var(--bg)">Automated</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Project ID</label><input id="rrProjectId" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px" placeholder="e.g. 1"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Customer Name</label><input id="rrName" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px" placeholder="John Smith"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Customer Email</label><input id="rrEmail" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px" placeholder="john@example.com"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn-d" onclick="sendReviewRequest()" style="width:100%">Send Review Request</button></div>
+      </div>
+      <div id="rrResult" style="font-size:12px;color:var(--green);display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Post Generator Panel -->
+<div id="blogPanel" style="display:none;padding:0 32px 16px">
+  <div class="panel" style="border:1px solid var(--blue)">
+    <div class="panel-h">
+      <h3>&#128221; SEO Blog Post Generator</h3>
+      <span class="badge" style="background:var(--blue);color:var(--bg)">AI-Powered</span>
+    </div>
+    <div style="padding:16px 20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Client Name</label><input id="bpClient" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px" placeholder="Linden Grove Dental"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Topic</label><input id="bpTopic" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px" placeholder="dental implants cost UK"></div>
+        <div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Industry</label><select id="bpIndustry" class="auth-input" style="text-align:left;letter-spacing:normal;font-size:13px;padding:10px 14px"><option value="dental">Dental</option><option value="aesthetics">Aesthetics</option><option value="trades">Trades</option><option value="local business">Other</option></select></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn-p" onclick="generateBlogPost()" id="bpBtn" style="width:100%">Generate Post</button></div>
+      </div>
+      <div id="bpResult" style="font-size:12px;display:none;padding:12px;background:var(--bg);border-radius:8px;margin-top:8px;max-height:400px;overflow-y:auto"></div>
+    </div>
+  </div>
 </div>
 
 <!-- Scraper Configuration Panel -->
@@ -2736,6 +2776,51 @@ function loadAddOnData(){
 
 function runRefreshAudit(){
   showToast('Run quarterly-refresh.mjs from terminal: node scripts/quarterly-refresh.mjs audit','blue');
+}
+
+// Send Google Review Request via edge function
+function sendReviewRequest(){
+  var pid=document.getElementById('rrProjectId').value.trim();
+  var name=document.getElementById('rrName').value.trim();
+  var email=document.getElementById('rrEmail').value.trim();
+  if(!pid||!email){showToast('Project ID and email required','red');return}
+  var res=document.getElementById('rrResult');
+  res.style.display='block';res.style.color='var(--accent)';res.textContent='Sending review request...';
+  fetch('https://zqcpktpnfikmshqeqxlg.supabase.co/functions/v1/review-request',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({project_id:parseInt(pid),customer_name:name,customer_email:email})
+  }).then(function(r){return r.json()}).then(function(d){
+    if(d.success){res.style.color='var(--green)';res.textContent='Review request sent to '+email;showToast('Review request sent!','green')}
+    else{res.style.color='var(--red)';res.textContent='Error: '+(d.error||'Unknown error')}
+  }).catch(function(e){res.style.color='var(--red)';res.textContent='Failed: '+e.message});
+}
+
+// Generate Blog Post via Claude API
+function generateBlogPost(){
+  var client=document.getElementById('bpClient').value.trim();
+  var topic=document.getElementById('bpTopic').value.trim();
+  var industry=document.getElementById('bpIndustry').value;
+  if(!client||!topic){showToast('Client name and topic required','red');return}
+  var btn=document.getElementById('bpBtn');
+  var res=document.getElementById('bpResult');
+  btn.disabled=true;btn.textContent='Generating...';
+  res.style.display='block';res.style.color='var(--accent)';res.innerHTML='<p>Generating SEO blog post with AI... this may take 15-30 seconds.</p>';
+  fetch('https://zqcpktpnfikmshqeqxlg.supabase.co/functions/v1/chatbot',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      project_id:1,
+      message:'Write a 800-word SEO blog post for "'+client+'" ('+industry+' business in UK) about "'+topic+'". Use H2 subheadings, include target keywords naturally, end with a call to action. UK English. Output clean HTML only.',
+      history:[]
+    })
+  }).then(function(r){return r.json()}).then(function(d){
+    btn.disabled=false;btn.textContent='Generate Post';
+    if(d.reply){
+      res.style.color='var(--text)';
+      res.innerHTML='<div style="margin-bottom:12px"><strong style="color:var(--green)">Blog post generated!</strong> Copy the HTML below:</div><div style="background:var(--surface);padding:16px;border-radius:8px;border:1px solid var(--border);white-space:pre-wrap;font-size:12px;font-family:var(--mono)">'+d.reply.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+      showToast('Blog post generated!','green');
+      fetch(SB+'/admin_actions',{method:'POST',headers:H,body:JSON.stringify({action_type:'blog_post_generated',description:'Generated blog post: '+topic+' for '+client,target:client,result:'success'})});
+    }else{res.style.color='var(--red)';res.textContent='No content returned. Check API key.'}
+  }).catch(function(e){btn.disabled=false;btn.textContent='Generate Post';res.style.color='var(--red)';res.textContent='Error: '+e.message});
 }
 
 loadData();

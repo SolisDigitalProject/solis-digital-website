@@ -242,6 +242,31 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   .fi{flex-direction:column;gap:16px;text-align:center}
   .roi-grid{grid-template-columns:1fr}
 }
+/* GSAP + LENIS PREMIUM ANIMATIONS */
+[data-anim]{opacity:0;transform:translateY(40px);will-change:opacity,transform}
+[data-anim="fade-up"].is-visible{opacity:1;transform:translateY(0)}
+[data-anim="fade-scale"]{transform:scale(0.92);opacity:0}
+[data-anim="fade-scale"].is-visible{opacity:1;transform:scale(1)}
+h1{font-size:clamp(2.2rem,5vw + 1rem,4.5rem) !important;letter-spacing:-0.03em;line-height:1.05}
+h2,.sec-h{font-size:clamp(1.6rem,3vw + 0.5rem,3rem) !important;letter-spacing:-0.02em}
+h3{font-size:clamp(1.1rem,1.5vw + 0.5rem,1.5rem) !important}
+.hero-sub{font-size:clamp(0.95rem,1.2vw + 0.3rem,1.25rem) !important}
+.bm,.nc,.bo{transition:all 0.4s cubic-bezier(0.23,1,0.32,1);will-change:transform}
+.bm:hover,.nc:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 40px var(--glowS)}
+.priceCard,.cd,.step,.faq-item{transition:transform 0.5s cubic-bezier(0.23,1,0.32,1),box-shadow 0.5s ease}
+.priceCard:hover,.cd:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.text-gradient{background:linear-gradient(135deg,var(--accent),var(--accentL));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.glow-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;filter:blur(80px)}
+@media(hover:hover){
+  .cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.15s ease;mix-blend-mode:screen}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.3s ease,width 0.3s,height 0.3s,opacity 0.3s;opacity:0.5}
+  .cursor-ring.hovering{width:56px;height:56px;opacity:0.3;border-color:var(--accentL)}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+  [data-anim]{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
@@ -267,11 +292,12 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </nav>
 
 <main>
-<section class="hero">
-<div class="hero-ey">&#9889; AI-Powered Systems for Tradespeople</div>
-<h1>Stop Paying Checkatrade.<br>Start Getting <em>Direct Leads.</em></h1>
-<p class="hero-sub">We build AI-powered lead generation systems for plumbers, electricians, builders, and tradespeople. Your own website, Google rankings, and 24/7 chatbot &mdash; so customers come to you directly. Live in 7 days.</p>
-<div class="hero-btns">
+<section class="hero" style="position:relative;overflow:hidden">
+<div class="glow-orb" style="top:-200px;left:-200px"></div>
+<div class="hero-ey" data-anim="fade-up">&#9889; AI-Powered Systems for Tradespeople</div>
+<h1 data-anim="fade-up" data-delay="0.1">Stop Paying Checkatrade.<br>Start Getting <em class="text-gradient">Direct Leads.</em></h1>
+<p class="hero-sub" data-anim="fade-up" data-delay="0.2">We build AI-powered lead generation systems for plumbers, electricians, builders, and tradespeople. Your own website, Google rankings, and 24/7 chatbot &mdash; so customers come to you directly. Live in 7 days.</p>
+<div class="hero-btns" data-anim="fade-up" data-delay="0.3">
   <a href="#contact" class="bm">Get Your Free Trade Audit &#8594;</a>
   <a href="#roi" class="bo">See What You're Losing</a>
 </div>
@@ -280,32 +306,32 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <!-- TRUST BADGES -->
 <div style="padding:20px 0;text-align:center">
 <div class="badges">
-  <div class="badge-item"><span class="badge-icon">&#9889;</span> Live in 7 Days</div>
-  <div class="badge-item"><span class="badge-icon">&#128736;</span> Built for Tradespeople</div>
-  <div class="badge-item"><span class="badge-icon">&#129302;</span> AI-Powered 24/7</div>
-  <div class="badge-item"><span class="badge-icon">&#127468;&#127463;</span> UK Based &amp; Operated</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0">&#9889; Live in 7 Days</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.1">&#128736; Built for Tradespeople</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.2">&#129302; AI-Powered 24/7</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.3">&#127468;&#127463; UK Based &amp; Operated</div>
 </div>
 </div>
 
 <!-- PAIN POINTS -->
 <section class="sec" id="pain"><div class="ctn">
-<div class="sec-ey rv">The Problem</div>
-<div class="sec-h rv">Sound familiar? You're not <em>alone.</em></div>
-<p class="sec-p rv">These are the problems every tradesperson faces. We fix all of them.</p>
+<div class="sec-ey" data-anim="fade-up">The Problem</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">Sound familiar? You're not <em class="text-gradient">alone.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.2">These are the problems every tradesperson faces. We fix all of them.</p>
 <div class="pain-grid">
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0">
     <div class="pain-icon">&#128176;</div>
     <p>You're paying Checkatrade/MyBuilder <strong style="color:var(--red)">&pound;15&ndash;50 per lead</strong> &mdash; and competing with 10 other tradespeople for the same job.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.1">
     <div class="pain-icon">&#128269;</div>
     <p>Customers Google <strong style="color:var(--red)">&ldquo;plumber near me&rdquo;</strong> and you're nowhere to be found. Your competitors are getting those calls instead.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.2">
     <div class="pain-icon">&#128222;</div>
     <p>You <strong style="color:var(--red)">miss calls while you're on a job</strong> &mdash; and that customer calls someone else. Every missed call is a lost job.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.3">
     <div class="pain-icon">&#11088;</div>
     <p>You do great work but only have <strong style="color:var(--red)">8 Google reviews</strong> &mdash; the bloke down the road has 150. Guess who the customer picks.</p>
   </div>
@@ -314,54 +340,54 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- WHAT WE BUILD -->
 <section class="sec" id="services"><div class="ctn">
-<div class="sec-ey rv">What We Build</div>
-<div class="sec-h rv">Your complete trade<br>lead generation <em>system.</em></div>
-<p class="sec-p rv">Everything a tradesperson needs to stop renting leads and start owning their pipeline.</p>
+<div class="sec-ey" data-anim="fade-up">What We Build</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">Your complete trade<br>lead generation <em class="text-gradient">system.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.2">Everything a tradesperson needs to stop renting leads and start owning their pipeline.</p>
 <div class="svg">
-  <div class="sc rv"><div class="si"><h3>Client-Converting Website</h3><p>Project galleries, service area pages, clear pricing, instant quote forms, click-to-call on mobile. Built for trades, not a generic template. Customers see your work and call you directly.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;[your trade] in [your area]&rdquo;. Stop paying per lead &mdash; own your Google rankings and get direct enquiries for &pound;0 per lead. We handle Google Business, citations, and content.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>AI Receptionist &mdash; 24/7</h3><p>Takes enquiry details, gives rough quotes, books call-backs &mdash; even when you're up a ladder. Never lose a job to a missed call again. Works evenings, weekends, and bank holidays.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>5-Star Review Automation</h3><p>Automated text after every job asking for a review. Build a reputation that sells for you. Go from 8 reviews to 100+ in months. Bad reviews flagged privately before they go public.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0"><div class="si"><h3>Client-Converting Website</h3><p>Project galleries, service area pages, clear pricing, instant quote forms, click-to-call on mobile. Built for trades, not a generic template. Customers see your work and call you directly.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.1"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;[your trade] in [your area]&rdquo;. Stop paying per lead &mdash; own your Google rankings and get direct enquiries for &pound;0 per lead. We handle Google Business, citations, and content.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.2"><div class="si"><h3>AI Receptionist &mdash; 24/7</h3><p>Takes enquiry details, gives rough quotes, books call-backs &mdash; even when you're up a ladder. Never lose a job to a missed call again. Works evenings, weekends, and bank holidays.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.3"><div class="si"><h3>5-Star Review Automation</h3><p>Automated text after every job asking for a review. Build a reputation that sells for you. Go from 8 reviews to 100+ in months. Bad reviews flagged privately before they go public.</p></div><div class="sa">&#8594;</div></div>
 </div>
 </div></section>
 
 <!-- ROI COMPARISON -->
 <section class="sec" id="roi"><div class="ctn">
-<div class="sec-ey rv">The Numbers</div>
-<div class="sec-h rv">The Checkatrade <em>Comparison.</em></div>
-<p class="sec-p rv">See how much you're really paying for leads &mdash; and what you could be getting instead.</p>
+<div class="sec-ey" data-anim="fade-up">The Numbers</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">The Checkatrade <em class="text-gradient">Comparison.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.2">See how much you're really paying for leads &mdash; and what you could be getting instead.</p>
 <div class="roi-compare">
   <div class="roi-grid">
-    <div class="roi-card bad rv">
+    <div class="roi-card bad" data-anim="fade-up" data-delay="0">
       <h3>&#10060; Checkatrade</h3>
       <div class="roi-line"><span>Avg cost per lead</span><span>&pound;30</span></div>
       <div class="roi-line"><span>Leads per month</span><span>20</span></div>
       <div class="roi-line"><span>Monthly cost</span><span>&pound;600/mo</span></div>
       <div class="roi-line"><span>Leads shared with</span><span>5&ndash;10 competitors</span></div>
       <div class="roi-line"><span>You own the leads?</span><span>No</span></div>
-      <div class="roi-total">&pound;7,200/year for shared leads</div>
+      <div class="roi-total" data-anim="fade-scale" data-delay="0.2">&pound;7,200/year for shared leads</div>
     </div>
-    <div class="roi-card good rv">
+    <div class="roi-card good" data-anim="fade-up" data-delay="0.15">
       <h3>&#9989; Solis Growth Plan</h3>
       <div class="roi-line"><span>Monthly cost</span><span>&pound;395/mo</span></div>
       <div class="roi-line"><span>Direct leads per month</span><span>15&ndash;30</span></div>
       <div class="roi-line"><span>Cost per lead</span><span>&pound;0 (organic)</span></div>
       <div class="roi-line"><span>Competition on leads</span><span>Zero</span></div>
       <div class="roi-line"><span>You own the leads?</span><span>Yes &mdash; forever</span></div>
-      <div class="roi-total">&pound;4,740/year for DIRECT leads</div>
+      <div class="roi-total" data-anim="fade-scale" data-delay="0.3">&pound;4,740/year for DIRECT leads</div>
     </div>
   </div>
-  <div class="roi-verdict rv">
-    <p>Stop renting leads. <em>Own your pipeline.</em></p>
+  <div class="roi-verdict" data-anim="fade-up" data-delay="0.2">
+    <p>Stop renting leads. <em class="text-gradient">Own your pipeline.</em></p>
   </div>
 </div>
 </div></section>
 
 <!-- SOCIAL PROOF -->
 <section class="sec"><div class="ctn">
-<div class="sec-ey rv">Real Results</div>
-<div class="sec-h rv">From Checkatrade to <em>Page One.</em></div>
-<div class="proof-card rv">
+<div class="sec-ey rv" data-anim="fade-up">Real Results</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">From Checkatrade to <em class="text-gradient">Page One.</em></div>
+<div class="proof-card rv" data-anim="fade-scale" data-delay="0.2">
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;text-align:center">
     <div><div style="font-size:32px;font-weight:900;color:var(--accent)">25+</div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Direct Enquiries/Mo</div></div>
     <div><div style="font-size:32px;font-weight:900;color:#34d399">#1</div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Google Ranking</div></div>
@@ -372,7 +398,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 
 <!-- TESTIMONIALS -->
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px" class="rv">
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px" class="rv" data-anim="fade-up" data-delay="0.3">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
     <div style="color:var(--accent);font-size:18px;margin-bottom:8px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">&ldquo;Went from zero online presence to ranking #1 for my area in under 3 months. Now I turn down jobs because I&rsquo;m fully booked. Absolute game changer.&rdquo;</p>
@@ -388,11 +414,11 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- PRICING -->
 <section class="sec" id="pricing"><div class="ctn">
-<div class="sec-ey rv">Pricing</div>
-<div class="sec-h rv">Transparent pricing.<br>No hidden fees. <em>Ever.</em></div>
-<p class="sec-p rv">One new job typically pays for your entire monthly plan. Most tradespeople see ROI within 30 days.</p>
+<div class="sec-ey" data-anim="fade-up">Pricing</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">Transparent pricing.<br>No hidden fees. <em class="text-gradient">Ever.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.2">One new job typically pays for your entire monthly plan. Most tradespeople see ROI within 30 days.</p>
 <div class="pg">
-<div class="pc rv">
+<div class="pc" data-anim="fade-up" data-delay="0">
   <div class="pt">Starter</div>
   <div class="pa">&pound;995 <span class="pe">+ &pound;195/mo</span></div>
   <p class="pd">Professional online presence that turns visitors into enquiries.</p>
@@ -408,7 +434,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One boiler install or rewire pays for months of this plan. Starter clients typically see 3&ndash;5 new enquiries per month.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc pop rv">
+<div class="pc pop" data-anim="fade-up" data-delay="0.15">
   <div class="pt">Growth</div>
   <div class="pa">&pound;1,995 <span class="pe">+ &pound;395/mo</span></div>
   <p class="pd">The full lead generation system &mdash; website, AI, reviews, and SEO working together.</p>
@@ -426,7 +452,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new job per month pays for this entire plan. Growth clients average 15&ndash;30 direct enquiries within 90 days.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc rv">
+<div class="pc" data-anim="fade-up" data-delay="0.3">
   <div class="pt">Accelerator</div>
   <div class="pa">&pound;2,997 <span class="pe">+ &pound;997/mo</span></div>
   <p class="pd">Full-service growth with ads, SEO, social media &amp; a dedicated strategist.</p>
@@ -446,17 +472,17 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 </div>
 
-<div class="price-guarantee rv">
+<div class="price-guarantee" data-anim="fade-up" data-delay="0.1">
   <p><strong>100% Satisfaction Guarantee.</strong> We don&rsquo;t stop until you&rsquo;re happy with your website. Every project includes 2 rounds of revisions and dedicated support throughout.</p>
 </div>
 </div></section>
 
 <!-- CONTACT / AUDIT -->
 <section class="cta-s" id="contact"><div class="ctn">
-<div class="sec-ey rv">Ready to ditch Checkatrade?</div>
-<div class="sec-h rv" style="max-width:640px;margin:0 auto 20px">Get your free trade<br>audit in <em>24 hours.</em></div>
-<p class="sec-p rv" style="text-align:center;max-width:480px;margin:0 auto 36px">We'll analyse your current online presence and show you exactly how many leads you're missing &mdash; and how to get them. Free. No obligation.</p>
-<div class="rv ms-form">
+<div class="sec-ey" data-anim="fade-up">Ready to ditch Checkatrade?</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1" style="max-width:640px;margin:0 auto 20px">Get your free trade<br>audit in <em class="text-gradient">24 hours.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.2" style="text-align:center;max-width:480px;margin:0 auto 36px">We'll analyse your current online presence and show you exactly how many leads you're missing &mdash; and how to get them. Free. No obligation.</p>
+<div class="ms-form" data-anim="fade-up" data-delay="0.3">
   <div class="ms-progress">
     <div class="ms-dot active" id="dot1"></div>
     <div class="ms-dot" id="dot2"></div>
@@ -651,6 +677,49 @@ function submitAudit(){
 // Allow Enter key on URL field
 document.getElementById('auditUrl').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();goStep(2)}
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},touchMultiplier:2});
+    function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
+    requestAnimationFrame(raf);
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('[data-anim]').forEach(function(el){
+    var delay=parseFloat(el.getAttribute('data-delay')||'0');
+    gsap.fromTo(el,{opacity:0,y:el.getAttribute('data-anim')==='fade-scale'?0:40,scale:el.getAttribute('data-anim')==='fade-scale'?0.92:1},{
+      opacity:1,y:0,scale:1,duration:0.8,delay:delay,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true}
+    });
+  });
+  if(window.matchMedia('(hover:hover)').matches){
+    var dot=document.createElement('div');dot.className='cursor-dot';
+    var ring=document.createElement('div');ring.className='cursor-ring';
+    document.body.appendChild(dot);document.body.appendChild(ring);
+    var mx=0,my=0,dx=0,dy=0;
+    document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+(mx-4)+'px,'+(my-4)+'px)'});
+    function movRing(){dx+=(mx-dx)*0.15;dy+=(my-dy)*0.15;ring.style.transform='translate('+(dx-18)+'px,'+(dy-18)+'px)';requestAnimationFrame(movRing)}
+    movRing();
+    document.querySelectorAll('a,button,.bm,.nc,.bo,.priceCard,.cd').forEach(function(el){
+      el.addEventListener('mouseenter',function(){ring.classList.add('hovering')});
+      el.addEventListener('mouseleave',function(){ring.classList.remove('hovering')});
+    });
+  }
+  document.querySelectorAll('.bm,.nc,.bo').forEach(function(btn){
+    btn.addEventListener('mousemove',function(e){
+      var r=btn.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)*0.15;
+      var y=(e.clientY-r.top-r.height/2)*0.15;
+      btn.style.transform='translate('+x+'px,'+y+'px) scale(1.02)';
+    });
+    btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  });
 });
 </script>
 

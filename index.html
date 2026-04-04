@@ -300,6 +300,46 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   [style*="grid-template-columns:repeat(3,1fr)"][style*="gap:16px"]{grid-template-columns:1fr!important}
   [style*="grid-template-columns:repeat(2,1fr)"][style*="gap:20px"]{grid-template-columns:1fr!important}
 }
+
+/* GSAP + LENIS PREMIUM ANIMATIONS */
+[data-anim]{opacity:0;transform:translateY(40px);will-change:opacity,transform}
+[data-anim="fade-up"].is-visible{opacity:1;transform:translateY(0)}
+[data-anim="fade-scale"]{transform:scale(0.92);opacity:0}
+[data-anim="fade-scale"].is-visible{opacity:1;transform:scale(1)}
+
+/* Fluid Typography */
+h1{font-size:clamp(2.2rem,5vw + 1rem,4.5rem) !important;letter-spacing:-0.03em;line-height:1.05}
+h2,.sec-h{font-size:clamp(1.6rem,3vw + 0.5rem,3rem) !important;letter-spacing:-0.02em}
+h3{font-size:clamp(1.1rem,1.5vw + 0.5rem,1.5rem) !important}
+.hero-sub{font-size:clamp(0.95rem,1.2vw + 0.3rem,1.25rem) !important}
+
+/* Magnetic button hover effect */
+.bm,.nc,.bo{transition:all 0.4s cubic-bezier(0.23,1,0.32,1);will-change:transform}
+.bm:hover,.nc:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 40px var(--glowS)}
+
+/* Smooth card hover lift */
+.priceCard,.cd,.step,.faq-item{transition:transform 0.5s cubic-bezier(0.23,1,0.32,1),box-shadow 0.5s ease}
+.priceCard:hover,.cd:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+
+/* Text gradient accent */
+.text-gradient{background:linear-gradient(135deg,var(--accent),var(--accentL));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Glow orb background effect */
+.glow-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;filter:blur(80px)}
+
+/* Custom cursor (desktop) */
+@media(hover:hover){
+  .cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.15s ease;mix-blend-mode:screen}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.3s ease,width 0.3s,height 0.3s,opacity 0.3s;opacity:0.5}
+  .cursor-ring.hovering{width:56px;height:56px;opacity:0.3;border-color:var(--accentL)}
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+  [data-anim]{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
@@ -326,11 +366,12 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </nav>
 
 <main>
-<section class="hero">
-<div class="hero-ey">&#9728; AI-Powered Client Acquisition — London, UK</div>
-<h1>More Clients. More Revenue.<br>All On <em>Autopilot.</em></h1>
-<p class="hero-sub">We build AI-powered systems that bring customers to your door 24/7 — websites, SEO, chatbots, and reviews all working together. Live in 7 days. Based in London, serving the UK.</p>
-<div class="hero-btns">
+<section class="hero" style="position:relative;overflow:hidden">
+<div class="glow-orb" style="top:-200px;left:-200px"></div>
+<div class="hero-ey" data-anim="fade-up">&#9728; AI-Powered Client Acquisition — London, UK</div>
+<h1 data-anim="fade-up" data-delay="0.1">More Clients. More Revenue.<br>All On <em class="text-gradient">Autopilot.</em></h1>
+<p class="hero-sub" data-anim="fade-up" data-delay="0.2">We build AI-powered systems that bring customers to your door 24/7 — websites, SEO, chatbots, and reviews all working together. Live in 7 days. Based in London, serving the UK.</p>
+<div class="hero-btns" data-anim="fade-up" data-delay="0.3">
   <a href="#contact" class="bm">Get Your Free Audit &#8594;</a>
   <a href="#calculator" class="bo">See What You're Losing</a>
 </div>
@@ -338,7 +379,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- TRUST BADGES -->
 <div style="padding:20px 0;text-align:center">
-<div class="badges">
+<div class="badges" data-anim="fade-up">
   <div class="badge-item"><span class="badge-icon">&#9889;</span> Live in 7 Days</div>
   <div class="badge-item"><span class="badge-icon">&#129302;</span> AI-Powered Delivery</div>
   <div class="badge-item"><span class="badge-icon">&#128274;</span> SSL &amp; GDPR Compliant</div>
@@ -348,42 +389,42 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 
 <div class="ctrs"><div class="ctn"><div class="ctrs-g">
-<div class="ctr rv"><div class="ctr-n"><span data-t="5">0</span>–7</div><div class="ctr-l">Days to Launch</div></div>
-<div class="ctr rv"><div class="ctr-n">24/7</div><div class="ctr-l">AI-Powered Support</div></div>
-<div class="ctr rv"><div class="ctr-n"><span data-t="100">0</span>%</div><div class="ctr-l">Satisfaction Guarantee</div></div>
-<div class="ctr rv"><div class="ctr-n"><span data-t="3">0</span></div><div class="ctr-l">Flexible Packages</div></div>
+<div class="ctr rv" data-anim="fade-scale"><div class="ctr-n"><span data-t="5">0</span>–7</div><div class="ctr-l">Days to Launch</div></div>
+<div class="ctr rv" data-anim="fade-scale" data-delay="0.1"><div class="ctr-n">24/7</div><div class="ctr-l">AI-Powered Support</div></div>
+<div class="ctr rv" data-anim="fade-scale" data-delay="0.2"><div class="ctr-n"><span data-t="100">0</span>%</div><div class="ctr-l">Satisfaction Guarantee</div></div>
+<div class="ctr rv" data-anim="fade-scale" data-delay="0.3"><div class="ctr-n"><span data-t="3">0</span></div><div class="ctr-l">Flexible Packages</div></div>
 </div></div></div>
 
 <section class="sec" id="process"><div class="ctn">
-<div class="sec-ey rv">The Process</div>
-<div class="sec-h rv">How we take brands from<br>invisible to <em>unstoppable.</em></div>
-<p class="sec-p rv">A proven 4-step system designed to get you more customers, faster.</p>
+<div class="sec-ey rv" data-anim="fade-up">The Process</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">How we take brands from<br>invisible to <em class="text-gradient">unstoppable.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.15">A proven 4-step system designed to get you more customers, faster.</p>
 <div class="psg">
-<div class="ps rv"><div class="ps-n">01</div><h4>Discovery</h4><p>We audit your website, SEO, competitors, and market position. You get a detailed report showing exactly where you're losing customers — and how to fix it.</p></div>
-<div class="ps rv"><div class="ps-n">02</div><h4>Strategy</h4><p>We map a custom growth plan for your business. Every recommendation is backed by data — not opinions. You know exactly what we're doing and why.</p></div>
-<div class="ps rv"><div class="ps-n">03</div><h4>Execute</h4><p>Our AI systems build your website, craft your content, and launch campaigns. Human experts refine every detail. Your site goes live in 5–7 days.</p></div>
-<div class="ps rv"><div class="ps-n">04</div><h4>Scale</h4><p>We continuously optimise campaigns, track rankings, and improve conversions. Monthly reporting shows exactly how your investment is performing.</p></div>
+<div class="ps rv" data-anim="fade-up"><div class="ps-n">01</div><h4>Discovery</h4><p>We audit your website, SEO, competitors, and market position. You get a detailed report showing exactly where you're losing customers — and how to fix it.</p></div>
+<div class="ps rv" data-anim="fade-up" data-delay="0.1"><div class="ps-n">02</div><h4>Strategy</h4><p>We map a custom growth plan for your business. Every recommendation is backed by data — not opinions. You know exactly what we're doing and why.</p></div>
+<div class="ps rv" data-anim="fade-up" data-delay="0.2"><div class="ps-n">03</div><h4>Execute</h4><p>Our AI systems build your website, craft your content, and launch campaigns. Human experts refine every detail. Your site goes live in 5–7 days.</p></div>
+<div class="ps rv" data-anim="fade-up" data-delay="0.3"><div class="ps-n">04</div><h4>Scale</h4><p>We continuously optimise campaigns, track rankings, and improve conversions. Monthly reporting shows exactly how your investment is performing.</p></div>
 </div>
 </div></section>
 
 <section class="sec" id="services"><div class="ctn">
-<div class="sec-ey rv">What We Build</div>
-<div class="sec-h rv">Your complete client<br>acquisition <em>system.</em></div>
-<p class="sec-p rv">Everything works together to bring customers through your door — on autopilot.</p>
+<div class="sec-ey rv" data-anim="fade-up">What We Build</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Your complete client<br>acquisition <em class="text-gradient">system.</em></div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.15">Everything works together to bring customers through your door — on autopilot.</p>
 <div class="svg">
-<div class="sc rv"><div class="si"><h3>Client-Converting Website</h3><p>Not just a pretty website — a system built to turn visitors into enquiries. Mobile-first, lightning-fast, with clear calls-to-action and booking integration. Live in 7 days.</p></div><div class="sa">&#8594;</div></div>
-<div class="sc rv"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;[your service] near me&rdquo; in your area. Technical SEO, Google Business optimisation, local citations, and content that gets you found by customers who are ready to buy.</p></div><div class="sa">&#8594;</div></div>
-<div class="sc rv"><div class="si"><h3>AI Receptionist &mdash; 24/7 Chatbot</h3><p>Your AI assistant captures leads, answers FAQs, quotes prices, and books appointments &mdash; even at midnight. Never miss an enquiry again, even when you&rsquo;re busy or closed.</p></div><div class="sa">&#8594;</div></div>
-<div class="sc rv"><div class="si"><h3>5-Star Review Automation</h3><p>Automated review requests after every job or appointment. SMS and email follow-ups build your reputation on autopilot. Bad reviews flagged privately before they go public.</p></div><div class="sa">&#8594;</div></div>
+<div class="sc rv" data-anim="fade-up"><div class="si"><h3>Client-Converting Website</h3><p>Not just a pretty website — a system built to turn visitors into enquiries. Mobile-first, lightning-fast, with clear calls-to-action and booking integration. Live in 7 days.</p></div><div class="sa">&#8594;</div></div>
+<div class="sc rv" data-anim="fade-up" data-delay="0.1"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;[your service] near me&rdquo; in your area. Technical SEO, Google Business optimisation, local citations, and content that gets you found by customers who are ready to buy.</p></div><div class="sa">&#8594;</div></div>
+<div class="sc rv" data-anim="fade-up" data-delay="0.2"><div class="si"><h3>AI Receptionist &mdash; 24/7 Chatbot</h3><p>Your AI assistant captures leads, answers FAQs, quotes prices, and books appointments &mdash; even at midnight. Never miss an enquiry again, even when you&rsquo;re busy or closed.</p></div><div class="sa">&#8594;</div></div>
+<div class="sc rv" data-anim="fade-up" data-delay="0.3"><div class="si"><h3>5-Star Review Automation</h3><p>Automated review requests after every job or appointment. SMS and email follow-ups build your reputation on autopilot. Bad reviews flagged privately before they go public.</p></div><div class="sa">&#8594;</div></div>
 </div>
 </div></section>
 
 <!-- REVENUE LOSS CALCULATOR -->
 <section class="sec" id="calculator"><div class="ctn">
-<div class="sec-ey rv">Revenue Calculator</div>
-<div class="sec-h rv">How much is your website<br><em>costing</em> you?</div>
-<p class="sec-p rv">Most businesses don't realise their website is losing them thousands every month. Find out in 30 seconds.</p>
-<div class="calc-wrap rv">
+<div class="sec-ey rv" data-anim="fade-up">Revenue Calculator</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">How much is your website<br><em class="text-gradient">costing</em> you?</div>
+<p class="sec-p rv" data-anim="fade-up" data-delay="0.15">Most businesses don't realise their website is losing them thousands every month. Find out in 30 seconds.</p>
+<div class="calc-wrap rv" data-anim="fade-scale" data-delay="0.2">
   <div class="calc-grid">
     <div class="calc-field">
       <label for="calcIndustry">Your Industry</label>
@@ -525,26 +566,26 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div></section>
 
 <section class="sec" id="results"><div class="ctn">
-<div class="sec-ey rv">Why Solis</div>
-<div class="sec-h rv">Built different.<br>Built for <em>results.</em></div>
+<div class="sec-ey rv" data-anim="fade-up">Why Solis</div>
+<div class="sec-h rv">Built different.<br>Built for <em class="text-gradient">results.</em></div>
 <p class="sec-p rv">We don&rsquo;t just build websites. We build systems that bring clients to your door.</p>
 <div class="rg">
-<div class="rc rv"><div class="rm">&#9889; Your Full Site Live in 7 Days</div><p class="rq">Day 1&ndash;2: Discovery call + your brief submitted. Day 3&ndash;5: Complete website designed and built using AI-accelerated workflows. Day 6: Your review + revisions. Day 7: Live on your domain with SSL, SEO, and chatbot activated. Traditional agencies take 8&ndash;12 weeks for the same thing.</p></div>
-<div class="rc rv"><div class="rm">&#127919; Free Audit Before We Pitch</div><p class="rq">We show you exactly where your business is losing customers online before asking for a penny. Speed, SEO, mobile scores, and a personalised action plan &mdash; completely free.</p></div>
-<div class="rc rv"><div class="rm">&#128200; Built for ROI, Not Awards</div><p class="rq">Every feature exists to get you more enquiries. AI chatbot captures leads at midnight. Review automation builds trust on autopilot. SEO brings customers who are ready to buy.</p></div>
-<div class="rc rv"><div class="rm">&#128274; You Own Everything</div><p class="rq">Your code, your content, your design &mdash; it&rsquo;s all yours. No lock-in contracts, no hostage situations. If you ever want to leave, we hand over everything. Simple.</p></div>
+<div class="rc rv" data-anim="fade-up"><div class="rm">&#9889; Your Full Site Live in 7 Days</div><p class="rq">Day 1&ndash;2: Discovery call + your brief submitted. Day 3&ndash;5: Complete website designed and built using AI-accelerated workflows. Day 6: Your review + revisions. Day 7: Live on your domain with SSL, SEO, and chatbot activated. Traditional agencies take 8&ndash;12 weeks for the same thing.</p></div>
+<div class="rc rv" data-anim="fade-up" data-delay="0.1"><div class="rm">&#127919; Free Audit Before We Pitch</div><p class="rq">We show you exactly where your business is losing customers online before asking for a penny. Speed, SEO, mobile scores, and a personalised action plan &mdash; completely free.</p></div>
+<div class="rc rv" data-anim="fade-up" data-delay="0.2"><div class="rm">&#128200; Built for ROI, Not Awards</div><p class="rq">Every feature exists to get you more enquiries. AI chatbot captures leads at midnight. Review automation builds trust on autopilot. SEO brings customers who are ready to buy.</p></div>
+<div class="rc rv" data-anim="fade-up" data-delay="0.3"><div class="rm">&#128274; You Own Everything</div><p class="rq">Your code, your content, your design &mdash; it&rsquo;s all yours. No lock-in contracts, no hostage situations. If you ever want to leave, we hand over everything. Simple.</p></div>
 </div>
 </div></section>
 
 <section class="sec" id="pricing"><div class="ctn">
-<div class="sec-ey rv">Pricing</div>
-<div class="sec-h rv">Transparent pricing.<br>No hidden fees. <em>Ever.</em></div>
-<div class="price-roi rv">
+<div class="sec-ey rv" data-anim="fade-up">Pricing</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Transparent pricing.<br>No hidden fees. <em class="text-gradient">Ever.</em></div>
+<div class="price-roi rv" data-anim="fade-up" data-delay="0.15">
   <h3>What would 5 new clients per month do for your business?</h3>
   <p>One new customer typically pays for your entire monthly plan. Most businesses see ROI within 30 days.</p>
 </div>
 <div class="pg">
-<div class="pc rv">
+<div class="pc rv" data-anim="fade-up">
   <div class="pt">Starter</div>
   <div class="pa">&pound;995 <span class="pe">+ &pound;195/mo</span></div>
   <p class="pd">Professional online presence that turns visitors into enquiries.</p>
@@ -560,7 +601,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new customer pays for months of this plan. Our Starter clients typically see 3&ndash;5 new enquiries per month from their website alone.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc pop rv">
+<div class="pc pop rv" data-anim="fade-up" data-delay="0.1">
   <div class="pt">Growth</div>
   <div class="pa">&pound;1,995 <span class="pe">+ &pound;395/mo</span></div>
   <p class="pd">The full client acquisition system &mdash; website, AI, reviews, and SEO working together.</p>
@@ -578,7 +619,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new client per month pays for this entire plan. Growth clients average 8&ndash;15 new monthly enquiries within 90 days.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc rv">
+<div class="pc rv" data-anim="fade-up" data-delay="0.2">
   <div class="pt">Accelerator</div>
   <div class="pa">&pound;2,997 <span class="pe">+ &pound;997/mo</span></div>
   <p class="pd">Full-service growth with ads, SEO, social media &amp; a dedicated strategist.</p>
@@ -628,8 +669,8 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- FAQ SECTION -->
 <section class="sec" id="faq"><div class="ctn">
-<div class="sec-ey rv">FAQ</div>
-<div class="sec-h rv">Questions? We've got <em>answers.</em></div>
+<div class="sec-ey rv" data-anim="fade-up">FAQ</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Questions? We've got <em class="text-gradient">answers.</em></div>
 <p class="sec-p rv">Everything you need to know before getting started.</p>
 <div class="faq-list">
   <div class="faq-item rv">
@@ -664,8 +705,8 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div></section>
 
 <section class="sec" id="team"><div class="ctn">
-<div class="sec-ey rv">The Team</div>
-<div class="sec-h rv">Meet the people behind<br><em>Solis Digital.</em></div>
+<div class="sec-ey rv" data-anim="fade-up">The Team</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">Meet the people behind<br><em class="text-gradient">Solis Digital.</em></div>
 <p class="sec-p rv">We&rsquo;re a UK-based duo combining marketing strategy with AI engineering to help local businesses compete online &mdash; without the bloated agency fees.</p>
 <div class="team-g">
   <div class="team-c rv">
@@ -693,8 +734,8 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div></section>
 
 <section class="cta-s" id="contact"><div class="ctn">
-<div class="sec-ey rv">Ready to grow?</div>
-<div class="sec-h rv" style="max-width:640px;margin:0 auto 20px">Get your free website<br>audit in <em>24 hours.</em></div>
+<div class="sec-ey rv" data-anim="fade-up">Ready to grow?</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1" style="max-width:640px;margin:0 auto 20px">Get your free website<br>audit in <em class="text-gradient">24 hours.</em></div>
 <p class="sec-p rv" style="text-align:center;max-width:480px;margin:0 auto 36px">We'll analyse your website, SEO, and online presence — then show you exactly how to get more customers. Free. No obligation.</p>
 <div class="rv ms-form">
   <div class="ms-progress">
@@ -951,6 +992,58 @@ function submitAudit(){
 // Allow Enter key on URL field
 document.getElementById('auditUrl').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();goStep(2)}
+});
+</script>
+
+<!-- GSAP + Lenis for premium animations -->
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  // Lenis smooth scroll
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},touchMultiplier:2});
+    function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
+    requestAnimationFrame(raf);
+  }
+
+  // GSAP ScrollTrigger reveals
+  gsap.registerPlugin(ScrollTrigger);
+  var animEls=document.querySelectorAll('[data-anim]');
+  animEls.forEach(function(el,i){
+    var delay=parseFloat(el.getAttribute('data-delay')||'0');
+    gsap.fromTo(el,{opacity:0,y:el.getAttribute('data-anim')==='fade-scale'?0:40,scale:el.getAttribute('data-anim')==='fade-scale'?0.92:1},{
+      opacity:1,y:0,scale:1,duration:0.8,delay:delay,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true}
+    });
+  });
+
+  // Custom cursor (desktop only)
+  if(window.matchMedia('(hover:hover)').matches){
+    var dot=document.createElement('div');dot.className='cursor-dot';
+    var ring=document.createElement('div');ring.className='cursor-ring';
+    document.body.appendChild(dot);document.body.appendChild(ring);
+    var mx=0,my=0,dx=0,dy=0;
+    document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+(mx-4)+'px,'+(my-4)+'px)'});
+    function movRing(){dx+=(mx-dx)*0.15;dy+=(my-dy)*0.15;ring.style.transform='translate('+(dx-18)+'px,'+(dy-18)+'px)';requestAnimationFrame(movRing)}
+    movRing();
+    document.querySelectorAll('a,button,.bm,.nc,.bo,.priceCard,.cd').forEach(function(el){
+      el.addEventListener('mouseenter',function(){ring.classList.add('hovering')});
+      el.addEventListener('mouseleave',function(){ring.classList.remove('hovering')});
+    });
+  }
+
+  // Magnetic button effect
+  document.querySelectorAll('.bm,.nc,.bo').forEach(function(btn){
+    btn.addEventListener('mousemove',function(e){
+      var r=btn.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)*0.15;
+      var y=(e.clientY-r.top-r.height/2)*0.15;
+      btn.style.transform='translate('+x+'px,'+y+'px) scale(1.02)';
+    });
+    btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  });
 });
 </script>
 
