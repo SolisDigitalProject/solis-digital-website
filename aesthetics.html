@@ -236,6 +236,32 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   .cf{flex-direction:column}
   .fi{flex-direction:column;gap:16px;text-align:center}
 }
+
+/* GSAP + LENIS PREMIUM ANIMATIONS */
+[data-anim]{opacity:0;transform:translateY(40px);will-change:opacity,transform}
+[data-anim="fade-up"].is-visible{opacity:1;transform:translateY(0)}
+[data-anim="fade-scale"]{transform:scale(0.92);opacity:0}
+[data-anim="fade-scale"].is-visible{opacity:1;transform:scale(1)}
+h1{font-size:clamp(2.2rem,5vw + 1rem,4.5rem) !important;letter-spacing:-0.03em;line-height:1.05}
+h2,.sec-h{font-size:clamp(1.6rem,3vw + 0.5rem,3rem) !important;letter-spacing:-0.02em}
+h3{font-size:clamp(1.1rem,1.5vw + 0.5rem,1.5rem) !important}
+.hero-sub{font-size:clamp(0.95rem,1.2vw + 0.3rem,1.25rem) !important}
+.bm,.nc,.bo{transition:all 0.4s cubic-bezier(0.23,1,0.32,1);will-change:transform}
+.bm:hover,.nc:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 40px var(--glowS)}
+.priceCard,.cd,.step,.faq-item{transition:transform 0.5s cubic-bezier(0.23,1,0.32,1),box-shadow 0.5s ease}
+.priceCard:hover,.cd:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.text-gradient{background:linear-gradient(135deg,var(--accent),var(--accentL));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.glow-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;z-index:0;filter:blur(80px)}
+@media(hover:hover){
+  .cursor-dot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.15s ease;mix-blend-mode:screen}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10000;transition:transform 0.3s ease,width 0.3s,height 0.3s,opacity 0.3s;opacity:0.5}
+  .cursor-ring.hovering{width:56px;height:56px;opacity:0.3;border-color:var(--accentL)}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
+  [data-anim]{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
@@ -261,11 +287,12 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </nav>
 
 <main>
-<section class="hero">
-<div class="hero-ey">&#10024; AI-Powered Systems for Aesthetics &amp; Skin Clinics</div>
-<h1>Your Clinic's Website Should Book Clients While You <em>Sleep.</em></h1>
-<p class="hero-sub">We build AI-powered booking systems for aesthetics and skin clinics. Website, Google rankings, AI chatbot, and 5-star reviews &mdash; all working 24/7 to fill your diary. Live in 7 days.</p>
-<div class="hero-btns">
+<section class="hero" style="position:relative;overflow:hidden">
+<div class="glow-orb" style="top:-200px;left:-200px"></div>
+<div class="hero-ey" data-anim="fade-up" data-delay="0">&#10024; AI-Powered Systems for Aesthetics &amp; Skin Clinics</div>
+<h1 data-anim="fade-up" data-delay="0.1">Your Clinic's Website Should Book Clients While You <em class="text-gradient">Sleep.</em></h1>
+<p class="hero-sub" data-anim="fade-up" data-delay="0.2">We build AI-powered booking systems for aesthetics and skin clinics. Website, Google rankings, AI chatbot, and 5-star reviews &mdash; all working 24/7 to fill your diary. Live in 7 days.</p>
+<div class="hero-btns" data-anim="fade-up" data-delay="0.3">
   <a href="#contact" class="bm">Get Your Free Clinic Audit &#8594;</a>
   <a href="#roi" class="bo">See What You're Losing</a>
 </div>
@@ -274,33 +301,33 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 <!-- TRUST BADGES -->
 <div style="padding:20px 0;text-align:center">
 <div class="badges">
-  <div class="badge-item"><span class="badge-icon">&#9889;</span> Live in 7 Days</div>
-  <div class="badge-item"><span class="badge-icon">&#129302;</span> AI-Powered Delivery</div>
-  <div class="badge-item"><span class="badge-icon">&#128274;</span> SSL &amp; GDPR Compliant</div>
-  <div class="badge-item"><span class="badge-icon">&#127468;&#127463;</span> UK Based &amp; Operated</div>
-  <div class="badge-item"><span class="badge-icon">&#128137;</span> Built for Aesthetics Clinics</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0"><span class="badge-icon">&#9889;</span> Live in 7 Days</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.05"><span class="badge-icon">&#129302;</span> AI-Powered Delivery</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.1"><span class="badge-icon">&#128274;</span> SSL &amp; GDPR Compliant</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.15"><span class="badge-icon">&#127468;&#127463;</span> UK Based &amp; Operated</div>
+  <div class="badge-item" data-anim="fade-scale" data-delay="0.2"><span class="badge-icon">&#128137;</span> Built for Aesthetics Clinics</div>
 </div>
 </div>
 
 <!-- PAIN POINTS -->
 <section class="sec" id="pain-points"><div class="ctn">
-<div class="sec-ey rv">Sound Familiar?</div>
-<div class="sec-h rv">These problems are costing<br>your clinic <em>thousands.</em></div>
-<p class="sec-p rv">If any of these hit home, your clinic is leaving money on the table every single day.</p>
+<div class="sec-ey" data-anim="fade-up">Sound Familiar?</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">These problems are costing<br>your clinic <em class="text-gradient">thousands.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.15">If any of these hit home, your clinic is leaving money on the table every single day.</p>
 <div class="pain-grid">
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0">
     <div class="pain-icon">&#128242;</div>
     <p><strong>80% of your bookings come from Instagram DMs</strong> &mdash; one algorithm change and they vanish. You&rsquo;re building your business on rented land.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.1">
     <div class="pain-icon">&#128269;</div>
     <p><strong>Patients Google &ldquo;Botox near me&rdquo; and find your competitors instead.</strong> They&rsquo;re spending money that should be yours &mdash; simply because they show up and you don&rsquo;t.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.2">
     <div class="pain-icon">&#128337;</div>
     <p><strong>&ldquo;How much is lip filler?&rdquo; &mdash; asked 50 times a day, but nobody&rsquo;s answering at 10pm.</strong> Late-night browsers are your highest-intent leads, and you&rsquo;re losing all of them.</p>
   </div>
-  <div class="pain-card rv">
+  <div class="pain-card" data-anim="fade-up" data-delay="0.3">
     <div class="pain-icon">&#11088;</div>
     <p><strong>You have happy clients but only 12 Google reviews</strong> &mdash; your competitor has 200. Patients trust reviews more than your Instagram grid. You&rsquo;re invisible where it matters most.</p>
   </div>
@@ -309,41 +336,41 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- WHAT WE BUILD -->
 <section class="sec" id="services"><div class="ctn">
-<div class="sec-ey rv">What We Build</div>
-<div class="sec-h rv">Your complete clinic<br>booking <em>system.</em></div>
-<p class="sec-p rv">Four systems working together to fill your appointment book &mdash; on autopilot, 24/7.</p>
+<div class="sec-ey" data-anim="fade-up">What We Build</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">Your complete clinic<br>booking <em class="text-gradient">system.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.15">Four systems working together to fill your appointment book &mdash; on autopilot, 24/7.</p>
 <div class="svg">
-  <div class="sc rv"><div class="si"><h3>Client-Converting Website</h3><p>Before/after galleries, treatment menus with pricing, online booking, patient testimonials. Built specifically for aesthetics clinics &mdash; not a generic template. Designed to turn browsers into booked consultations.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;Botox [your city]&rdquo;, &ldquo;lip filler near me&rdquo;, &ldquo;aesthetics clinic [area]&rdquo;. Your safety net when Instagram goes down. Organic traffic that compounds month after month.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>AI Receptionist (24/7)</h3><p>Answers treatment questions, quotes prices, explains aftercare, and books consultations &mdash; even at midnight. Never miss a late-night browser. Trained on your clinic&rsquo;s treatments, pricing, and policies.</p></div><div class="sa">&#8594;</div></div>
-  <div class="sc rv"><div class="si"><h3>5-Star Review Automation</h3><p>Automated review requests after every treatment. Push your rating to 4.8+ stars. Bad reviews flagged privately before they go public. Build a reputation that sells for you.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0"><div class="si"><h3>Client-Converting Website</h3><p>Before/after galleries, treatment menus with pricing, online booking, patient testimonials. Built specifically for aesthetics clinics &mdash; not a generic template. Designed to turn browsers into booked consultations.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.1"><div class="si"><h3>Local SEO &amp; Google Domination</h3><p>Rank #1 for &ldquo;Botox [your city]&rdquo;, &ldquo;lip filler near me&rdquo;, &ldquo;aesthetics clinic [area]&rdquo;. Your safety net when Instagram goes down. Organic traffic that compounds month after month.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.2"><div class="si"><h3>AI Receptionist (24/7)</h3><p>Answers treatment questions, quotes prices, explains aftercare, and books consultations &mdash; even at midnight. Never miss a late-night browser. Trained on your clinic&rsquo;s treatments, pricing, and policies.</p></div><div class="sa">&#8594;</div></div>
+  <div class="sc" data-anim="fade-up" data-delay="0.3"><div class="si"><h3>5-Star Review Automation</h3><p>Automated review requests after every treatment. Push your rating to 4.8+ stars. Bad reviews flagged privately before they go public. Build a reputation that sells for you.</p></div><div class="sa">&#8594;</div></div>
 </div>
 </div></section>
 
 <!-- ROI SECTION -->
 <section class="sec" id="roi"><div class="ctn">
-<div class="sec-ey rv">The ROI</div>
-<div class="sec-h rv">The math is <em>simple.</em></div>
-<p class="sec-p rv">Aesthetics clients are high-value and repeat. Even a small increase in bookings changes everything.</p>
+<div class="sec-ey" data-anim="fade-up">The ROI</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">The math is <em class="text-gradient">simple.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.15">Aesthetics clients are high-value and repeat. Even a small increase in bookings changes everything.</p>
 <div class="roi-grid">
-  <div class="roi-card rv">
+  <div class="roi-card" data-anim="fade-scale" data-delay="0">
     <div class="roi-num">&pound;1,500&ndash;5,000</div>
     <div class="roi-label">Average client lifetime value per year<br><small style="color:var(--text3)">Botox 3x/yr + fillers + skin treatments</small></div>
   </div>
-  <div class="roi-card rv">
+  <div class="roi-card" data-anim="fade-scale" data-delay="0.1">
     <div class="roi-num">10 extra clients/mo</div>
     <div class="roi-label">What a high-converting website + SEO delivers<br><small style="color:var(--text3)">Conservative estimate based on client data</small></div>
   </div>
-  <div class="roi-card rv">
+  <div class="roi-card" data-anim="fade-scale" data-delay="0.2">
     <div class="roi-num">&pound;180k&ndash;600k</div>
     <div class="roi-label">Additional annual revenue<br><small style="color:var(--text3)">10 clients &times; &pound;1,500&ndash;5,000 &times; 12 months</small></div>
   </div>
-  <div class="roi-card rv">
+  <div class="roi-card" data-anim="fade-scale" data-delay="0.3">
     <div class="roi-num">&pound;1,995 + &pound;395/mo</div>
     <div class="roi-label">Your investment for the Growth plan<br><small style="color:var(--text3)">Setup + monthly &mdash; cancel anytime</small></div>
   </div>
 </div>
-<div class="roi-highlight rv">
+<div class="roi-highlight" data-anim="fade-up" data-delay="0.2">
   <div class="roi-num">&#9989;</div>
   <p><strong>One new Botox client per month pays for your entire plan.</strong> Everything else is pure profit. The question isn&rsquo;t whether you can afford this &mdash; it&rsquo;s whether you can afford not to.</p>
 </div>
@@ -351,9 +378,9 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- SOCIAL PROOF -->
 <section class="sec"><div class="ctn">
-<div class="sec-ey rv">Real Results</div>
-<div class="sec-h rv">From Instagram-dependent<br>to <em>Google-dominant.</em></div>
-<div class="proof-card rv" style="text-align:left">
+<div class="sec-ey rv" data-anim="fade-up">Real Results</div>
+<div class="sec-h rv" data-anim="fade-up" data-delay="0.1">From Instagram-dependent<br>to <em class="text-gradient">Google-dominant.</em></div>
+<div class="proof-card rv" data-anim="fade-scale" data-delay="0.2" style="text-align:left">
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;text-align:center">
     <div><div style="font-size:32px;font-weight:900;color:var(--accent)">+35</div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">New Clients/Mo</div></div>
     <div><div style="font-size:32px;font-weight:900;color:#34d399">92%</div><div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px">From Google</div></div>
@@ -364,7 +391,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 
 <!-- TESTIMONIALS -->
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px" class="rv">
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:32px" class="rv" data-anim="fade-up" data-delay="0.3">
   <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px">
     <div style="color:var(--accent);font-size:18px;margin-bottom:8px">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">&ldquo;The AI chatbot books consultations while we sleep. We&rsquo;ve had 12 new bookings this month just from the chatbot &mdash; clients love how quick the responses are.&rdquo;</p>
@@ -380,14 +407,14 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 
 <!-- PRICING -->
 <section class="sec" id="pricing"><div class="ctn">
-<div class="sec-ey rv">Pricing</div>
-<div class="sec-h rv">Transparent pricing.<br>No hidden fees. <em>Ever.</em></div>
-<div class="price-roi rv">
+<div class="sec-ey" data-anim="fade-up">Pricing</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1">Transparent pricing.<br>No hidden fees. <em class="text-gradient">Ever.</em></div>
+<div class="price-roi" data-anim="fade-up" data-delay="0.15">
   <h3>What would 10 new clients per month do for your clinic?</h3>
   <p>One new Botox client typically pays for your entire monthly plan. Most clinics see ROI within 30 days.</p>
 </div>
 <div class="pg">
-<div class="pc rv">
+<div class="pc" data-anim="fade-up" data-delay="0">
   <div class="pt">Starter</div>
   <div class="pa">&pound;995 <span class="pe">+ &pound;195/mo</span></div>
   <p class="pd">Professional clinic website that turns visitors into booked consultations.</p>
@@ -405,7 +432,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One Botox client covers months of this plan. Starter clinics typically see 3&ndash;5 new enquiries per month from their website alone.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc pop rv">
+<div class="pc pop" data-anim="fade-up" data-delay="0.1">
   <div class="pt">Growth</div>
   <div class="pa">&pound;1,995 <span class="pe">+ &pound;395/mo</span></div>
   <p class="pd">The full client acquisition system &mdash; website, AI receptionist, reviews, and SEO working together.</p>
@@ -423,7 +450,7 @@ footer{border-top:1px solid var(--border);padding:48px 0}
   <div class="roi-note">One new client per month pays for this entire plan. Growth clinics average 8&ndash;15 new monthly bookings within 90 days.</div>
   <a href="https://calendly.com/solisdigital-info/solis-digital-free-strategy-call" target="_blank" class="pb">Book a Call &#8594;</a>
 </div>
-<div class="pc rv">
+<div class="pc" data-anim="fade-up" data-delay="0.2">
   <div class="pt">Accelerator</div>
   <div class="pa">&pound;2,997 <span class="pe">+ &pound;997/mo</span></div>
   <p class="pd">Full-service growth with ads, SEO campaigns, social media &amp; a dedicated strategist.</p>
@@ -443,17 +470,17 @@ footer{border-top:1px solid var(--border);padding:48px 0}
 </div>
 </div>
 
-<div class="price-guarantee rv">
+<div class="price-guarantee" data-anim="fade-up" data-delay="0.3">
   <p><strong>100% Satisfaction Guarantee.</strong> We don&rsquo;t stop until you&rsquo;re happy with your website. Every project includes 2 rounds of revisions and dedicated support throughout.</p>
 </div>
 </div></section>
 
 <!-- CONTACT / AUDIT -->
 <section class="cta-s" id="contact"><div class="ctn">
-<div class="sec-ey rv">Ready to fill your diary?</div>
-<div class="sec-h rv" style="max-width:640px;margin:0 auto 20px">Get your free clinic<br>audit in <em>24 hours.</em></div>
-<p class="sec-p rv" style="text-align:center;max-width:480px;margin:0 auto 36px">We&rsquo;ll analyse your clinic&rsquo;s website, SEO, and online presence &mdash; then show you exactly how to get more bookings. Free. No obligation.</p>
-<div class="rv ms-form">
+<div class="sec-ey" data-anim="fade-up">Ready to fill your diary?</div>
+<div class="sec-h" data-anim="fade-up" data-delay="0.1" style="max-width:640px;margin:0 auto 20px">Get your free clinic<br>audit in <em class="text-gradient">24 hours.</em></div>
+<p class="sec-p" data-anim="fade-up" data-delay="0.15" style="text-align:center;max-width:480px;margin:0 auto 36px">We&rsquo;ll analyse your clinic&rsquo;s website, SEO, and online presence &mdash; then show you exactly how to get more bookings. Free. No obligation.</p>
+<div class="ms-form" data-anim="fade-up" data-delay="0.2">
   <div class="ms-progress">
     <div class="ms-dot active" id="dot1"></div>
     <div class="ms-dot" id="dot2"></div>
@@ -639,6 +666,49 @@ function submitAudit(){
 // Allow Enter key on URL field
 document.getElementById('auditUrl').addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();goStep(2)}
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    var lenis=new Lenis({duration:1.2,easing:function(t){return Math.min(1,1.001-Math.pow(2,-10*t))},touchMultiplier:2});
+    function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
+    requestAnimationFrame(raf);
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll('[data-anim]').forEach(function(el){
+    var delay=parseFloat(el.getAttribute('data-delay')||'0');
+    gsap.fromTo(el,{opacity:0,y:el.getAttribute('data-anim')==='fade-scale'?0:40,scale:el.getAttribute('data-anim')==='fade-scale'?0.92:1},{
+      opacity:1,y:0,scale:1,duration:0.8,delay:delay,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 88%',once:true}
+    });
+  });
+  if(window.matchMedia('(hover:hover)').matches){
+    var dot=document.createElement('div');dot.className='cursor-dot';
+    var ring=document.createElement('div');ring.className='cursor-ring';
+    document.body.appendChild(dot);document.body.appendChild(ring);
+    var mx=0,my=0,dx=0,dy=0;
+    document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+(mx-4)+'px,'+(my-4)+'px)'});
+    function movRing(){dx+=(mx-dx)*0.15;dy+=(my-dy)*0.15;ring.style.transform='translate('+(dx-18)+'px,'+(dy-18)+'px)';requestAnimationFrame(movRing)}
+    movRing();
+    document.querySelectorAll('a,button,.bm,.nc,.bo,.priceCard,.cd').forEach(function(el){
+      el.addEventListener('mouseenter',function(){ring.classList.add('hovering')});
+      el.addEventListener('mouseleave',function(){ring.classList.remove('hovering')});
+    });
+  }
+  document.querySelectorAll('.bm,.nc,.bo').forEach(function(btn){
+    btn.addEventListener('mousemove',function(e){
+      var r=btn.getBoundingClientRect();
+      var x=(e.clientX-r.left-r.width/2)*0.15;
+      var y=(e.clientY-r.top-r.height/2)*0.15;
+      btn.style.transform='translate('+x+'px,'+y+'px) scale(1.02)';
+    });
+    btn.addEventListener('mouseleave',function(){btn.style.transform=''});
+  });
 });
 </script>
 
